@@ -1,0 +1,468 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+
+<style>
+    #FilialeUOcodeDesc, #email, #pec {
+        width: 300px;
+    }
+</style>
+
+
+<table class="gestioneTable">
+    <tr>
+
+        @*<td class="DataRichiesta2 form-group">
+                @if (Model.DataRichiesta.HasValue)
+                {
+
+                    @Html.LabelFor(model => model.DataRichiesta, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <p>@Model.DataRichiesta.GetValueOrDefault().ToString("dd/MM/yyyy")</p>
+                    </div>
+
+                }
+            </td>
+
+
+            <td class="DataRichiesta form-group">
+                @Html.LabelFor(model => model.DataRichiesta, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DataRichiesta, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DataRichiesta, "", new { @class = "text-danger" })
+                </div>
+            </td>
+
+            <td>
+                <div>
+                    Data max evasione:
+                    <p id="datamaxevasione"></p>
+                </div>
+            </td>*@
+    </tr>
+</table>
+
+
+@*<fieldset class="modalitapagamento">
+        <legend>Modalità di pagamento</legend>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ModalitaPagamento, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div>
+                @Html.DropDownListFor(model => model.ModalitaPagamento.Id, (IEnumerable<SelectListItem>)ViewBag.DropDownPagamento, "-- Seleziona --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ModalitaPagamento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="numeroconto form-group">
+            @Html.LabelFor(model => model.NumeroConto, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NumeroConto, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NumeroConto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </fieldset>*@
+
+
+<table class="TabellaDati">
+    <tr>
+        <td style="width:250px">
+            @if (@Model.CanaleRicezione != null)
+            {
+                <div class="canalericezione2 form-group">
+                    @Html.DisplayNameFor(model => model.CanaleRicezione)
+                    <br />
+                    <b>
+                        @Model.CanaleRicezione.Descrizione
+                    </b>
+                </div>
+
+            }
+            <div class="canalericezione">
+                @Html.LabelFor(model => model.CanaleRicezione, htmlAttributes: new { @class = "control-label col-md-2" })
+                <br />
+                <b>
+                    @Html.DropDownListFor(model => model.CanaleRicezione.Id, (IEnumerable<SelectListItem>)ViewBag.DropDownRicezione, "-- Seleziona --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CanaleRicezione, "", new { @class = "text-danger" })
+                </b>
+            </div>
+        </td>
+        <td style="width:250px">
+            <div class="form-group">
+                @Html.LabelFor(model => model.CanaleConsegna, htmlAttributes: new { @class = "control-label col-md-2" })
+                <br />
+                <div>
+                    @Html.DropDownListFor(model => model.CanaleConsegna.Id, (IEnumerable<SelectListItem>)ViewBag.DropDownConsegna, "-- Seleziona --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CanaleConsegna, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </td>
+        @*<td>
+                @Html.HiddenFor(model => model.FilialeUOcode)
+                <div class="FilialeUOcode form-group">
+                    @Html.LabelFor(model => model.FilialeUOcode, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <br />
+                    <div class="col-md-10">
+                        @Html.Editor("FilialeUOcodeDesc", new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.FilialeUOcode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>*@
+
+        <td>
+            <div class="email form-group">
+                @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label col-md-2" })
+                <br />
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="pec form-group">
+                @Html.LabelFor(model => model.pec, htmlAttributes: new { @class = "control-label col-md-2" })
+                <br />
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.pec, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.pec, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </td>
+
+    </tr>
+</table>
+
+
+<div id="resultCanali" class="" style="display: none"></div>
+<script>
+                    function alertCanali(message) {
+            if (message.length > 0) {
+                $("#resultCanali").empty();
+                console.log("alert:" + message);
+                $("<div>").text(message).appendTo("#resultCanali");
+                $("#resultCanali").scrollTop(0);
+                var opt = {
+                    autoOpen: false,
+                    modal: true,
+                    width: "auto",
+                    height: "auto",
+                    title: 'Alert',
+                    buttons: {
+                        Chiudi: function () {
+                            $(this).dialog("close");
+                            $(this).dialog("destroy");
+                        }
+                    },
+                };
+                $('#resultCanali').dialog(opt).dialog('open');
+            }
+            };
+            function ControlloCostiCanali() {
+                var ValoreCanaleConsegna = $("select#CanaleConsegna_Id").val();
+                if ((presentecostonullo) && (
+                    @*(ValoreCanaleConsegna == "@ViewBag.CanaleFilialeID") ||*@
+                    ($("input#SpesaAddebitabile").is(':checked'))))
+                {
+                    alertCanali("Attenzione controllare costo documenti!");
+                }
+            };
+
+</script>
+
+
+<script type="text/javascript">
+
+            $("document").ready(function () {
+
+
+    var myArrayParametriRichiestaConsegna = [];
+    @foreach(var item in ViewBag.ParametriRichiestaConsegna)
+    {
+        @:myArrayParametriRichiestaConsegna.push({ Richiesta: "@Html.Raw(item.Richiesta.Id)", Consegna: "@Html.Raw(item.Consegna.Id)"});
+    }
+                var stato = "@Model.Stato.Stato";
+                var CanaleRicezione = $("select#CanaleRicezione_Id");
+                var CanalePagamento = $("select#ModalitaPagamento_Id");
+                var CanaleConsegna = $("select#CanaleConsegna_Id");
+
+
+
+                @*var datepicker = $("#DataRichiesta").data("kendoDatePicker");
+                datepicker.bind("change", function () {
+                    var value = this.value();
+                    /* The result can be observed in the DevTools(F12) console of the browser. */
+                    //alert.log(value); //value is the selected date in the datepicker
+
+                    //alert("datanuova: " + value);
+                    DataEvasione();
+                });
+
+                DataEvasione();
+                function DataEvasione(value) {
+                    var richiesta = $("#DataRichiesta").val();
+
+                    var dateString = richiesta; // Oct 23
+                    var words = dateString.split('/');
+
+                    var dd = words[0];
+                    var mm = words[1];
+                    var y = words[2];
+                    var dateObject = new Date(mm + '/' + dd + '/' + y);
+                    //alert("dopo split " + dateObject.toLocaleDateString())
+
+                    var numberOfDaysToAdd = @ViewBag.giorniscadenzabanca;//evasione 90gg
+                    dateObject.setDate(dateObject.getDate() + numberOfDaysToAdd);
+                    //alert("add day " + dateObject.toLocaleDateString())
+                    $("#datamaxevasione").text(dateObject.toLocaleDateString());
+
+                    //var dd = String(dateObject.getDate()).padStart(2, '0');
+                    //var mm = String(dateObject.getMonth() + 1).padStart(2, '0');;
+
+
+                    var dd = ("00" + String(dateObject.getDate())).slice(-2);
+                    var mm = ("00" + String(dateObject.getMonth() + 1)).slice(-2);
+
+                    var y = dateObject.getFullYear();
+                    $("#datamaxevasione").text(dd + '/' + mm + '/' + y);
+                }*@
+
+            function ControlloPagamento(value) {
+                console.log(value);
+                if (value) {
+                    console.log(value);
+                    $('.numeroconto').show(); //show
+
+                } else {
+                    console.log(value);
+                    $('.numeroconto').hide(); //hide
+                }
+
+            };
+
+
+                CanalePagamento.change(function () {
+                    $('#NumeroConto').val("");
+
+                ControlloPagamento(CanalePagamento.val() == "@ViewBag.CanaleFilialeID");
+            });
+
+
+
+            function ControlloConsegna(value) {
+            console.log("ControlloConsegna:"+value);
+            if (value == "@ViewBag.CanalePecID") {
+                console.log(value);
+                $('.pec').show(); //show
+                $('.email').hide(); //hide
+       /*         $('.FilialeUOcode').hide(); //hide*/
+                $('.btnModInvioDocumentazione').show(); //show
+                $('.btnStampaConsegna').hide(); //hide
+                CanaleConsegna.val("@ViewBag.CanalePecID");
+            } else {
+                if (value == "@ViewBag.CanaleEmailID") {
+                    console.log(value);
+                    $('.pec').hide(); //show
+                    $('.email').show(); //hide
+                /*    $('.FilialeUOcode').hide(); //hide*/
+                    $('.btnModInvioDocumentazione').show(); //show
+                    $('.btnStampaConsegna').hide(); //hide
+                    CanaleConsegna.val("@ViewBag.CanaleEmailID");
+                }
+                else {
+                    if (value == "@ViewBag.CanaleFilialeID") {
+                        console.log(value);
+                        $('.pec').hide(); //hide
+                        $('.email').hide(); //show
+                       /* $('.FilialeUOcode').show(); //hide*/
+                        CanaleConsegna.val("@ViewBag.CanaleFilialeID");
+                        @*$("#FilialeUOcodeDesc").val('@ViewData["FilialeC"]').change();
+                        $("#FilialeUOcode").val('@ViewData["FilialeCuocode"]').change();*@
+
+                        @*if ((value == "@ViewBag.CanaleFilialeID") && (presentecostonullo))
+                        {
+                    alert("Attenzione controllare costo documenti!                             ");
+
+                        };*@
+
+                        $('.btnModInvioDocumentazione').hide(); //show
+                        $('.btnStampaConsegna').show(); //hide
+                        ControlloCostiCanali();
+
+
+                    } else {
+                        if ((value == "@ViewBag.CanaleRaccomandataID") || (value == "") || (value == null)) {
+                            console.log(value);
+                            $('.pec').hide(); //hide
+                            $('.email').hide(); //show
+      /*                      $('.FilialeUOcode').hide(); //hide*/
+
+                            if (value == "@ViewBag.CanaleRaccomandataID") {
+                                CanaleConsegna.val("@ViewBag.CanaleRaccomandataID");
+                            }
+                            if (value == "@ViewBag.CanaleRaccomandataID") {
+                                $('.btnModInvioDocumentazione').show(); //show
+                                $('.btnStampaConsegna').hide(); //hide
+                            } else {
+                                $('.btnModInvioDocumentazione').hide(); //show
+                                $('.btnStampaConsegna').hide(); //hide
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            };
+
+                function ControlloDocumentiGiacenza() {
+                    var ricezioneId = $("select#CanaleRicezione_Id option:selected").val();
+                    var consegnaId = $("select#CanaleConsegna_Id option:selected").val();
+                    console.log("ricezioneId:" + ricezioneId);
+                    console.log("consegnaId:" + consegnaId);
+                    if ((ricezioneId && consegnaId && ricezioneId == 1 && consegnaId == 1)
+                        || (ricezioneId && consegnaId && ricezioneId == 3 && consegnaId == 1)
+                        || (ricezioneId && (ricezioneId == 2 || ricezioneId == 4))) {
+                        console.log("Bottone documenti in giacenza visibile");
+                        $('#docGiacenza').show();
+                    } else {
+                        console.log("Bottone documenti in giacenza invisibile");
+                        $('#docGiacenza').hide();
+                    }
+                }
+                ControlloDocumentiGiacenza();
+
+
+                CanaleConsegna.unbind().change(function () {
+                    //$('#FilialeUOcodeDesc').val("");
+                    //$('#pec').val("");
+                    //$('#email').val("");
+            console.log("click selezione");
+            var valore = CanaleConsegna.val();
+            console.log("|" + valore + "|");
+                    ControlloConsegna(valore);
+                    ControlloDocumentiGiacenza();
+
+        });
+            function FiltraConsegna(attuale, Richiesta, Consegna) {
+                console.log("FiltraConsegna:" + attuale + " " + Richiesta + " " + Consegna);
+            if (attuale == Richiesta) {
+
+                $('#CanaleConsegna_Id option[value="' + Consegna+'"]').removeAttr('disabled'); //show
+                //$('#CanaleConsegna_Id').val(Consegna);
+                //$('#CanaleConsegna_Id').value = Consegna;
+            }
+        }
+            function ControlloCanaleRicezione(stato,value) {
+                console.log("ControlloCanaleRicezione stato:"+stato+" value:"+value);
+
+            @*if (stato == "Inizio") {
+                if (value == "@ViewBag.CanaleFilialeID") {
+                    $('.modalitapagamento').show(); //show
+                }
+                else {
+                    $('.modalitapagamento').hide(); //show
+                }
+            }*@
+
+
+                $('#CanaleConsegna_Id option').attr('disabled', 'disabled');
+                $('#CanaleConsegna_Id option[value=""]').removeAttr('disabled');
+
+            //myArrayParametriRichiestaConsegna.forEach(element => FiltraConsegna(value, element.Richiesta, element.Consegna));
+            //console.log(myArrayParametriRichiestaConsegna);
+            for (var i in myArrayParametriRichiestaConsegna) {
+                FiltraConsegna(value, myArrayParametriRichiestaConsegna[i].Richiesta, myArrayParametriRichiestaConsegna[i].Consegna);
+            };
+            ControlloConsegna(CanaleConsegna.val());
+                };
+
+
+
+
+
+
+        CanaleRicezione.unbind().change(function () {
+            console.log("Stato " + stato + " CanaleRicezione " + $("select#CanaleRicezione_Id option:selected").val());
+            CanaleConsegna.val("").change();
+            CanaleConsegna.value = "";
+            ControlloCanaleRicezione(stato, $("select#CanaleRicezione_Id option:selected").val());
+            ControlloDocumentiGiacenza();
+        });
+
+        
+                @*@if (@Model.CanaleRicezione!=null)
+                {
+                    @:CanaleRicezione.val('@Model.CanaleRicezione.Id');
+                }
+                @if (@Model.CanaleConsegna!= null) {
+                    @:CanaleConsegna.val('@Model.CanaleConsegna.Id');
+                }
+                @if (@Model.ModalitaPagamento!= null) {
+                    @:CanalePagamento.val('@Model.ModalitaPagamento.Id');
+                }*@
+
+
+                ControlloCanaleRicezione(stato, CanaleRicezione.val());
+               /* ControlloConsegna(CanaleConsegna.val());*/
+                ControlloPagamento(CanalePagamento.val() == "@ViewBag.CanaleFilialeID");
+
+                
+
+    });
+</script>
+
+
+@*<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+        Result:
+        <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+    </div>*@
+
+@*<script>
+      $(function() {
+        //function log( message ) {
+        //  $( "<div>" ).text( message ).prependTo( "#log" );
+        //  $( "#log" ).scrollTop( 0 );
+        //}
+
+          $("#FilialeUOcodeDesc").autocomplete({
+              source: function (request, response) {
+                  var url = '@Url.Action("GetFiliali", "Richiesta")';
+                  $.ajax({
+                      url: url,
+                      type: "POST",
+                      dataType: "json",
+                      data: {
+                          prefix: request.term
+                      },
+                      success: function (data) {
+                          response($.map(data,
+                              function (item) {
+                                  //console.log("item di ritorno");
+                                  //console.log(item);
+                                  return { label: item.DescrizioneUObyIstituto, value: item.UOCode + ' - ' + item.DescrizioneUObyIstituto, id: item.UOCode };
+                              }))
+                      }
+                  });
+              },
+              minLength: 3,
+              select: function (e, ui) {
+
+                  if ((ui.item)) {
+                      console.log("ui.item", ui.item);
+                      $("#FilialeUOcode").val(ui.item.id);
+                  }
+
+                  //console.log("value ", $(this).val());
+              },
+              change: function (e, ui) {
+                  if (!(ui.item)) {
+                      e.target.value = "";
+                      $("#FilialeUOcode").val("");
+                  }
+              },
+              open: function () {
+                  $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+              },
+              close: function () {
+                  $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+              }
+          });//.val('@ViewData["FilialeC"]');
+      });
+    </script>*@

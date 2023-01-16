@@ -1,0 +1,569 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+
+
+<fieldset>
+    <legend class="testo_ordine_red">Informazioni Richiesta</legend>
+    <table class="TabellaDati">
+        <tr>
+            @*<td>
+                    @Html.DisplayNameFor(model => model.DataInserimento)
+                    <br />
+                    @if (Model.DataInserimento.HasValue)
+                    {
+                        <b> @Html.DisplayFor(model => model.DataInserimento)</b>
+                    }
+                </td>*@
+            <td width="205px">
+                <div class="DataRichiesta2">
+                    @if (Model.DataRichiesta.HasValue)
+                    {
+
+                        @Html.LabelFor(model => model.DataRichiesta, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <br />
+                        <b>
+                            @Model.DataRichiesta.GetValueOrDefault().ToString("dd/MM/yyyy")
+                        </b>
+
+                    }
+                </div>
+
+                <div class="DataRichiesta">
+                    @Html.LabelFor(model => model.DataRichiesta, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DataRichiesta, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DataRichiesta, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+
+
+
+
+            <td width="250px">
+                <div>
+                    Data max evasione
+                    <br />
+                    <b id="datamaxevasione"></b>
+                </div>
+            </td>
+            <td width="120px">
+
+                @Html.DisplayNameFor(model => model.Istituto)
+                <br />
+                <b>
+                    @Html.EditorFor(model => model.Istituto, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Istituto, "", new { @class = "text-danger" })
+                </b>
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.NDG)
+                <br />
+                <b>
+                    @Html.EditorFor(model => model.NDG, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NDG, "", new { @class = "text-danger" })
+                </b>
+
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.Stato)
+                <br />
+                <b>
+                    @Html.TextBoxFor(model => model.Stato.Stato, new { disabled = "disabled", @readonly = "readonly" })
+                </b>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+
+
+
+
+@Html.HiddenFor(model => model.isPerson)
+@Html.HiddenFor(model => model.NaturaGiuridica)
+
+
+@if ((Model.Cointestatari == null) || (Model.Cointestatari.Count() == 0))
+{
+    if (Model.isPerson)
+    {
+        <fieldset class="persona">
+            <legend>Persona fisica</legend>
+            <table class="TabellaDati">
+                <tr>
+                    <td>
+
+                        @Html.DisplayNameFor(model => model.IntestazioneNDG)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.IntestazioneNDG, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.IntestazioneNDG, "", new { @class = "text-danger" })
+                        </b>
+
+                    </td>
+                    <td>
+
+                        @Html.DisplayNameFor(model => model.CodiceFiscale)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.CodiceFiscale, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodiceFiscale, "", new { @class = "text-danger" })
+                        </b>
+
+                    </td>
+
+                    <td>
+                        @Html.DisplayNameFor(model => model.LuogoNascita)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.LuogoNascita, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LuogoNascita, "", new { @class = "text-danger" })
+                        </b>
+                    </td>
+                    <td>
+                        @*<div class="form-group">
+                                @Html.LabelFor(model => model.DataNascita, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.DataNascita, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.DataNascita, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+                        @if (Model.DataNascita.HasValue)
+                        {
+
+                            @Html.DisplayNameFor(model => model.DataNascita)
+                            <br />
+                            <b>
+                                @Html.HiddenFor(model => model.DataNascita)
+                                @Model.DataNascita.GetValueOrDefault().ToString("dd/MM/yyyy")
+                            </b>
+
+                        }
+                    </td>
+                    <td>
+
+                        @Html.DisplayNameFor(model => model.Indirizzo)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.Indirizzo, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Indirizzo, "", new { @class = "text-danger" })
+                        </b>
+
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+
+    }
+    else
+    {
+        <fieldset class="giuridica">
+            <legend>Società</legend>
+            <table class="TabellaDati">
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.IntestazioneNDG)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.IntestazioneNDG, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.IntestazioneNDG, "", new { @class = "text-danger" })
+                        </b>
+
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(model => model.PIva)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.PIva, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PIva, "", new { @class = "text-danger" })
+                        </b>
+
+                    </td>
+                    <td>
+
+                        @Html.DisplayNameFor(model => model.SedeLegale)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.SedeLegale, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.SedeLegale, "", new { @class = "text-danger" })
+                        </b>
+                    </td>
+                </tr>
+
+                <tr>
+
+                    <td>
+
+                        @Html.DisplayNameFor(model => model.IscrizioneCCIAA)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.IscrizioneCCIAA, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.IscrizioneCCIAA, "", new { @class = "text-danger" })
+                        </b>
+
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(model => model.AlboProfessionale)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.AlboProfessionale, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.AlboProfessionale, "", new { @class = "text-danger" })
+                        </b>
+                    </td>
+
+                    <td>
+
+                        @Html.DisplayNameFor(model => model.Indirizzo)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.Indirizzo, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Indirizzo, "", new { @class = "text-danger" })
+                        </b>
+
+                    </td>
+                </tr>
+            </table>
+
+        </fieldset>
+    }
+}
+else
+{
+    <fieldset>
+        <legend>Conto cointestato</legend>
+        <table class="TabellaDati">
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.IntestazioneNDG)
+                    <br />
+                    <b>
+                        @Html.EditorFor(model => model.IntestazioneNDG, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.IntestazioneNDG, "", new { @class = "text-danger" })
+                    </b>
+
+                </td>
+                @*<td>
+                        @Html.DisplayNameFor(model => model.PIva)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.PIva, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PIva, "", new { @class = "text-danger" })
+                        </b>
+                    </td>*@
+                <td>
+
+                    @Html.DisplayNameFor(model => model.SedeLegale)
+                    <br />
+                    <b>
+                        @Html.EditorFor(model => model.SedeLegale, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SedeLegale, "", new { @class = "text-danger" })
+                    </b>
+                </td>
+            </tr>
+
+            @*<tr>
+
+                    <td>
+
+                        @Html.DisplayNameFor(model => model.IscrizioneCCIAA)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.IscrizioneCCIAA, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.IscrizioneCCIAA, "", new { @class = "text-danger" })
+                        </b>
+
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(model => model.AlboProfessionale)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.AlboProfessionale, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.AlboProfessionale, "", new { @class = "text-danger" })
+                        </b>
+                    </td>
+
+                    <td>
+
+                        @Html.DisplayNameFor(model => model.Indirizzo)
+                        <br />
+                        <b>
+                            @Html.EditorFor(model => model.Indirizzo, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Indirizzo, "", new { @class = "text-danger" })
+                        </b>
+
+                    </td>
+                </tr>*@
+        </table>
+
+    </fieldset>
+}
+
+@{
+    int i = 0;
+    if ((Model.Cointestatari != null) && (Model.Cointestatari.Count() > 0))
+    {
+        <fieldset>
+            <legend>Cointestatari</legend>
+            @foreach (var item in Model.Cointestatari)
+            {
+
+                @Html.Hidden("Cointestatari[" + i + "].Id", item.Id)
+                @Html.Hidden("Cointestatari[" + i + "].NaturaGiuridica", item.NaturaGiuridica)
+                @Html.Hidden("Cointestatari[" + i + "].isPerson", item.isPerson)
+                @Html.Hidden("Cointestatari[" + i + "].NDG", item.NDG)
+                if (item.isPerson)
+                {
+                    <fieldset>
+                        <legend>Persona fisica</legend>
+                        <table class="TabellaDati">
+                            <tr>
+                                <td>
+
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().IntestazioneNDG)
+                                    <br />
+                                    <b>
+                                        @Html.Hidden("Cointestatari[" + i + "].IntestazioneNDG", item.IntestazioneNDG)
+                                        @Html.TextBox("Cointestatari[" + i + "].IntestazioneNDG", item.IntestazioneNDG, new { @disabled = "@disabled", @readonly = "readonly" })
+                                        @Html.ValidationMessage("Cointestatari[" + i + "].IntestazioneNDG")
+                                    </b>
+
+                                </td>
+                                <td>
+
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().CodiceFiscale)
+                                    <br />
+                                    <b>
+                                        @Html.Hidden("Cointestatari[" + i + "].CodiceFiscale", item.CodiceFiscale)
+                                        @Html.TextBox("Cointestatari[" + i + "].CodiceFiscale", item.CodiceFiscale, new { @disabled = "@disabled", @readonly = "readonly" })
+                                        @Html.ValidationMessage("Cointestatari[" + i + "].CodiceFiscale")
+                                    </b>
+
+                                </td>
+
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().LuogoNascita)
+                                    <br />
+                                    <b>
+                                        @Html.Hidden("Cointestatari[" + i + "].LuogoNascita", item.LuogoNascita)
+                                        @Html.TextBox("Cointestatari[" + i + "].LuogoNascita", item.LuogoNascita, new { @disabled = "@disabled", @readonly = "readonly" })
+                                        @Html.ValidationMessage("Cointestatari[" + i + "].LuogoNascita")
+                                    </b>
+                                </td>
+                                <td>
+                                    @*<div class="form-group">
+                                            @Html.LabelFor(model => model.Cointestatari.FirstOrDefault().DataNascita, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.Cointestatari.FirstOrDefault().DataNascita, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Cointestatari.FirstOrDefault().DataNascita, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>*@
+                                    @if (item.DataNascita.HasValue)
+                                    {
+
+                                        @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().DataNascita)
+                                        <br />
+                                        <b>
+                                            @Html.Hidden("Cointestatari[" + i + "].DataNascita", item.DataNascita)
+                                            @item.DataNascita.GetValueOrDefault().ToString("dd/MM/yyyy")
+                                        </b>
+
+                                    }
+                                </td>
+                                <td>
+
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().Indirizzo)
+                                    <br />
+                                    <b>
+                                        @Html.Hidden("Cointestatari[" + i + "].Indirizzo", item.Indirizzo)
+                                        @Html.TextBox("Cointestatari[" + i + "].Indirizzo", item.Indirizzo, new { @disabled = "@disabled", @readonly = "readonly" })
+                                        @Html.ValidationMessage("Cointestatari[" + i + "].Indirizzo")
+                                    </b>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+
+                }
+                else
+                {
+                    <fieldset>
+                        <legend>Società</legend>
+                        <table class="TabellaDati">
+                            <tr>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().IntestazioneNDG)
+                                    <br />
+                                    <b>
+                                        @Html.Hidden("Cointestatari[" + i + "].IntestazioneNDG", item.IntestazioneNDG)
+                                        @Html.TextBox("Cointestatari[" + i + "].IntestazioneNDG", item.IntestazioneNDG, new { @disabled = "@disabled", @readonly = "readonly" })
+                                        @Html.ValidationMessage("Cointestatari[" + i + "].IntestazioneNDG")
+                                    </b>
+                                </td>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().PIva)
+                                    <br />
+                                    <b>
+                                        @Html.Hidden("Cointestatari[" + i + "].PIva", item.PIva)
+                                        @Html.TextBox("Cointestatari[" + i + "].PIva", item.PIva, new { @disabled = "@disabled", @readonly = "readonly" })
+                                        @Html.ValidationMessage("Cointestatari[" + i + "].PIva")
+                                    </b>
+
+                                </td>
+                                <td>
+
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().SedeLegale)
+                                    <br />
+                                    <b>
+                                        @Html.Hidden("Cointestatari[" + i + "].SedeLegale", item.SedeLegale)
+                                        @Html.TextBox("Cointestatari[" + i + "].SedeLegale", item.SedeLegale, new { @disabled = "@disabled", @readonly = "readonly" })
+                                        @Html.ValidationMessage("Cointestatari[" + i + "].SedeLegale")
+                                    </b>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().IscrizioneCCIAA)
+                                    <br />
+                                    <b>
+                                        @Html.TextBox("Cointestatari[" + i + "].IscrizioneCCIAA", item.IscrizioneCCIAA, new { })
+                                        @Html.ValidationMessage("Cointestatari[" + i + "].IscrizioneCCIAA")
+                                    </b>
+
+                                </td>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().AlboProfessionale)
+                                    <br />
+                                    <b>
+                                        @Html.TextBox("Cointestatari[" + i + "].AlboProfessionale", item.AlboProfessionale, new { })
+                                        @Html.ValidationMessage("Cointestatari[" + i + "].AlboProfessionale")
+                                    </b>
+                                </td>
+                                <td>
+
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().Indirizzo)
+                                    <br />
+                                    <b>
+                                        @Html.Hidden("Cointestatari[" + i + "].Indirizzo", item.Indirizzo)
+                                        @Html.TextBox("Cointestatari[" + i + "].Indirizzo", item.Indirizzo, new { @disabled = "@disabled", @readonly = "readonly" })
+                                        @Html.ValidationMessage("Cointestatari[" + i + "].Indirizzo")
+                                    </b>
+
+                                </td>
+                            </tr>
+                        </table>
+
+                    </fieldset>
+
+                }
+
+                i++;
+
+
+            }
+
+
+        </fieldset>
+        <br />
+    }
+}
+
+
+
+
+@*vincenzo
+        <div class="form-group">
+        @Html.LabelFor(model => model.Richiedente, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Richiedente, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Richiedente, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+<script type="text/javascript">
+    $(function () {
+        @*var False = false;
+        var True = true;
+        function ControlloPersona(value) {
+            //console.log(value);
+            if (value) {
+                //$('.persona').css("visibility", "visible"); //show
+                $('.persona').show(); //show
+                $('.giuridica').hide(); //hide
+                //console.log("show "+value);
+            }
+            else {
+                //$('.persona').css("visibility", "hidden"); //hide
+                $('.persona').hide(); //hide
+                $('.giuridica').show(); //show
+                //console.log("hide " +value);
+
+            }
+        };
+        //var isPerson = $("input#isPerson");
+        //ControlloPersona(isPerson.is(':checked'));
+        //isPerson.click(function () {
+        //    //console.log("isPerson");
+        //    ControlloPersona($(this).is(':checked'));
+        //});
+        ControlloPersona(@Model.isPerson);*@
+
+
+           var datepicker = $("#DataRichiesta").data("kendoDatePicker");
+                datepicker.bind("change", function () {
+                    var value = this.value();
+                    /* The result can be observed in the DevTools(F12) console of the browser. */
+                    //alert.log(value); //value is the selected date in the datepicker
+
+                    //alert("datanuova: " + value);
+                    DataEvasione();
+                });
+
+                DataEvasione();
+                function DataEvasione(value) {
+                    var richiesta = $("#DataRichiesta").val();
+
+                    var dateString = richiesta; // Oct 23
+                    var words = dateString.split('/');
+
+                    var dd = words[0];
+                    var mm = words[1];
+                    var y = words[2];
+                    var dateObject = new Date(mm + '/' + dd + '/' + y);
+                    //alert("dopo split " + dateObject.toLocaleDateString())
+
+                    var numberOfDaysToAdd = @ViewBag.giorniscadenzabanca;//evasione 90gg
+                    dateObject.setDate(dateObject.getDate() + numberOfDaysToAdd);
+                    //alert("add day " + dateObject.toLocaleDateString())
+                    $("#datamaxevasione").text(dateObject.toLocaleDateString());
+
+                    //var dd = String(dateObject.getDate()).padStart(2, '0');
+                    //var mm = String(dateObject.getMonth() + 1).padStart(2, '0');;
+
+
+                    var dd = ("00" + String(dateObject.getDate())).slice(-2);
+                    var mm = ("00" + String(dateObject.getMonth() + 1)).slice(-2);
+
+                    var y = dateObject.getFullYear();
+                    $("#datamaxevasione").text(dd + '/' + mm + '/' + y);
+                }
+
+        var CampoIndirizzo = $("input#Indirizzo");
+        CampoIndirizzo.change(function () {
+            var campoind = $(this).val();
+            console.log("CampoIndirizzo " + campoind);
+            $("input#Indirizzo").each(function () { $(this).val(campoind); });
+        });
+        var CampoIntestazioneNDG = $("input#IntestazioneNDG");
+        CampoIntestazioneNDG.change(function () {
+            var campoint = $(this).val();
+            console.log("CampoIntestazioneNDG " + campoint);
+            $("input#IntestazioneNDG").each(function () { $(this).val(campoint); });
+        });
+
+    });
+</script>
+
+<script>
+    $("#DataRichiesta").kendoDatePicker({
+        max: new Date()
+    });
+</script>

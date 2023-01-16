@@ -1,0 +1,217 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+<div class="form-group">
+    @Html.LabelFor(model => model.Istituto, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.Istituto, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Istituto, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.NDG, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.NDG, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.NDG, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+
+
+@Html.HiddenFor(model => model.isPerson)
+@Html.HiddenFor(model => model.NaturaGiuridica)
+
+
+@*<div class="form-group">
+        @Html.LabelFor(model => model.isPerson, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.isPerson)
+                @Html.ValidationMessageFor(model => model.isPerson, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>*@
+
+
+
+<fieldset class="persona">
+    <legend>Persona fisica</legend>
+    <table>
+        <tr>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IntestazioneNDG, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.IntestazioneNDG, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.IntestazioneNDG, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CodiceFiscale, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.CodiceFiscale, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CodiceFiscale, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LuogoNascita, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.LuogoNascita, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.LuogoNascita, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                @*<div class="form-group">
+                        @Html.LabelFor(model => model.DataNascita, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DataNascita, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DataNascita, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+                @if (Model.DataNascita.HasValue)
+                {
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DataNascita, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.HiddenFor(model => model.DataNascita)
+                            @Model.DataNascita.GetValueOrDefault().ToString("dd/MM/yyyy")
+                        </div>
+                    </div>
+                }
+            </td>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Indirizzo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Indirizzo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Indirizzo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset class="giuridica">
+    <legend>Società</legend>
+    <table>
+        <tr>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IntestazioneNDG, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.IntestazioneNDG, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.IntestazioneNDG, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PIva, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.PIva, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PIva, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SedeLegale, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.SedeLegale, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SedeLegale, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IscrizioneCCIAA, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.IscrizioneCCIAA, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.IscrizioneCCIAA, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AlboProfessionale, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.AlboProfessionale, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.AlboProfessionale, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Indirizzo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Indirizzo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Indirizzo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</fieldset>
+
+@*vincenzo
+        <div class="form-group">
+        @Html.LabelFor(model => model.Richiedente, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Richiedente, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Richiedente, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+<script type="text/javascript">
+    $(function () {
+        var False = false;
+        var True = true;
+        function ControlloPersona(value) {
+            //console.log(value);
+            if (value) {
+                //$('.persona').css("visibility", "visible"); //show
+                $('.persona').show(); //show
+                $('.giuridica').hide(); //hide
+                //console.log("show "+value);
+            }
+            else {
+                //$('.persona').css("visibility", "hidden"); //hide
+                $('.persona').hide(); //hide
+                $('.giuridica').show(); //show
+                //console.log("hide " +value);
+
+            }
+        };
+        //var isPerson = $("input#isPerson");
+        //ControlloPersona(isPerson.is(':checked'));
+        //isPerson.click(function () {
+        //    //console.log("isPerson");
+        //    ControlloPersona($(this).is(':checked'));
+        //});
+        ControlloPersona(@Model.isPerson);
+
+
+
+
+        var CampoIndirizzo = $("input#Indirizzo");
+        CampoIndirizzo.change(function () {
+            var campoind = $(this).val();
+            console.log("CampoIndirizzo " + campoind);
+            $("input#Indirizzo").each(function () { $(this).val(campoind); });
+        });
+        var CampoIntestazioneNDG = $("input#IntestazioneNDG");
+        CampoIntestazioneNDG.change(function () {
+            var campoint = $(this).val();
+            console.log("CampoIntestazioneNDG " + campoint);
+            $("input#IntestazioneNDG").each(function () { $(this).val(campoint); });
+        });
+    });
+</script>
+

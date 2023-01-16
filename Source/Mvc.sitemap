@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0" enableLocalization="true">
+  <mvcSiteMapNode title="Home" controller="" action="">
+    <mvcSiteMapNode title=">>Ricerca" controller="Ricerca" action="RicercaNdg" >
+    </mvcSiteMapNode>
+    <mvcSiteMapNode title=">>Nuova Richiesta" controller="Richiesta" action="ApriRichiestaVuota" />
+    <mvcSiteMapNode title=">>Richieste" controller="Richiesta" action="GestioneRichieste">
+      <mvcSiteMapNode title="Child item 1.2.1" controller="Home" action="MainRicerca"/>
+    </mvcSiteMapNode>
+  </mvcSiteMapNode>
+</mvcSiteMap>

@@ -1,0 +1,859 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+
+<div id="finestramotivazione" style="display: none">
+    @Html.LabelFor(model => model.Motivazione, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.Editor("imputMotivazione", new { htmlAttributes = new { @class = "form-control" } })
+        @*@Html.Label(@ViewData["Motivazione"]==null ? "" :(string)@ViewData["Motivazione"])*@
+        @Html.ValidationMessageFor(model => model.Motivazione, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div id="result" class="" style="display: none"></div>
+
+
+<script type="text/javascript">
+    $(function () {
+        ControlloSpesa(SpesaAddebitabile.is(':checked'));
+
+        var TipoRichiedente = $("select#TipoRichiedente_Id");
+        var selectCessione = $("select#Cessione");
+        var selectLegittimato = $("select#Legittimato");
+        var radioLegittimatoTrue = $('#Legittimato-True');
+        var radioLegittimatoFalse = $('#Legittimato-False');
+        var radioCessioneTrue = $('#Cessione-True');
+        var radioCessioneFalse = $('#Cessione-False');
+
+        function ControlloUOcompetente() {
+            var valCuratore = TipoRichiedente.val() != "@ViewBag.TitolareId";
+            var valCessione = $("input[name='Cessione']:checked").val();
+            var valCuratoreBool = String(valCuratore).toLowerCase() == "true";
+            var valCessioneBool = String(valCessione).toLowerCase() == "true";
+            var value = valCuratoreBool || valCessioneBool;
+            console.log('Controllo UOcompetente valCuratore:' + valCuratoreBool);
+            console.log('Controllo UOcompetente valCessione:' + valCessioneBool);
+            console.log('Controllo UOcompetente:' + value);
+            if (value) {
+                $('.inoltrofiliale').hide();
+                $('#SelezioneUffici').change();
+            }
+            else {
+                $('.inoltrofiliale').show();
+            }
+        };
+
+        function azzeraCessione() {
+            console.log("Azzera Cessione" );
+            selectCessione.val("");
+            selectCessione.value = "";
+            radioCessioneTrue.attr('checked', false);
+            radioCessioneFalse.attr('checked', false);
+        }
+        function ControlloCessione() {
+            /*var value = eleLegittimato.val();*/
+            var value = $("input[name='Cessione']:checked").val();
+            console.log('Controllo Cessione:' + value);
+            ControlloUOcompetente();
+        };
+        radioCessioneTrue.change(function () {
+            ControlloCessione();
+        });
+        radioCessioneFalse.change(function () {
+            ControlloCessione();
+        });
+        function Cessione(value) {
+            var eleCessione = $("#Cessione");
+            console.log("Inizializza Cessione:" + value);
+                    if (value.toLowerCase() == "true") {
+                        eleCessione.val("True");
+                        radioCessioneTrue.attr('checked', 'checked').change();
+                        radioCessioneFalse.attr('checked', false).change();
+                    } else {
+                        if (value.toLowerCase() == "false") {
+                            eleCessione.val("False");
+                            radioCessioneTrue.attr('checked', false).change();
+                            radioCessioneFalse.attr('checked', 'checked').change();
+                        } else {
+                            eleCessione.val("");
+                            radioCessioneTrue.attr('checked', false).change();
+                            radioCessioneFalse.attr('checked', false).change();
+                        }
+                    }
+        };
+        Cessione('@Model.Cessione');
+        ControlloCessione();
+
+
+        function azzeraLegittimato() {
+            console.log("Azzera Legittimato:");
+            selectLegittimato.val("");
+            selectLegittimato.value = "";
+            radioLegittimatoTrue.attr('checked', false);
+            radioLegittimatoFalse.attr('checked', false);
+        };
+        function ControlloLegittimato() {
+            /*var value = eleLegittimato.val();*/
+            var value = $("input[name='Legittimato']:checked").val();
+            console.log('Controllo Legittimato:' + value);
+            if (value == "True") {
+                $('.cessione').show(); //show
+            }
+            else {
+                $('.cessione').hide(); //show
+                azzeraCessione();
+            }
+        };
+        selectLegittimato.change(function () {
+            ControlloLegittimato();
+        });
+        radioLegittimatoTrue.change(function () {
+            ControlloLegittimato();
+        });
+        radioLegittimatoFalse.change(function () {
+            ControlloLegittimato();
+        });
+        function Legittimato(value) {
+            var eleLegittimato = $("#Legittimato");
+            console.log("Inizializza Legittimato:" + value);
+                if (value.toLowerCase() == "true") {
+                    eleLegittimato.val("True");
+                    radioLegittimatoTrue.attr('checked', 'checked').change();
+                    radioLegittimatoFalse.attr('checked', false).change();
+                } else {
+                    if (value.toLowerCase() == "false") {
+                        eleLegittimato.val("False");
+                        radioLegittimatoTrue.attr('checked', false).change();
+                        radioLegittimatoFalse.attr('checked', 'checked').change();
+                    } else {
+                        eleLegittimato.val("");
+                        radioLegittimatoTrue.attr('checked', false).change();
+                        radioLegittimatoFalse.attr('checked', false).change();
+                    }
+                }
+        };
+        Legittimato('@Model.Legittimato');
+        ControlloLegittimato();
+
+        function ControlloTitolare(value) {
+            console.log('Controllo Titolare:' + value);
+            if (value) {
+                $('.legittimato').show(); //show
+            }
+            else {
+                $('.legittimato').hide();
+                $('.cessione').hide();
+                azzeraLegittimato();
+                azzeraCessione();
+            }
+            ControlloUOcompetente();
+        };
+        ControlloTitolare(TipoRichiedente.val() == "@ViewBag.TitolareId");
+        TipoRichiedente.change(function () {
+            $('#UOCode_Inoltro').val("").change();
+            $('#SelezioneUffici').val("").change();
+            $("#UOCode_InoltroDesc").val("").change();
+            ControlloTitolare($(this).val() == "@ViewBag.TitolareId");
+          //  ControlloUOCompetente(TipoRichiedente.val() == "@ViewBag.CuratoreId" || Cessione.val() == "True");
+        });
+
+
+        $('#SelezioneUffici').change(function () {
+            var ufficioselezionato = $(this).val();
+            $("#UOCode_InoltroDesc").val("").change();
+            console.log("ufficioselezionato:" + ufficioselezionato);
+            $("#UOCode_Inoltro").val(ufficioselezionato).change();
+        });
+
+
+
+        function ControlloBypass() {
+            /*var value = eleLegittimato.val();*/
+            var value = $("input[name='bypassallegati']:checked").val();
+            console.log('Bypass:' + value);
+            if (value=='true') {
+                $('.motbypass').show(); //show
+            }
+            else {
+                $('.motbypass').hide(); //show
+                $('#MotivazioneBypass').val("");
+            }
+        };
+
+        ControlloBypass();
+
+        $('#bypassallegati').unbind().click(function () {
+            /*DocOrig.prop('checked', true);*/
+            $(this).val($(this).is(':checked'));
+            console.log("bypassallegati:" + $(this).is(':checked') + ":" + $(this).val());
+            ControlloBypass();
+        });
+
+        @*function ControlloUOCompetente(value) {
+            //console.log(value);
+            if (value) {
+                $('.inoltro').show(); //show
+            }
+            else {
+                $('.inoltro').hide(); //show
+            }
+        };
+        ControlloUOCompetente(TipoRichiedente.val() == "@ViewBag.CuratoreId" || Cessione.val() == "True");
+        Cessione.change(function () {
+            $('#UOCode_Inoltro').val("").change();
+            ControlloUOCompetente(TipoRichiedente.val() == "@ViewBag.CuratoreId" || Cessione.val() == "True");
+        });*@
+
+
+
+            var DocOrig = $("input#DocOrig");
+            DocOrig.unbind().click(function () {
+                /*DocOrig.prop('checked', true);*/
+                DocOrig.val($(this).is(':checked'));
+                console.log("DocOrig:"+$(this).is(':checked') + ":" + $(this).val());
+
+            });
+
+
+
+            function GestionePost(elemento, submitName, submitValue, form, term) {
+                term.append(submitName, submitValue);
+                // Display the key/value pairs
+                //for (var pair of term.entries()) {
+                //    console.log(pair[0] + ', ' + pair[1]);
+                //}
+                url = form.attr('action');
+                console.log("url:" + url);
+                console.log(term);
+                $("#loading").css("display", "block");
+                $.ajax({
+                    url: url,
+                    data: term,
+                    method: "POST",
+                    dataType: 'json',
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 800000,
+                    success:
+                        function (data)
+                        {
+                            $("#loading").css("display", "none");
+                            console.log(submitName + ":" + submitValue);
+
+                            @*var url = '@Url.Action("Gestione", "Richiesta")';
+                            var url2 = '/' + data.data.Id;
+                            if (url.search(url2) < 0) {
+
+                                history.pushState({}, "", url+url2);
+                            }*@
+
+                            //$('#result').html('Salvato con successo');
+                            /*console.log("DataIN:" + JSON.stringify(data));*/
+                            //data = $.parseJSON(JSON.stringify(data));
+                            /*console.log("dataIN:" + JSON.stringify(data));*/
+                            $.each(data.data,
+                                function (i, item) {
+                                    if ((item != null) && (i == "Stato")) {
+                                        $.map(item, function (itemb, ib) {
+                                            $("#Stato_" + ib).val(itemb);
+                                            console.log("Map " + ib + ":" + itemb
+                                            );
+                                        });
+
+                                        //$("#Stato.Id").val(item.Id);
+                                        //console.log(Stato.Id + ":" + item.Id);
+                                        //$("#Stato.Descrizione").val(item.Descrizione);
+                                        //console.log(Stato.Descrizione + ":" + item.Descrizione);
+                                    } else {
+                                        if ((item != null) && (String(item).substring(0, 5) == "/Date")) {
+
+                                        @*$('#DataPagamento').val(new Date(Date.parse('@Model.DataPagamento')).format("yyyy-MM-dd"));
+                                            $('#DataSottoscrizione').val(new Date(Date.parse('@Model.DataSottoscrizione')).format("yyyy-MM-dd"));*@
+
+                                            item = String(item).replace("/Date(", "").replace(")/", "");
+                                            var dateObj = new Date(+item);
+                                            var month = dateObj.getMonth() + 1; //months from 1-12
+                                            var day = dateObj.getDate();
+                                            var year = dateObj.getFullYear();
+                                            item = ("000" + day).slice(-2) + "/" + ("000" + month).slice(-2) + "/" + year;
+                                            console.log("data trovata:" + item);
+                                        }
+
+                                        /*             $("#" + i).val(item).change();*/
+
+                                        $("input[id='"+i+"']" ).each(function (index) {
+                                            $(this).val(item).change();
+                                            console.log("Aggiorno "+index+":"+$(this).attr("id") + ":" + item);
+                                        });
+
+
+                                }
+
+                            });
+
+                            Legittimato(String(data.data.Legittimato));
+                            Cessione(String(data.data.Cessione));
+
+
+
+                            displayValidationErrors(data.errorList);
+
+
+
+
+                            if (data.errors) {
+
+                            } else {
+
+                            }
+
+                            console.log("operationType:" + data.operationType);
+                            var statosucc = String(data.data.StatoSuccessivo);
+                            console.log("StatoSuccessivo:" + statosucc);
+                            if ((data != null) && (data.operationType!=null)&&(data.operationType.toLowerCase().indexOf("conferma")>=0))
+                            {
+                                if (!statosucc || statosucc.length === 0)
+                                {
+                                    /*alert("Non è possibile nessun cambio stato,\n effettuato solo salvataggio.                             ");*/
+                                }
+                                else
+                                {
+                                    var message = "Confermi passaggio a " + statosucc + "?                ";
+                                    console.log(message);
+                                    //var conferma = confirmCustom(message);
+                                    //if (conferma)
+                                    //{
+                                    //    //var formdataxconferma = $("#RichiestaForm")[0];
+                                    //    //var dataxconferma = new FormData(formdataxconferma);
+                                    //    //GestionePost(elemento, "operationType", data.operationType+"Ok", form, dataxconferma);
+                                    //    ConfermaOK(elemento, "operationType", data.operationType + "Ok", form);
+                                    //}
+                                    if (message.length > 0) {
+                                        $("#result").empty();
+                                        console.log("alert:" + message);
+                                        $("<div>").text(message).appendTo("#result");
+                                        $("#result").scrollTop(0);
+                                        var opt = {
+                                            autoOpen: false,
+                                            modal: true,
+                                            width: "auto",
+                                            height: "auto",
+                                            title: 'Conferma',
+                                            buttons: {
+                                                Conferma: function () {
+                                                    $(this).dialog("close");
+                                                    $(this).dialog("destroy");
+                                                    ConfermaOK(elemento, "operationType", data.operationType + "Ok", form);
+                                                },
+                                                Annulla: function () {
+                                                    $(this).dialog("close");
+                                                    $(this).dialog("destroy");
+
+                                                }
+                                            },
+                                        };
+                                        $('#result').dialog(opt).dialog('open');
+                                    }
+                                }
+                            }
+
+
+
+
+
+                            if ((submitValue == "AddFile") || (submitName == "DelAllegato"))
+                            {
+                                var url = '@Url.Action("TabellaAllegati", "Richiesta")';
+                                dato = {
+                                    id: data.data.Id
+                                };
+                                console.log(dato);
+                                $("#loading").css("display", "block");
+                                $.ajax({
+                                    xhr: function()
+                                    {
+                                        var xhr = new window.XMLHttpRequest();
+                                        //Upload progress
+                                        xhr.upload.addEventListener("progress", function(evt){
+                                            if (evt.lengthComputable) {
+                                                var percentComplete = evt.loaded / evt.total;
+                                                //Do something with upload progress
+                                                console.log(percentComplete);
+                                            }
+                                        }, false);
+                                        //Download progress
+                                        xhr.addEventListener("progress", function(evt){
+                                            if (evt.lengthComputable) {
+                                                var percentComplete = evt.loaded / evt.total;
+                                                //Do something with download progress
+                                                console.log(percentComplete);
+                                            }
+                                        }, false);
+                                        return xhr;
+                                    },
+                                    url: url,
+                                    data: dato,
+                                    type: "POST",
+                                    cache: false,
+                                    timeout: 800000,
+                                    error: function (xhr) {
+                                        $("#loading").css("display", "none");
+                                        alert('Error: ' + xhr.statusText);
+                                    },
+                                    success: function (result) {
+                                        $("#loading").css("display", "none");
+                                        $('#AllegatiPartial').html(result);
+                                        //$('#FileForm').val(null);
+                                        //fixhttps://qastack.it/programming/20549241/how-to-reset-input-type-file
+                                        $("#FileForm").replaceWith($("#FileForm").val('').clone(true));
+                                        ////azzero selettore tipo allegato
+                                        $('#tipoAllegato_Id').val(0).change();
+                                        console.log("Rigenero tabella AllegatiPartial");
+                                        init();
+                                    }
+                                });
+                            }
+                            else
+                            if ((submitValue == "AddDocumento") || (submitName == "DelDocumento"))
+                            {
+                                var url = '@Url.Action("TabellaDocumenti", "Richiesta")';
+                                dato = {
+                                    id: data.data.Id
+                                };
+                                console.log(dato);
+                                $("#loading").css("display", "block");
+                                $.ajax({
+                                    url: url,
+                                    data: dato,
+                                    type: "POST",
+                                    cache: false,
+                                    timeout: 800000,
+                                    error: function (xhr) {
+                                        $("#loading").css("display", "none");
+                                        alert('Error: ' + xhr.statusText);
+                                    },
+                                    success: function (result) {
+                                        $("#loading").css("display", "none");
+                                        $('#DocumentazionePartial').html(result);
+                                        console.log("Rigenero tabella DocumentazionePartial");
+                                        init();
+                                    }
+                                });
+
+                            }
+                            ///Sincronizzo checkbox
+                            if (DocOrig.val() == 'true') DocOrig.prop('checked', true);
+                            if (DocOrig.val() == 'false') DocOrig.prop('checked', false);
+                            console.log("DocOrig:" + DocOrig.is(':checked') + ":" + DocOrig.val());
+
+                            //if (SpesaAddebitabile.val() == 'true') SpesaAddebitabile.prop('checked', true);
+                            //if (SpesaAddebitabile.val() == 'false') SpesaAddebitabile.prop('checked', false);
+                            //SpesaAddebitabile.prop('checked', SpesaAddebitabile.val());
+                            //console.log("SpesaAddebitabile:" + SpesaAddebitabile.is(':checked') + ":" + SpesaAddebitabile.val());
+                            /////Sincronizzo checkbox
+
+                            ////sincronizzo selettore tipo documento
+                            if ((typeof (data.data) !== 'undefined')&& (data.data.Documento))
+                            {
+                                console.log("select documento:" + $('#Documento_Id').val());
+                                $('#Documento_Id').val(data.data.Documento.Id).change();
+                                console.log("Set select tipo documento:" + data.data.Documento.Id);
+                            } else $('#Documento_Id').val(0).change();
+
+
+
+
+                            if (data.operationType == "StatoCambiato")
+                            {
+                                Chiudi();
+                                var url = "@Url.Action("GestioneRichieste", "Richiesta")";
+                                //console.log(window.location);
+                                if (window.location.pathname.toLowerCase() != url.toLowerCase()) window.location.href = url;
+                            }
+                            if (data.operationType == "StatoNonCambiato")
+                            {
+                                /*alert("Non è possibile nessun cambio stato,\n effettuato solo salvataggio.                                      ");*/
+                            }
+
+
+
+
+                            $(elemento).removeAttr("disabled");
+
+                            init();
+                        },
+                    error: function (xhr) {
+                        $("#loading").css("display", "none");
+                        alert('Impossibile inviare il modulo. Error: ' + xhr.statusText);
+                        $(elemento).removeAttr("disabled");
+                    }
+                });
+
+                //console.log("Valore file " + $("#FileForm").val());
+                //document.getElementById('FileForm').value = "";
+                //var nome_file = document.getElementById('FileForm').value;
+                //nome_file = "";
+                //document.getElementById('FileForm').value = nome_file;
+                //console.log("Valore file dopo " + $("#FileForm").val());
+            }
+
+            function ModificaElemento(Attributo, NomeElemento, NomeProprieta, ValoreProprieta) {
+                var ele = "[" + Attributo + "='" + NomeElemento + "']";
+                console.log("Elemento:"+ele + " " + NomeProprieta + " " + ValoreProprieta);
+                var elemento = $(ele);
+                if (NomeProprieta == "hidden") {
+                    if (ValoreProprieta == "false") { elemento.show(); } else
+                    if (ValoreProprieta == "true") { elemento.hide(); }
+                }
+                if (ValoreProprieta == "false") { elemento.prop(NomeProprieta, false); } else
+                if (ValoreProprieta == "true") { elemento.prop(NomeProprieta, true); } else
+                    elemento.prop(NomeProprieta, ValoreProprieta);
+            };
+
+            function init() {
+                var StatiMotivazione = @Html.Raw(Json.Encode(@ViewBag.StatiMotivazione));
+                for (var i = 0; i < StatiMotivazione.length; i++) {
+                    console.log("StatiMotivazione:" + StatiMotivazione[i]);
+                }
+                var regForm = $("#RichiestaForm");
+                var url = '@Url.Action("BottoniCambioStato", "Richiesta")';
+                dato = { statoattuale: $('#Stato_Id').val(), uocode: '@Model.UOCode' };
+                console.log(dato);
+                if (dato.statoattuale > 0) {
+                    $("#loading").css("display", "block");
+                    $.ajax({
+                        url: url,
+                        data: dato,
+                        type: "POST",
+                        dataType: 'html',
+                        error: function (xhr) {
+                            $("#loading").css("display", "none");
+                            alert('Error: ' + xhr.statusText);
+                        },
+                        success: function (result) {
+                            $("#loading").css("display", "none");
+                            console.log("Genero Bottoni cambio stato");
+                            $('#BottoniCambioStato').html(result);
+
+                            regForm.find(':submit').each(function () {
+                                $(this).unbind().click(function () {
+                                    var elemento = $(this);
+                                    console.log("Submit form click");
+                                    $(this).attr("disabled", "disabled");
+                                    submitName = $(this).attr('name');
+                                    submitValue = $(this).val();
+                                    console.log("submitValue:" + submitValue);
+                                    var conferma = submitValue.indexOf("Conferma");
+                                    console.log("conferma:" + conferma);
+
+
+                                    @*var annulla = submitValue.indexOf("@ViewBag.Annulla")
+                                    console.log("annulla:" + annulla);
+                                    var respingixmod = submitValue.indexOf("@ViewBag.Respingixmod")
+                                    console.log("respingixmod:" + respingixmod);
+                                    var archivia = submitValue.indexOf("@ViewBag.Archivia")
+                                    console.log("archivia:" + archivia);
+                                    var respinta = submitValue.indexOf("@ViewBag.Respinta")
+                                    console.log("respinta:" + respinta);*@
+
+
+                                //    var ChiediMotivazione = false;
+                                //    for (var i = 0; i < StatiMotivazione.length; i++) {
+                                //        var ind = submitValue.indexOf(StatiMotivazione[i]);
+                                //        console.log("StatiMotivazione:" + StatiMotivazione[i] + " Submitvalue:" + submitValue + " IndexOf:" + ind);
+                                //        if (ind >= 0) ChiediMotivazione = true;
+                                //    }
+                                //    //if ((conferma >= 0) && ((annulla >= 0) || (respingixmod >= 0) || (archivia >= 0) || (respinta >= 0) ))
+                                //    if ((conferma >= 0) && (ChiediMotivazione))
+                                //        {
+                                //        console.log("Chiedo motivazione");
+                                //        var opt = {
+                                //            autoOpen: false,
+                                //            modal: true,
+                                //            width: "800px",
+                                //            height: "auto",
+                                //            title: 'Inserire motivazione'
+                                //        };
+                                //        $('#imputMotivazione').val($('#Motivazione').val());
+                                //        $("#finestramotivazione").dialog({
+                                //            buttons: {
+                                //                "Conferma": function () {
+                                //                    console.log("Elemento:" + elemento);
+
+                                //                    var motivazione = $('#imputMotivazione').val();
+                                //                    $('#Motivazione').val(motivazione);
+                                //                    //$('#Motivazione').value = motivazione;
+
+
+                                //                    var form = elemento.closest('form');
+                                //                    var formdata = $("#RichiestaForm")[0];
+                                //                    var data = new FormData(formdata);
+
+                                //                    //data.remove('Motivazione');
+                                //                    //data.append('Motivazione', motivazione);
+                                //                    //console.log("imputMotivazione:" + motivazione);
+                                //                    //console.log("Motivazione:" + $('#Motivazione').val());
+                                //                    //console.log("DataOUT:" + formdata);
+                                //                    GestionePost(elemento, submitName, submitValue, form, data);
+                                //                    $(this).dialog("close");
+
+                                //                },
+                                //                "Cancella": function () {
+                                //                    $('#Motivazione').val("");
+                                //                    $(this).dialog("close");
+                                //                    $(elemento).removeAttr("disabled");
+                                //                }
+                                //            }
+                                //        });
+                                //        $('#finestramotivazione').dialog(opt).dialog('open');
+
+                                //    } else {
+                                //        $('#Motivazione').val('');
+                                //        var form = $(this).closest('form');
+                                //        var formdata = $("#RichiestaForm")[0];
+                                //        var data = new FormData(formdata);
+                                //        console.log("DataOUT:" + formdata);
+                                //        GestionePost(this, submitName, submitValue, form, data);
+                                //    }
+                                    if (submitName == "DelAllegato") {
+                                        var message = "Confermi cancellazione allegato?                ";
+                                        console.log(message);
+                                        var elemento = this;
+                                        if (message.length > 0) {
+                                            $("#result").empty();
+                                            console.log("alert:" + message);
+                                            $("<div>").text(message).appendTo("#result");
+                                            $("#result").scrollTop(0);
+                                            var opt = {
+                                                autoOpen: false,
+                                                modal: true,
+                                                width: "auto",
+                                                height: "auto",
+                                                title: 'Conferma',
+                                                buttons: {
+                                                    Conferma: function () {
+                                                        $(this).dialog("close");
+                                                        $(this).dialog("destroy");
+                                                        var form = $("#RichiestaForm").closest('form');
+                                                        var formdata = $("#RichiestaForm")[0];
+                                                        var data = new FormData(formdata);
+                                                        console.log("DataOUT:" + formdata);
+                                                        GestionePost(elemento, submitName, submitValue, form, data);
+                                                    },
+                                                    Annulla: function () {
+                                                        $(this).dialog("close");
+                                                        $(this).dialog("destroy");
+                                                        $(elemento).removeAttr("disabled");
+                                                    }
+                                                },
+                                            };
+                                            $('#result').dialog(opt).dialog('open');
+                                        }
+                                    }
+                                    else {
+                                        var form = $(this).closest('form');
+                                        var formdata = $("#RichiestaForm")[0];
+                                        var data = new FormData(formdata);
+                                        console.log("DataOUT:" + formdata);
+                                        GestionePost(this, submitName, submitValue, form, data);
+                                    }
+
+
+                                });
+                            });
+                        }
+                    });
+                }
+
+
+
+                regForm.submit(
+                    function (event) {
+                        console.log("Submit default prevenuto");
+                        event.preventDefault();
+
+                    }
+                );
+                var id = $("#Id");
+                console.log("ID: " + id.val());
+                if (id.val() =="@Guid.Empty") {
+                    $(".Id_Empty").hide();
+                    console.log("Id_Empty: hide");
+                } else {
+                    $(".Id_Empty").show();
+                    console.log("Id_Empty: show");
+                }
+
+
+                var url = '@Url.Action("Abilitaelementi", "Richiesta")';
+                dato = { statoattuale: $('#Stato_Id').val() };
+                console.log(dato);
+                if (dato.statoattuale > 0) {
+                    $("#loading").css("display", "block");
+                    $.ajax({
+                        url: url,
+                        data: dato,
+                        type: "POST",
+                        dataType: "json",
+                        error: function (xhr) {
+                            $("#loading").css("display", "none");
+                            alert('Error: ' + xhr.statusText);
+                        },
+                        success: function (data) {
+                            $("#loading").css("display", "none");
+                            $.map(data,
+                                function(item) {
+                                    ModificaElemento(item.Attributo, item.NomeElemento, item.NomeProprieta, item.ValoreProprieta);
+                                });
+                        }
+                    });
+                }
+
+
+            }
+            init();
+
+            function ConfermaOK(elemento, submitName, submitValue, form) {
+                console.log("submitValue:" + submitValue);
+                var conferma = submitValue.indexOf("Conferma");
+                console.log("conferma:" + conferma);
+                var StatiMotivazione = @Html.Raw(Json.Encode(@ViewBag.StatiMotivazione));
+                for (var i = 0; i < StatiMotivazione.length; i++) {
+                    console.log("StatiMotivazione:" + StatiMotivazione[i]);
+                }
+                var ChiediMotivazione = false;
+                for (var i = 0; i < StatiMotivazione.length; i++) {
+                    var ind = submitValue.indexOf(StatiMotivazione[i]);
+                    console.log("StatiMotivazione:" + StatiMotivazione[i] + " Submitvalue:" + submitValue + " IndexOf:" + ind);
+                    if (ind >= 0) ChiediMotivazione = true;
+                }
+                //if ((conferma >= 0) && ((annulla >= 0) || (respingixmod >= 0) || (archivia >= 0) || (respinta >= 0) ))
+                if ((conferma >= 0) && (ChiediMotivazione)) {
+                    console.log("Chiedo motivazione");
+                    var opt = {
+                        autoOpen: false,
+                        modal: true,
+                        width: "800px",
+                        height: "auto",
+                        title: 'Inserire motivazione'
+                    };
+                    $('#imputMotivazione').val($('#Motivazione').val());   ///////////////////// ripropongo motivazione memorizzata
+                    $("#finestramotivazione").dialog({
+                        options:opt,
+                        buttons: {
+                            "Conferma": function () {
+                                console.log("Elemento:" + elemento);
+
+                                var motivazione = $('#imputMotivazione').val(); 
+                                $('#Motivazione').val(motivazione);
+                                var formdataxconferma = $("#RichiestaForm")[0];
+                                var dataxconferma = new FormData(formdataxconferma);
+                                GestionePost(elemento, "operationType", submitValue+"Ok", form, dataxconferma);
+                                $(this).dialog("close");
+
+                            },
+                            "Cancella": function () {
+                                $('#Motivazione').val("");
+                                $(this).dialog("close");
+                                $(elemento).removeAttr("disabled");
+                            }
+                        }
+                    });
+
+                }
+                else {
+                    $('#Motivazione').val('');
+                    var formdataxconferma = $("#RichiestaForm")[0];
+                    var dataxconferma = new FormData(formdataxconferma);
+                    GestionePost(elemento, "operationType", submitValue + "Ok", form, dataxconferma);
+                }
+            }
+
+
+            function displayValidationErrors(errors) {
+                $("span[data-valmsg-for]").text("");
+                $("#result").empty();
+                @*var errorecosto = false;
+                var ValoreCanaleConsegna = $("select#CanaleConsegna_Id").val();
+                if ((presentecostonullo) && ((ValoreCanaleConsegna == "@ViewBag.CanaleFilialeID") || ($("input#SpesaAddebitabile").is(':checked'))))
+                {
+                    var message = "Attenzione controllare costo documenti! (Messaggio non bloccante)";
+                    $("<div>").text(message).appendTo("#result");
+                    errorecosto = true;
+                }*@
+                console.log("displayValidationErrors:" + errors);
+                if (errors.length>0) {
+                    $.each(errors, function (idx, validationError) {
+                        //var message = ("Errore Validazione:" + validationError.PropertyName + " < " + validationError.ErrorList[0]);
+                        //$("span[data-valmsg-for='" + validationError.PropertyName + "']").text(validationError.ErrorList[0]);
+                        //$("<div>").text(message).prependTo("#result");
+                        //$("#result").scrollTop(0);
+                        validationError.ErrorList.forEach(function (element) {
+                            console.log(element)
+                            //var message = ("Errore Validazione:" + validationError.PropertyName + " < " + element);
+                            var message = element;
+                            //$("span[data-valmsg-for='" + validationError.PropertyName + "']").text(element);
+                            $("span[data-valmsg-for='" + validationError.PropertyName + "']").text("*");
+
+                            /*$("<div>").text(message).prependTo("#result");*/
+                            $("<div>").text(message).appendTo("#result");
+                            $("#result").scrollTop(0);
+                        })
+                    }
+                    );
+
+                }
+                //if ((errors.length > 0)||(errorecosto)) {
+                if (errors.length > 0) {
+                    var opt = {
+                        autoOpen: false,
+                        modal: true,
+                        width: "auto",
+                        height: "auto",
+                        title: 'Errori validazione',
+                        buttons: {
+                            Chiudi: function () {
+                                $(this).dialog("close");
+                                $(this).dialog("destroy");
+                            }
+                        },
+                    };
+                    $('#result').dialog(opt).dialog('open');
+                }
+            }
+
+
+            //function confirmCustom(message) {
+            //    if (message.length > 0) {
+            //        $("#result").empty();
+            //        console.log("alert:" + message);
+            //        $("<div>").text(message).appendTo("#result");
+            //        $("#result").scrollTop(0);
+            //        var opt = {
+            //            autoOpen: false,
+            //            modal: true,
+            //            width: "auto",
+            //            height: "auto",
+            //            title: 'Conferma',
+            //            buttons: {
+            //                Conferma: function () {
+            //                    $(this).dialog("close");
+            //                    $(this).dialog("destroy");
+            //                    return true;
+            //                },
+            //                Annulla: function () {
+            //                    $(this).dialog("close");
+            //                    $(this).dialog("destroy");
+            //                    return false;
+            //                }
+            //            },
+            //        };
+            //        $('#result').dialog(opt).dialog('open');
+            //    }
+            //}
+
+        });
+
+
+</script>

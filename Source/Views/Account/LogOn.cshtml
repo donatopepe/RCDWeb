@@ -1,0 +1,35 @@
+﻿@{
+  ViewBag.Title = "SelezionaUtenza";
+  Layout = "~/Views/Shared/_Layout_NoMenu.cshtml";
+}
+
+<script>
+  function GridRuoli_onChange(arg) {    
+    CallGridUtente_onChange(arg, this);
+  }
+</script>
+
+<h2>SelezionaUtenza</h2>
+
+@(Html.Kendo().Grid<WebServiceModel.WSSicurezza.Utenza>()
+        .Name("GridUtenze")
+        .PrefixUrlParameters(false)
+        .Columns(columns =>
+        {
+          columns.Bound(o => o.IdUtenza).Width(2);
+          columns.Bound(o => o.CodRuolo).Width(10);
+          columns.Bound(o => o.NomeRuolo).Width(100);
+          columns.Bound(o => o.DescSicurezza).Width(200);
+        })
+        .DataSource(dataSource => dataSource
+              .Ajax().Events(events => events.Error("Grid_onError"))
+              .Read(read => read.Action("_GridUtenze", "Account", new { codApp = ViewBag.codApp, matricola = ViewBag.matricola }))
+            )
+        .Events(events => events.Change("GridRuoli_onChange"))
+        .Selectable()
+        .Sortable()
+        .Pageable(p => p.Messages(m => m
+                    .Display("{0} - {1} di {2} elementi")
+                    .Empty("Nessun elemento trovato")))
+        .Filterable()
+        )

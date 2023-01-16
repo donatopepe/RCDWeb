@@ -1,0 +1,134 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+<fieldset>
+    <legend>Inserimento documentazione richiesta</legend>
+    @Html.HiddenFor(model => model.Id_Documento)
+    @Html.ValidationMessage("Documenti", "", new { @class = "text-danger" })
+    @*@Html.ValidationMessageFor(model => model.Id_Documento, "", new { @class = "text-danger" })*@
+    @*@Html.ValidationMessageFor(model => model.Id_Documento, "", new { @class = "text-danger", @style = "color:red" })*@
+
+
+    <div class="form-horizontal">
+        <table>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Documento, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-2">
+                            @Html.DropDownListFor(model => model.Documento.Id, (IEnumerable<SelectListItem>)ViewBag.DropDownTipoDocumenti, "-- Seleziona --", new { @class = "" })
+                            @*@Html.ValidationMessageFor(model => model.Documento, "", new { @class = "text-danger" })*@
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DescrizioneDocumento, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-2">
+                            @Html.EditorFor(model => model.DescrizioneDocumento, new { htmlAttributes = new { @class = "form-control" } })
+                            @*@Html.ValidationMessageFor(model => model.DescrizioneDocumento, "", new { @class = "text-danger" })*@
+                        </div>
+
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Rapporto, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-2">
+                            @Html.EditorFor(model => model.Rapporto, new { htmlAttributes = new { @class = "form-control" } })
+                            @*@Html.ValidationMessageFor(model => model.Rapporto, "", new { @class = "text-danger" })*@
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Costo, htmlAttributes: new { @class = "control-label col-md-1" })
+                        <div class="col-md-1">
+                            @Html.EditorFor(model => model.Costo, new { htmlAttributes = new { @class = "form-control", @style = "width:30px" } })
+                            @*@Html.ValidationMessageFor(model => model.Costo, "", new { @class = "text-danger" })*@
+                        </div>
+                    </div>
+                </td>
+                <td>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NumCopie, htmlAttributes: new { @class = "control-label col-md-1" })
+                        <div class="col-md-1">
+                            @Html.EditorFor(model => model.NumCopie, new { htmlAttributes = new { @class = "form-control", @style = "width:30px" } })
+                            @*@Html.ValidationMessageFor(model => model.NumCopie, "", new { @class = "text-danger" })*@
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DocOrig, htmlAttributes: new { @class = "control-label col-md-2 " })
+                        <div class="col-md-2">
+                            <div class="checkbox">
+                                @Html.CheckBoxFor(model => model.DocOrig)
+                                @*@Html.ValidationMessageFor(model => model.DocOrig, "", new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NumCartone, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-2">
+                            @Html.EditorFor(model => model.NumCartone, new { htmlAttributes = new { @class = "form-control", @style = "width:30px" } })
+                            @*@Html.ValidationMessageFor(model => model.NumCartone, "", new { @class = "text-danger" })*@
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+            <tr>
+                <td>@Html.ValidationMessageFor(model => model.Documento, "", new { @class = "text-danger" })</td>
+                <td>@Html.ValidationMessageFor(model => model.DescrizioneDocumento, "", new { @class = "text-danger" })</td>
+                <td>@Html.ValidationMessageFor(model => model.Rapporto, "", new { @class = "text-danger" })</td>
+                <td>@Html.ValidationMessageFor(model => model.Costo, "", new { @class = "text-danger" })</td>
+                <td>@Html.ValidationMessageFor(model => model.NumCopie, "", new { @class = "text-danger" })</td>
+                <td>@Html.ValidationMessageFor(model => model.DocOrig, "", new { @class = "text-danger" })</td>
+                <td>@Html.ValidationMessageFor(model => model.NumCartone, "", new { @class = "text-danger" })</td>
+
+
+
+            </tr>
+        </table>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-12">
+                <button name="operationType" id="AddDocumento" value="AddDocumento" type="submit">Salva Documento</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="DocumentazionePartial">@Html.Partial("Documentazione", Model)</div>
+    <div class="modalitapagamento">
+        <div class="form-group">
+            @Html.LabelFor(model => model.ModalitaPagamento, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div>
+                @Html.DropDownListFor(model => model.ModalitaPagamento.Id, (IEnumerable<SelectListItem>)ViewBag.DropDownPagamento, "-- Seleziona --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ModalitaPagamento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="numeroconto form-group">
+            @Html.LabelFor(model => model.NumeroConto, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NumeroConto, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NumeroConto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="spesa">
+        <div class="DataPagamento form-group">
+            @Html.LabelFor(model => model.DataPagamento, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DataPagamento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DataPagamento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+
+</fieldset>

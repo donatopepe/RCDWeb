@@ -1,0 +1,139 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+<style>
+    #DescrizioneDocumento {
+        width: 600px;
+    }
+    #Costo, #DocOrig, #NumCopie {
+        width: 50px;
+    }
+</style>
+<fieldset>
+    <legend class="testo_ordine_red">Documentazione richiesta</legend>
+    @Html.HiddenFor(model => model.Id_Documento)
+    @Html.ValidationMessage("Documenti", "", new { @class = "text-danger" })
+    @*@Html.ValidationMessageFor(model => model.Id_Documento, "", new { @class = "text-danger" })*@
+    @*@Html.ValidationMessageFor(model => model.Id_Documento, "", new { @class = "text-danger", @style = "color:red" })*@
+
+    <div class="dt-body-center DropDownList">
+
+    </div>
+    <div class="form-horizontal dt-body-center k- ">
+        <table class="TabellaDati">
+            <tr>
+                <td>
+
+                    @Html.DisplayNameFor(model => model.Documento)
+                    <br />
+                    <div class="col-md-2">
+                        @Html.DropDownListFor(model => model.Documento.Id, (IEnumerable<SelectListItem>)ViewBag.DropDownTipoDocumenti, "-- Seleziona --",
+                            new { @class = "control-label" })
+                        @*@Html.ValidationMessageFor(model => model.Documento, "", new { @class = "text-danger" })*@
+                        @*@(Html.Kendo().DropDownList()
+                            .Name("TEST_DOCUMENTO_ID")
+                            .HtmlAttributes(new { @style = "width: 200px", @class = "DropDownList" })
+                            .BindTo((IEnumerable<SelectListItem>)ViewBag.DropDownTipoDocumenti)
+                            .OptionLabel("-- Seleziona --"))*@
+                    </div>
+
+                </td>
+                <td>
+
+                    @Html.DisplayNameFor(model => model.DescrizioneDocumento)
+                    <br />
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.DescrizioneDocumento, new { htmlAttributes = new { @class = "form-control" } })
+                        @*@Html.ValidationMessageFor(model => model.DescrizioneDocumento, "", new { @class = "text-danger" })*@
+                    </div>
+
+
+                </td>
+
+            </tr>
+            <tr>
+                <td>@Html.ValidationMessageFor(model => model.Documento, "", new { @class = "text-danger" })</td>
+                <td>@Html.ValidationMessageFor(model => model.DescrizioneDocumento, "", new { @class = "text-danger" })</td>
+
+            </tr>
+            </table>
+            <table class="TabellaDati">
+                <tr>
+                    <td>
+
+                        @Html.DisplayNameFor(model => model.Rapporto)
+                        <br />
+                        <div class="col-md-2">
+                            @Html.EditorFor(model => model.Rapporto, new { htmlAttributes = new { @class = "form-control" } })
+                            @*@Html.ValidationMessageFor(model => model.Rapporto, "", new { @class = "text-danger" })*@
+                        </div>
+
+                    </td>
+
+                    <td>
+                        @Html.DisplayNameFor(model => model.DocOrig)
+
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(model => model.DocOrig)
+                            @*@Html.ValidationMessageFor(model => model.DocOrig, "", new { @class = "text-danger" })*@
+                        </div>
+
+
+                    </td>
+                    <td>
+
+                        <div class="form-group">
+                            @Html.DisplayNameFor(model => model.NumCopie)
+                            <div class="col-md-1">
+                                @Html.EditorFor(model => model.NumCopie, new { htmlAttributes = new { @class = "form-control", @style = "width:30px" } })
+                                @*@Html.ValidationMessageFor(model => model.NumCopie, "", new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+
+                        @Html.DisplayNameFor(model => model.Costo)
+                        <br />
+                        <div>
+                            @Html.EditorFor(model => model.Costo, new { htmlAttributes = new { @class = "testo", @style = "width:100%" } })
+                            @*@Html.ValidationMessageFor(model => model.Costo, "", new { @class = "text-danger" })*@
+                        </div>
+
+                    </td>
+                    <td>
+
+                        @Html.DisplayNameFor(model => model.NumCartone)
+                        <div class="col-md-2">
+                            @Html.EditorFor(model => model.NumCartone, new { htmlAttributes = new { @class = "form-control", @style = "width:30px" } })
+                            @*@Html.ValidationMessageFor(model => model.NumCartone, "", new { @class = "text-danger" })*@
+                        </div>
+
+                    </td>
+                    <td style="width:100px;">
+                        <button style=" padding-left: 0px;" class="bottone_submit" name="operationType" id="AddDocumento" value="AddDocumento" type="submit">Salva Doc.</button>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.ValidationMessageFor(model => model.Rapporto, "", new { @class = "text-danger" })</td>
+                    <td>@Html.ValidationMessageFor(model => model.DocOrig, "", new { @class = "text-danger" })</td>
+                    <td>@Html.ValidationMessageFor(model => model.NumCopie, "", new { @class = "text-danger" })</td>
+                    <td>@Html.ValidationMessageFor(model => model.Costo, "", new { @class = "text-danger" })</td>
+                    <td>@Html.ValidationMessageFor(model => model.NumCartone, "", new { @class = "text-danger" })</td>
+                    <td></td>
+                </tr>
+            </table>
+
+
+
+
+    </div>
+
+
+    <div id="DocumentazionePartial">@Html.Partial("Documentazione", Model)</div>
+
+
+
+
+</fieldset>
+
+

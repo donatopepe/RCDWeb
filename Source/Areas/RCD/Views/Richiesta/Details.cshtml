@@ -1,0 +1,858 @@
+﻿@model RCDWeb.Areas.RCD.Models.Richieste
+@{
+    bool button = (Model.Istituto == Convert.ToInt32(ViewData["istituto"])) && (Model.UOCodeNext == "" + ViewData["uocode"]) && (!Model.Stato.Chiuso);
+
+}
+
+<style>
+    .altezza_row {
+        height: 40px;
+    }
+
+    table.TabellaDati {
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
+    }
+
+        table.TabellaDati td, table.TabellaDati th {
+            border: 0px solid #AAAAAA;
+            text-wrap: normal;
+            word-wrap: break-word;
+            max-width: 250px;
+        }
+
+        table.TabellaDati thead {
+            background: #EEECEC;
+        }
+
+        table.TabellaDati th tr {
+            font-weight: normal;
+            text-align: left;
+        }
+
+        table.TabellaDati tfoot .links {
+            text-align: right;
+        }
+
+            table.TabellaDati tfoot .links a {
+                display: inline-block;
+                background: #FFFDFD;
+                color: #000000;
+                padding: 2px 8px;
+                border-radius: 5px;
+            }
+
+
+    table.Tabella_Documenti {
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
+    }
+
+        table.Tabella_Documenti td, table.Tabella_Documenti th {
+            border: 1px solid #000000;
+            padding: 0px 0px;
+            text-wrap: normal;
+            word-wrap: break-word;
+            max-width: 250px;
+        }
+
+        table.Tabella_Documenti tbody td {
+            font-size: 12px;
+        }
+
+        table.Tabella_Documenti tr:nth-child(even) {
+            background: #EEEEEE;
+        }
+
+        table.Tabella_Documenti thead {
+            background: #CFCFCF;
+        }
+
+            table.Tabella_Documenti thead th {
+                font-size: 13px;
+                font-weight: bold;
+                color: #000000;
+                text-align: left;
+            }
+
+        table.Tabella_Documenti tfoot td {
+            font-size: 14px;
+        }
+</style>
+<div>
+    <fieldset>
+        <legend class="testo_ordine_red">Informazioni Richiesta</legend>
+        <table class="TabellaDati">
+            <tr class="altezza_row">
+                <td>
+                    @Html.DisplayNameFor(model => model.DataRichiesta)
+                    <br />
+                    @if (Model.DataRichiesta.HasValue)
+                    {
+                        <b> @Html.DisplayFor(model => model.DataRichiesta)</b>}
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.DataInserimento)
+                    <br />
+                    @if (Model.DataInserimento.HasValue)
+                    {
+                        <b> @Html.DisplayFor(model => model.DataInserimento)</b>
+                    }
+                </td>
+                <td colspan="2">
+                    @Html.DisplayNameFor(model => model.Stato)
+                    <br />
+                    @if (Model.Stato != null)
+                    {
+                        <b> @Html.DisplayFor(model => model.Stato.Stato)</b>
+                    }
+                </td>
+            </tr>
+
+
+            <tr class="altezza_row">
+                <td>
+                    @Html.DisplayNameFor(model => model.Istituto)
+                    <br />
+                    <b>@Html.DisplayFor(model => model.Istituto)</b>
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.Filiale)
+                    <br />
+                    <b>
+                        @if (!String.IsNullOrWhiteSpace(Model.Filiale))
+                        {@Html.DisplayFor(model => model.Filiale)}
+                    </b>
+                </td>
+                <td colspan="2">
+                    @Html.DisplayNameFor(model => model.Luogo)
+                    <br />
+                    <b>
+                        @if (!String.IsNullOrWhiteSpace(Model.Luogo))
+                        {@Html.DisplayFor(model => model.Luogo)}
+                    </b>
+                </td>
+            </tr>
+
+
+            <tr class="altezza_row">
+                <td>
+                    @Html.DisplayNameFor(model => model.NDG)
+                    <br />
+                    <b>@Html.DisplayFor(model => model.NDG)</b>
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.IntestazioneNDG)
+                    <br />
+                    <b>@Html.DisplayFor(model => model.IntestazioneNDG)</b>
+                </td>
+                @if ((Model.Cointestatari == null) || (Model.Cointestatari.Count() == 0))
+                {
+                    <td colspan="2">
+                        @Html.DisplayNameFor(model => model.Indirizzo)
+                        <br />
+                        <b>@Html.DisplayFor(model => model.Indirizzo)</b>
+                    </td>
+                }
+            </tr>
+            @if ((Model.Cointestatari == null) || (Model.Cointestatari.Count() == 0))
+            {
+                if (!Model.isPerson)
+                {
+                    <tr class="altezza_row">
+                        <td>
+                            @Html.DisplayNameFor(model => model.PIva)
+                            <br />
+                            <b>
+                                @if (!String.IsNullOrWhiteSpace(Model.PIva))
+                                {@Html.DisplayFor(model => model.PIva)}
+                            </b>
+                        </td>
+
+                        <td>
+                            @Html.DisplayNameFor(model => model.SedeLegale)
+                            <br />
+                            <b>
+                                @if (!String.IsNullOrWhiteSpace(Model.SedeLegale))
+                                {@Html.DisplayFor(model => model.SedeLegale)}
+                            </b>
+                        </td>
+                        <td>
+                            @Html.DisplayNameFor(model => model.IscrizioneCCIAA)
+                            <br />
+                            <b>
+                                @if (!String.IsNullOrWhiteSpace(Model.IscrizioneCCIAA))
+                                {@Html.DisplayFor(model => model.IscrizioneCCIAA)}
+                            </b>
+                        </td>
+                        <td>
+                            @Html.DisplayNameFor(model => model.AlboProfessionale)
+                            <br />
+                            <b>
+                                @if (!String.IsNullOrWhiteSpace(Model.AlboProfessionale))
+                                {@Html.DisplayFor(model => model.AlboProfessionale)}
+                            </b>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayNameFor(model => model.CodiceFiscale)
+                            <br />
+                            <b>
+                                @if (!String.IsNullOrWhiteSpace(Model.CodiceFiscale))
+                                {@Html.DisplayFor(model => model.CodiceFiscale)}
+                            </b>
+                        </td>
+                        <td>
+                            @Html.DisplayNameFor(model => model.DataNascita)
+                            <br />
+                            <b>
+                                @if (Model.DataNascita.HasValue)
+                                {@Html.DisplayFor(model => model.DataNascita)}
+                            </b>
+                        </td>
+                        <td colspan="2">
+                            @Html.DisplayNameFor(model => model.LuogoNascita)
+                            <br />
+                            <b>
+                                @if (!String.IsNullOrWhiteSpace(Model.LuogoNascita))
+                                {@Html.DisplayFor(model => model.LuogoNascita)}
+                            </b>
+                        </td>
+                    </tr>
+
+
+
+                }
+            }
+            else
+            {
+                <tr class="altezza_row">
+                    <td>
+                        @Html.DisplayNameFor(model => model.SedeLegale)
+                        <br />
+                        <b>
+                            @if (!String.IsNullOrWhiteSpace(Model.SedeLegale))
+                            {@Html.DisplayFor(model => model.SedeLegale)}
+                        </b>
+                    </td>
+                </tr>
+
+                if ((Model.NaturaGiuridica.ToLower() == "sco") && (Model.Cointestatari != null) && (Model.Cointestatari.Count() > 0))
+                {
+                    <tr class="altezza_row">
+                        <td>
+                            <p>Cointestatari:</p>
+                        </td>
+                    </tr>
+                    foreach (var item in Model.Cointestatari)
+                    {
+                        if (item.isPerson)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().IntestazioneNDG)
+                                    <br />
+                                    <b>
+                                        @Html.DisplayFor(modelItem => item.IntestazioneNDG)
+                                    </b>
+
+                                </td>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().CodiceFiscale)
+                                    <br />
+                                    <b>
+                                        @Html.DisplayFor(modelItem => item.CodiceFiscale)
+                                    </b>
+                                </td>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().LuogoNascita)
+                                    <br />
+                                    <b>
+                                        @Html.DisplayFor(modelItem => item.LuogoNascita)
+                                    </b>
+                                </td>
+                                <td>
+                                    @if (item.DataNascita.HasValue)
+                                    {
+
+                                        @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().DataNascita)
+                                        <br />
+                                        <b>
+                                            @item.DataNascita.GetValueOrDefault().ToString("dd/MM/yyyy")
+                                        </b>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().Indirizzo)
+                                    <br />
+                                    <b>
+                                        @Html.DisplayFor(modelItem => item.Indirizzo)
+                                    </b>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().IntestazioneNDG)
+                                    <br />
+                                    <b>
+                                        @Html.DisplayFor(modelItem => item.IntestazioneNDG)
+                                    </b>
+                                </td>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().PIva)
+                                    <br />
+                                    <b>
+                                        @Html.DisplayFor(modelItem => item.PIva)
+                                    </b>
+                                </td>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().SedeLegale)
+                                    <br />
+                                    <b>
+                                        @Html.DisplayFor(modelItem => item.SedeLegale)
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().IscrizioneCCIAA)
+                                    <br />
+                                    <b>
+                                        @Html.DisplayFor(modelItem => item.IscrizioneCCIAA)
+                                    </b>
+                                </td>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().AlboProfessionale)
+                                    <br />
+                                    <b>
+                                        @Html.DisplayFor(modelItem => item.AlboProfessionale)
+                                    </b>
+                                </td>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Cointestatari.FirstOrDefault().Indirizzo)
+                                    <br />
+                                    <b>
+                                        @Html.DisplayFor(modelItem => item.Indirizzo)
+                                    </b>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            }
+        </table>
+    </fieldset>
+    <br />
+    <fieldset>
+        <table class="TabellaDati">
+            <tr class="altezza_row">
+                <td>
+                    Canale Richiesta
+                    <br />
+                    <b>
+                        @if ((Model.CanaleRicezione != null) && (!String.IsNullOrWhiteSpace(Model.CanaleRicezione.Descrizione)))
+                        {@Html.DisplayFor(model => model.CanaleRicezione.Descrizione)}
+                    </b>
+                </td>
+                <td>
+                    Canale Consegna
+                    <br />
+                    <b>
+                        @if ((Model.CanaleConsegna != null) && (!String.IsNullOrWhiteSpace(Model.CanaleConsegna.Descrizione)))
+                        {@Html.DisplayFor(model => model.CanaleConsegna.Descrizione)}
+                    </b>
+                </td>
+                <td>
+
+                    @*@if (!String.IsNullOrWhiteSpace(Model.Filiale) && (Model.CanaleConsegna != null) && (Model.CanaleConsegna.Id == @ViewBag.CanaleFilialeID))
+                        {@Html.DisplayFor(model => model.Filiale)}*@
+
+                    @if (!String.IsNullOrWhiteSpace(Model.email))
+                    {
+                        @Html.DisplayNameFor(model => model.email)
+                        <br />
+                        <b>
+                            @Html.DisplayFor(model => model.email)
+                        </b>
+                    }
+
+                    @if (!String.IsNullOrWhiteSpace(Model.pec))
+                    {
+                        @Html.DisplayNameFor(model => model.pec)
+                        <br />
+                        <b>
+                            @Html.DisplayFor(model => model.pec)
+                        </b>
+                    }
+
+
+
+                </td>
+            </tr>
+            <br />
+            <tr class="altezza_row">
+                <td>
+                    @if (Model.ModalitaPagamento != null)
+                    {
+                        @Html.DisplayNameFor(model => model.ModalitaPagamento)
+                        <br />
+                        <b>@Html.DisplayFor(model => model.ModalitaPagamento.Descrizione)</b>
+                    }
+                </td>
+
+                <td style="text-align:center; ">
+                    @if (Model.ModalitaPagamento != null)
+                    {
+                        @Html.DisplayNameFor(model => model.SpesaAddebitabile)
+                        <br />
+                        if (Model.SpesaAddebitabile)
+                        {
+                            <b>SI</b>
+                        }
+                        else
+                        {
+                            <b>NO</b>
+                        }
+                    }
+
+                </td>
+            </tr>
+            <br />
+            <tr class="altezza_row">
+                <td>
+                    @if (Model.TipoRichiedente != null)
+                    {
+                        @Html.DisplayNameFor(model => model.TipoRichiedente)
+                        <br />
+                        <b>
+                            @if (Model.TipoRichiedente != null)
+                            {
+                                @Html.DisplayFor(model => model.TipoRichiedente.Descrizione)
+                            }
+                        </b>
+                    }
+                </td>
+
+                <td style="text-align:center; ">
+                    @if (Model.Cessione != null)
+                    {
+                        <span>@Html.DisplayNameFor(model => model.Cessione)</span>
+                        <br />
+                        if ((bool)Model.Cessione)
+                        {<b>SI</b>}
+                        else
+                        {<b>NO</b>}
+                    }
+                </td>
+
+                <td style="text-align: center; ">
+                    @if (Model.Legittimato != null)
+                    {
+                        <span>@Html.DisplayNameFor(model => model.Legittimato)</span>
+                        <br />
+                        if ((bool)Model.Legittimato)
+                        {
+                            <b>SI</b>
+                        }
+                        else
+                        {
+                            <b>NO</b>
+                        }
+                    }
+
+                </td>
+
+
+            </tr>
+        </table>
+        <br />
+        @if (!String.IsNullOrWhiteSpace(Model.Richiedente))
+        {
+            <fieldset>
+                <legend>Dati Richiedente</legend>
+                <table>
+                    <tr>
+                        <td style="width:500px">
+                            @if (!String.IsNullOrWhiteSpace(Model.Richiedente))
+                            {
+                                @Html.DisplayNameFor(model => model.Richiedente)
+                                <br />
+                                <b>@Html.DisplayFor(model => model.Richiedente) </b>
+                            }
+                        </td>
+
+                        <td style="width:500px">
+                            @if (!String.IsNullOrWhiteSpace(Model.IndirizzoRichiedente))
+                            {
+                                @Html.DisplayNameFor(model => model.IndirizzoRichiedente)
+                                <br />
+                                <b>@Html.DisplayFor(model => model.IndirizzoRichiedente) </b>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:500px">
+                            @if (!String.IsNullOrWhiteSpace(Model.LuogoNascitaRichiedente))
+                            {
+                                @Html.DisplayNameFor(model => model.LuogoNascitaRichiedente)
+                                <br />
+                                <b>@Html.DisplayFor(model => model.LuogoNascitaRichiedente) </b>
+                            }
+                        </td>
+
+                        <td style="width:500px">
+                            @if (!String.IsNullOrWhiteSpace(Model.CodiceFiscaleRichiedente))
+                            {
+                                @Html.DisplayNameFor(model => model.CodiceFiscaleRichiedente)
+                                <br />
+                                <b>@Html.DisplayFor(model => model.CodiceFiscaleRichiedente) </b>
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        }
+
+    </fieldset>
+    @if (Model.DocumentiRichiesti != null && Model.DocumentiRichiesti.Count > 0)
+    {
+        <fieldset>
+            <legend class="testo_ordine_red">Documenti richiesti</legend>
+            <table class="Tabella_Documenti">
+                <tr>
+                    <th style="text-align:left">
+                        @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Rapporto)
+                    </th>
+                    <th style="text-align:left">
+                        @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Documento)
+                    </th>
+                    <th style="text-align:left">
+                        @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().DescrizioneDocumento)
+                    </th>
+                    <th style="text-align:left">
+                        @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Costo)
+                    </th>
+                    <th style="text-align:center">
+                        @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().NumCopie)
+                    </th>
+                    <th style="text-align:center">
+                        @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().DocOrig)
+                    </th>
+                    <th style="text-align:left">
+                        @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().NumCartone)
+                    </th>
+                </tr>
+
+                @foreach (var item in Model.DocumentiRichiesti)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rapporto)
+                        </td>
+                        <td>
+                            @if (item.Documento != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Documento.Nome)
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DescrizioneDocumento)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Costo)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.NumCopie)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.DocOrig)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NumCartone)
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </fieldset>
+
+    }
+    <br />
+
+    <fieldset>
+        <legend class="testo_ordine_red">Altri Dati</legend>
+        <table class="TabellaDati">
+            <tr class="altezza_row">
+                <td colspan="4">
+                    @Html.DisplayNameFor(model => model.Motivazione)
+                    <br />
+                    <b>@Html.DisplayFor(model => model.Motivazione)</b>
+                </td>
+                <td colspan="3">
+                    @Html.DisplayNameFor(model => model.Note)
+                    <br />
+                    <b>@Html.DisplayFor(model => model.Note)</b>
+                </td>
+            </tr>
+            @if (Model.bypassallegati)
+            {
+                <tr class="altezza_row">
+                    <td colspan="4">
+                        @Html.DisplayNameFor(model => model.bypassallegati)
+                        <br />
+                        @*<b>@Html.DisplayFor(model => model.bypassallegati)</b>*@
+                        <b>Attivo</b>
+                    </td>
+                    <td colspan="3">
+                        @Html.DisplayNameFor(model => model.MotivazioneBypass)
+                        <br />
+                        <b>@Html.DisplayFor(model => model.MotivazioneBypass)</b>
+                    </td>
+                </tr>
+            }
+
+            <tr class="altezza_row">
+                <td>
+
+                    @if (Model.GiorniAttesaBanca != null)
+                    {
+                        @Html.DisplayNameFor(model => model.GiorniAttesaBanca)
+                        <br />
+                        <b>@Html.DisplayFor(model => model.GiorniAttesaBanca)</b>
+                    }
+                    else
+                    {
+                        @*<b>Non definita</b>*@
+                    }
+
+                </td>
+                <td>
+
+                    @if (Model.DataStopBanca != null)
+                    {
+                        @Html.DisplayNameFor(model => model.DataStopBanca)
+                        <br />
+                        <b>@Html.DisplayFor(model => model.DataStopBanca)</b>
+                    }
+                    else
+                    {
+                        @*<b>Non definita</b>*@
+                    }
+
+                </td>
+                <td>
+
+                    @if (Model.GiorniAttesaCliente != null)
+                    {
+                        @Html.DisplayNameFor(model => model.GiorniAttesaCliente)
+                        <br />
+                        <b>@Html.DisplayFor(model => model.GiorniAttesaCliente)</b>
+                    }
+                    else
+                    {
+                        @*<b>Non definita</b>*@
+                    }
+
+                </td>
+                <td>
+
+                    @if (Model.DataAvviso != null)
+                    {
+                        @Html.DisplayNameFor(model => model.DataAvviso)
+                        <br />
+                        <b>@Html.DisplayFor(model => model.DataAvviso)</b>
+                    }
+                    else
+                    {
+                        @*<b>Non definita</b>*@
+                    }
+
+                </td>
+                <td>
+
+                    @if (Model.DataIIAvviso != null)
+                    {
+                        @Html.DisplayNameFor(model => model.DataIIAvviso)
+                        <br />
+                        <b>@Html.DisplayFor(model => model.DataIIAvviso)</b>
+                    }
+                    else
+                    {
+                        @*<b>Non definita</b>*@
+                    }
+
+                </td>
+                <td>
+
+                    @if (Model.DataConsegna != null)
+                    {
+                        @Html.DisplayNameFor(model => model.DataConsegna)
+                        <br />
+                        <b>@Html.DisplayFor(model => model.DataConsegna)</b>
+                    }
+                    else
+                    {
+                        @*<b>Non definita</b>*@
+                    }
+
+                </td>
+                <td>
+
+                    @if (Model.DataChiusa != null)
+                    {
+                        @Html.DisplayNameFor(model => model.DataChiusa)
+                        <br />
+                        <b>@Html.DisplayFor(model => model.DataChiusa)</b>
+                    }
+                    else
+                    {
+                        @*<b>Non definita</b>*@
+                    }
+
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <br />
+
+    @if (Model.Allegati != null && Model.Allegati.Count > 0)
+    {
+        <fieldset>
+            <legend>Allegati</legend>
+            <table class="TabellaDati">
+                <tr>
+                    <th style="text-align:left">
+                        @Html.DisplayNameFor(model => model.Allegati.FirstOrDefault().tipoAllegato.Nome)
+                    </th>
+                    <th style="text-align:left">
+                        @Html.DisplayNameFor(model => model.Allegati.FirstOrDefault().DescrizioneFile)
+                    </th>
+                    <th style="text-align:left">
+                        <span>@Html.DisplayNameFor(model => model.Allegati.FirstOrDefault().FileName)</span>
+                    </th>
+                    <th style="width:90px">Scarica documento</th>
+                </tr>
+
+                @foreach (var item in Model.Allegati)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.tipoAllegato.Nome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DescrizioneFile)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FormattaFile)
+                        </td>
+                        <td>
+                            <div class="col-md-offset-2 col-md-10">
+                                @*<button class="bottone_submit" onclick="location.href='@Url.Action("Download", "Richiesta", new { id = item.Id })';return false;">Download</button>*@
+                                <button style="background: url(~/Content/img/download.png); cursor: pointer;border: none" onclick="location.href='@Url.Action("Download", "Richiesta", new { id = item.Id })';return false;">
+                                    <img src="~/Content/img/download.png">
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </fieldset>
+
+    }
+
+
+    <br />
+
+    <table class="TabellaDati">
+
+        <tr>
+            <td>
+                <spam>@Html.DisplayNameFor(model => model.Addetto)</spam>
+                @Html.DisplayFor(model => model.Addetto)
+                @*<span>Modificato da</span>
+                    <b>@ViewBag.MatricolaNome</b>*@
+            </td>
+            <td>
+                <spam>@Html.DisplayNameFor(model => model.DescrizioneUOCode)</spam>
+                @Html.DisplayFor(model => model.DescrizioneUOCode)
+                @*<span>Inserito da</span>
+                    @ViewBag.DescrizioneUOCode*@
+            </td>
+            <td>
+                <spam>@Html.DisplayNameFor(model => model.Struttura)</spam>
+                @Html.DisplayFor(model => model.Struttura)
+
+                @*<span>Gestito da</span>
+                    @ViewBag.DescrizioneUOCodeNext*@
+            </td>
+            <td>
+                <spam>@Html.DisplayNameFor(model => model.UltimaModifica)</spam>
+                @Html.DisplayFor(model => model.UltimaModifica)
+            </td>
+        </tr>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<table>
+    <tr>
+
+        @if (button)
+        {
+            <td>
+                <button class="bottone_submit" onclick="Gestione('@Model.Id')">Gestione</button>
+            </td>
+        }
+
+        <td>
+            <button class="bottone_submit" onclick="Chiudi()">Chiudi</button>
+        </td>
+    </tr>
+</table>
+
+<script>
+    @*var ist =  @Convert.ToInt32(ViewData["istituto"]);
+    var uo = @Convert.ToString(ViewData["uocode"]);
+    var chiuso = @Convert.ToString(!Model.Stato.Chiuso);
+    console.log(ist);
+    console.log(uo);
+    console.log(chiuso);*@
+
+    function Chiudi() {
+        $("#elencoRich").empty();
+        $("#dettaglio").empty();
+        $("#elencoNdg").empty();
+        $("#sceltaNdg").empty();
+        $('form[data-ajax-update="#elencoRich"] :submit').trigger("click");
+    }
+</script>

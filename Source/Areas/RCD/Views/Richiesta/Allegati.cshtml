@@ -1,0 +1,51 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+
+@if ((Model.Allegati != null) && (Model.Allegati.Count() > 0))
+{
+    
+        <table class="Tabella_Documenti">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Allegati.FirstOrDefault().tipoAllegato.Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Allegati.FirstOrDefault().DescrizioneFile)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Allegati.FirstOrDefault().FileName)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Allegati)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.tipoAllegato.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DescrizioneFile)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FormattaFile)
+                    </td>
+                    <td style="width:100px">
+
+                        <div class="col-md-offset-2 col-md-10">
+                            <button style="background: url(~/Content/img/download.png); cursor: pointer;border: none" onclick="location.href='@Url.Action("Download", "Richiesta", new { id = item.Id })';return false;">
+                                <img src="~/Content/img/download.png">
+                            </button>
+
+                            <button style="background: url(~/Content/img/delete_icon.png); cursor: pointer; border: none" name="DelAllegato" value="@item.Id" type="submit">
+                                <img src="~/Content/img/delete_icon.png">
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    
+}
+
+

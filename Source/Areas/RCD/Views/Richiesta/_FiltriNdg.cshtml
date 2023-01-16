@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "_FiltriNdg"; 
+    Layout = null;
+    bool haveS01 = ViewData["haveSottoFunzS01"] != null ? (bool)ViewData["haveSottoFunzS01"] : false;
+}
+
+
+<script type="text/javascript">
+    function setAzzeraCognome() {
+        $("#cognome").val("");
+        $("#nome").val("");
+        $("#codiceFiscale").val("");
+    }
+
+    function setAzzeraCognomeNDG() {
+        $("#cognome").val("");
+        $("#nome").val("");
+        $("#ndg").val("");
+    }
+
+    function setAzzeraNdg() {
+        $("#ndg").val("");
+        $("#codiceFiscale").val("");
+    }
+    function inviaFiltri() {
+        $('#elencoNdg').empty();
+        $('#sceltaNdg').empty();
+        if ($("#ndg").val() != "" && ($("#SelIstitutoR").val() == "" || $("#SelIstitutoR").val() == 0)) {
+            alertDialog("Selezionare istituto per ricerca per ndg.", 'confirmDialog', '');
+        } else {
+             $("#btnSubmit").trigger("click");
+        }
+
+
+    }
+
+    function onloadIstitutoN() {
+
+        var admin = $("#SelIstitutoR").val();
+        if (admin != "0" && '@haveS01' == 'False') {
+            $("#istitutoR").val($("#SelIstitutoR").val());
+            $("#SelIstitutoR").data('kendoComboBox').enable(false);
+        } else {
+            $("#istitutoR").val($("#SelIstitutoR").val());
+            $("#SelIstitutoR").data('kendoComboBox').enable(true);
+        }
+    }
+
+    function setIstituto() {
+
+        $("#istitutoR").val($("#SelIstitutoR").val());
+
+    }
+</script>
+
+
+<fieldset>
+    <legend>Filtri</legend>
+    <a id="anchorFiltri"></a>
+    <div id='filtriNdg'>
+        @using (Ajax.BeginForm("_GridElencoNdg", "Richiesta", null, new AjaxOptions { UpdateTargetId = "elencoNdg", InsertionMode = InsertionMode.Replace, HttpMethod = "Post" }, new { id = "Filtri_form" }))
+        {
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        @Html.Label("Istituto:")
+                    </td>
+                    <td>
+                        @Html.Hidden("istitutoR")
+                        @(Html.Kendo().ComboBox()
+                              .Name("SelIstitutoR")
+                              .HtmlAttributes(new { @style = "width: 50px", @class = "DropDownList" })
+                              .BindTo((IEnumerable<SelectListItem>)ViewData["SelIstituti"])
+                              .Events(events => events.Change("setIstituto").DataBound("onloadIstitutoN")) //AGGIUNGERE CONTROLLI E ONCHANGE
+                        )
+                    </td>
+                    <td>
+                        @Html.Label(@"Cognome\RagSociale:")
+                    </td>
+                    <td>
+                        @Html.TextBox("cognome", "", new { @class = "testo", @style = "width: 100px;", onchange = "setAzzeraNdg()" })
+                    </td>
+                    <td>
+                        @Html.Label("Nome:")
+                    </td>
+                    <td>
+                        @Html.TextBox("nome", "", new { @class = "testo", @style = "width: 100px;", onchange = "setAzzeraNdg()" })
+                    </td>
+                    <td>
+                        @Html.Label("Ndg:")
+                    </td>
+                    <td>
+                        @Html.TextBox("ndg", "", new { @class = "testo", @style = "width: 100px;", onchange = "setAzzeraCognome()" })
+                    </td>
+                    <td>
+                        @Html.Label("CodFiscale:")
+                    </td>
+                    <td>
+                        @Html.TextBox("codiceFiscale", "", new { @class = "testo", @style = "width: 100px;", onchange = "setAzzeraCognomeNDG()" })
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="10">
+
+                        <input id="btnSubmit" type="submit" class="bottone_submit" value="Cerca" style="display: none" />
+                        <input type="button" class="bottone_submit" value="Cerca" onclick="inviaFiltri();" />
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+</fieldset>

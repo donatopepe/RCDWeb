@@ -1,0 +1,21 @@
+﻿@model List<RCDWeb.Areas.RCD.Models.Stati>
+
+
+<td class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <button class="bottone_submit" type="submit" name="operationType" value="">Salva</button>
+    </div>
+</td>
+
+
+@foreach (var item in Model)
+{
+    <td  class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button class="bottone_submit_big" name="operationType" value="Conferma @item.Stato" type="submit">@item.Descrizione</button>
+        </div>
+    </td>
+}
+
+
+

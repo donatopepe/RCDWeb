@@ -1,0 +1,57 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+
+<div class="pagamento">
+    <table>
+        <tr>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SpesaAddebitabile, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(model => model.SpesaAddebitabile)
+                            @Html.ValidationMessageFor(model => model.SpesaAddebitabile, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="spesa">
+                    <div class="TotaleCosto form-group">
+                        @Html.LabelFor(model => model.TotaleCosto, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.TotaleCosto, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.TotaleCosto, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+</div>
+ 
+
+
+<script type="text/javascript">
+    function ControlloSpesa(value) {
+        //console.log(value); 
+        if (value) {
+            $('.spesa').show(); //show
+
+        }
+        else {
+            $('.spesa').hide(); //hide
+
+        }
+    };
+    var SpesaAddebitabile = $("input#SpesaAddebitabile");
+    ControlloSpesa(SpesaAddebitabile.is(':checked'));
+    SpesaAddebitabile.unbind().click(function () {
+        /*DocOrig.prop('checked', true);*/
+        SpesaAddebitabile.val($(this).is(':checked'));
+        console.log("SpesaAddebitabile:" + $(this).is(':checked') + ":" + $(this).val());
+        ControlloSpesa($(this).is(':checked'));
+    });
+
+</script>

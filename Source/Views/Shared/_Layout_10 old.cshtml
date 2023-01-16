@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <title>@ViewBag.Title</title>
+
+    <!---------------------------------- kendo ------------------------------->
+    <link href="@Url.Content("~/Content/kendo/2015.2.902/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2015.2.902/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2015.2.902/kendo.default.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2015.2.902/kendo.dataviz.default.min.css")" rel="stylesheet" type="text/css" />
+
+
+
+    <link href="@Url.Content("~/Scripts/DataTables/datatables.min.css")" rel="stylesheet" type="text/css" />
+
+
+
+
+    <script src="@Url.Content("~/Scripts/kendo/2015.2.902/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.10.4.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2015.2.902/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2015.2.902/kendo.aspnetmvc.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2015.2.902/cultures/kendo.culture.it-IT.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/json2.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Window/gestioneWindow.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/tracciatogarante.js")" type="text/javascript"></script>
+
+
+
+    <script src="@Url.Content("~/Scripts/DataTables/datatables.min.js")" type="text/javascript"></script>
+
+
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.tabs.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery-ui.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/jquery.jgrowl.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery.blockUI.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.jgrowl.js")"></script>
+    <script src="@Url.Content("~/Scripts/SessionWarning.js")"></script>
+    <script src="@Url.Content("~/Scripts/pybhelper.js")"></script>
+
+
+
+
+    @*<script type="text/javascript">
+                 //set current culture script
+        kendo.culture("it-IT");
+
+        //Warning a due minuti dalla scadenza
+        var sessionTimeoutWarning = '@System.Configuration.ConfigurationSettings.AppSettings["SessionWarning"]';
+        //Warning in millisecondi
+        var timeWarning = parseInt(sessionTimeoutWarning) * 60 * 1000;
+        //Timeout
+        var sessionTimeout = '@Session.Timeout';
+        //Timeout millisecondi
+        var timeTimeout = parseInt(sessionTimeout) * 60 * 1000;
+        var timeOnPageLoad = new Date();
+            //$(document).ready(function () {
+            //    var browser = $(document).height();
+            //    var header = $("#header").height();
+            //    var menu = $("#menu").height();
+            //    var bottom = $("#bottom").height();
+            //    var footer = $("#footer").height();
+            //    var height = browser - header - menu - bottom - footer - 60;
+
+            //    $("#containerTop").css("height", height);
+
+            //    //For warning
+            //    var sessionWarningTimer = setTimeout(function () { openWarningTimeout(); }, timeWarning);
+            //    document.body.style.zoom = 1.0;
+            //});
+        </script>*@
+
+
+
+</head>
+
+<body>
+
+    <div id="containerTop" class="clearfix">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Richiesta Copia Documentazione</p>
+        </footer>
+    </div>
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+

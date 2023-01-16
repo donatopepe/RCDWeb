@@ -1,0 +1,47 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+
+@if ((Model.Allegati != null) && (Model.Allegati.Count() > 0))
+{
+    <fieldset>
+        <legend>Tabella Allegati</legend>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Allegati.FirstOrDefault().tipoAllegato.Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Allegati.FirstOrDefault().DescrizioneFile)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Allegati.FirstOrDefault().FileName)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Allegati)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.tipoAllegato.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DescrizioneFile)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FormattaFile)
+                    </td>
+                    <td>
+
+                        <div class="col-md-offset-2 col-md-10">
+                            <button name="DelAllegato" value="@item.Id" type="submit">Cancella</button>
+                            <button onclick="location.href='@Url.Action("Download", "Richiesta", new { id = item.Id })';return false;">Download</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </fieldset>
+}
+
+

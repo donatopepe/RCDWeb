@@ -1,0 +1,153 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+<style>
+    #Note {
+        width: 100%;
+    }
+
+    #Filiale, #Luogo {
+        width: 400px;
+    }
+</style>
+<table class="TabellaDati">
+    <tr>
+        <td>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Note, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+<br />
+<table class="TabellaDati">
+    <tr>
+        <td>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Filiale, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Filiale, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Filiale, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Luogo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Luogo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Luogo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </td>
+
+    </tr>
+    <tr>
+
+        <td>
+            <div class="Id_Empty">
+                @Html.DisplayNameFor(model => model.Addetto)
+                <br />
+                <b>
+                    @*@Model.Matricola*@
+                    @*@ViewBag.MatricolaNome*@
+                    @Html.EditorFor(model => model.Addetto, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Matricola, "", new { @class = "text-danger" })
+                </b>
+            </div>
+
+        </td>
+        <td>
+            <div class="Id_Empty">
+                @Html.DisplayNameFor(model => model.UltimaModifica)
+                <br />
+                <b>
+                    @*@Model.UltimaModifica*@
+                    @Html.EditorFor(model => model.UltimaModifica, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.UltimaModifica, "", new { @class = "text-danger" })
+                </b>
+            </div>
+        </td>
+        <td>
+            <div class="DataChiusa">
+                @if (@Model.DataChiusa.HasValue)
+                {
+                    @Html.DisplayNameFor(model => model.DataChiusa)
+                    <br />
+                    <b>
+                        @Model.DataChiusa.GetValueOrDefault().ToString("dd/MM/yyyy")
+                        @Html.ValidationMessageFor(model => model.DataChiusa, "", new { @class = "text-danger" })
+                    </b>
+                }
+            </div>
+        </td>
+
+    </tr>
+</table>
+
+
+<div class="Id_Empty">
+    <table class="TabellaDati">
+        <tr>
+        </tr>
+    </table>
+</div>
+
+
+@*<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+        Result:
+        <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+    </div>*@
+<script>
+  $(function() {
+      //function log(message) {
+      //    $("<div>").text(message).prependTo("#log");
+      //    $("#log").scrollTop(0);
+      //}
+
+      $("#Filiale").autocomplete({
+          source: function (request, response) {
+              var url = '@Url.Action("GetFiliali", "Richiesta")';
+              $.ajax({
+                  url: url,
+                  type: "POST",
+                  dataType: "json",
+                  data: {
+                      prefix: request.term
+                  },
+                  success: function (data) {
+                      response($.map(data,
+                          function (item) {
+                              //console.log("item di ritorno");
+                              //console.log(item);
+                              //return { label: item.DescrizioneUObyIstituto, value: item.UOCode };
+                              return { label: item.DescrizioneUObyIstituto, value: item.DescrizioneUObyIstituto, id: item.UOCode };
+                          }))
+                  }
+              });
+          },
+          minLength: 3,
+          select: function (e, ui) {
+              console.log("ui.item", ui.item);
+              //console.log("value ", $(this).val());
+              $("#FilialeUOcode").val(ui.item.id);
+          },
+          change: function (e, ui) {
+              if (!(ui.item)) {
+                  e.target.value = "";
+                  $("#FilialeUOcode").val("");
+              }
+          },
+          open: function () {
+              $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+          },
+          close: function () {
+              $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+          }
+      }).val('@ViewData["FilialeDesc"]');
+       @*$("#FilialeUOcodeDesc").val('@ViewData["FilialeC"]').change();*@
+      $("#FilialeUOcode").val('@ViewData["FilialeCuocode"]').change();
+  });
+</script>

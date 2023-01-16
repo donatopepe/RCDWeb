@@ -1,0 +1,513 @@
+﻿@model RCDWeb.Areas.RCD.Models.Richieste
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Stato)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stato.Descrizione)
+        </dd>
+
+        @if (!String.IsNullOrWhiteSpace(Model.Filiale))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Filiale)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Filiale)
+            </dd>
+        }
+
+        @if (!String.IsNullOrWhiteSpace(Model.Luogo))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Luogo)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Luogo)
+            </dd>
+        }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Istituto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Istituto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NDG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NDG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IntestazioneNDG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IntestazioneNDG)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Indirizzo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Indirizzo)
+        </dd>
+        @if (!Model.isPerson)
+        {
+            if (!String.IsNullOrWhiteSpace(Model.PIva))
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.PIva)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PIva)
+                </dd>
+            }
+            if (!String.IsNullOrWhiteSpace(Model.SedeLegale))
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.SedeLegale)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.SedeLegale)
+                </dd>
+            }
+            if (!String.IsNullOrWhiteSpace(Model.IscrizioneCCIAA))
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.IscrizioneCCIAA)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.IscrizioneCCIAA)
+                </dd>
+            }
+            if (!String.IsNullOrWhiteSpace(Model.AlboProfessionale))
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.AlboProfessionale)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.AlboProfessionale)
+                </dd>
+            }
+        }
+        else
+        {
+            if (!String.IsNullOrWhiteSpace(Model.CodiceFiscale))
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.CodiceFiscale)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CodiceFiscale)
+                </dd>
+            }
+            if (!String.IsNullOrWhiteSpace(Model.LuogoNascita))
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.LuogoNascita)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.LuogoNascita)
+                </dd>
+            }
+            if (Model.DataNascita.HasValue)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.DataNascita)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.DataNascita)
+                </dd>
+            }
+        }
+        @if (!String.IsNullOrWhiteSpace(Model.Richiedente))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Richiedente)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Richiedente)
+            </dd>
+        }
+        @if (!String.IsNullOrWhiteSpace(Model.FilialeConsegna))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.FilialeConsegna)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.FilialeConsegna)
+            </dd>
+        }
+        @if (!String.IsNullOrWhiteSpace(Model.email))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.email)
+            </dd>
+        }
+        @if (!String.IsNullOrWhiteSpace(Model.pec))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.pec)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.pec)
+            </dd>
+        }
+        @if (!String.IsNullOrWhiteSpace(Model.NumeroConto))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.NumeroConto)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NumeroConto)
+            </dd>
+        }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cessione)
+        </dt>
+
+        <dd>
+            @if (Model.Cessione == null)
+            {
+                <p>Non selezionato</p>
+            }
+            else
+            {
+                if ((bool)Model.Cessione)
+                {
+                    <p>Cessione Rilevata</p>
+                }
+                else
+                {
+                    <p>Cessione Non Rilevata</p>
+                }
+            }
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Legittimato)
+        </dt>
+
+        <dd>
+            @if (Model.Legittimato == null)
+            {
+                <p>Non selezionato</p>
+            }
+            else
+            {
+                if ((bool)Model.Legittimato)
+                {
+                    <p>Legittimato</p>
+                }
+                else
+                {
+                    <p>Non Legittimato</p>
+                }
+            }
+        </dd>
+
+        @if (!String.IsNullOrWhiteSpace(Model.Motivazione))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Motivazione)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Motivazione)
+            </dd>
+        }
+
+        @if (!String.IsNullOrWhiteSpace(Model.Note))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Note)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Note)
+            </dd>
+        }
+        @if (Model.DataRichiesta.HasValue)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.DataRichiesta)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DataRichiesta)
+            </dd>
+        }
+        @if (Model.DataInserimento.HasValue)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.DataInserimento)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DataInserimento)
+            </dd>
+        }
+        @if (Model.DataAvviso.HasValue)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.DataAvviso)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DataAvviso)
+            </dd>
+        }
+        @if (Model.DataIIAvviso.HasValue)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.DataIIAvviso)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DataIIAvviso)
+            </dd>
+        }
+        @if (Model.DataConsegna.HasValue)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.DataConsegna)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DataConsegna)
+            </dd>
+        }
+        @if (Model.DataChiusa.HasValue)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.DataChiusa)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DataChiusa)
+            </dd>
+        }
+        @if (Model.DataStopBanca.HasValue)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.DataStopBanca)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DataStopBanca)
+            </dd>
+        }
+        @if (Model.GiorniAttesaBanca.HasValue)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.GiorniAttesaBanca)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.GiorniAttesaBanca)
+            </dd>
+        }
+        @if (Model.GiorniAttesaCliente.HasValue)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.GiorniAttesaCliente)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.GiorniAttesaCliente)
+            </dd>
+        }
+        <dt>
+            @Html.DisplayNameFor(model => model.SpesaAddebitabile)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SpesaAddebitabile)
+        </dd>
+        @if (Model.DataPagamento.HasValue)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.DataPagamento)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DataPagamento)
+            </dd>
+        }
+        @if (Model.ImportoTotale.HasValue)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.ImportoTotale)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ImportoTotale)
+            </dd>
+        }
+        <dt>
+            @Html.DisplayNameFor(model => model.Matricola)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Matricola)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UOCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UOCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UOCodeNext)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UOCodeNext)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UltimaModifica)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UltimaModifica)
+        </dd>
+    </dl>
+</div>
+@if ((Model.DocumentiRichiesti != null) && (Model.DocumentiRichiesti.Count() > 0))
+{
+    <fieldset>
+        <legend>Tabella documenti</legend>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Rapporto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Documento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().DescrizioneDocumento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Costo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().NumCopie)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().DocOrig)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().NumCartone)
+                </th>
+            </tr>
+
+            @foreach (var item in Model.DocumentiRichiesti)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rapporto)
+                    </td>
+                    <td>
+                        @if (item.Documento != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Documento.Nome)
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DescrizioneDocumento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Costo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumCopie)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DocOrig)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumCartone)
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </fieldset>
+}
+
+@if ((Model.Allegati != null) && (Model.Allegati.Count() > 0))
+{
+    <fieldset>
+        <legend>Tabella Allegati</legend>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Allegati.FirstOrDefault().tipoAllegato.Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Allegati.FirstOrDefault().DescrizioneFile)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Allegati.FirstOrDefault().FileName)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Allegati)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.tipoAllegato.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DescrizioneFile)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FileName)
+                    </td>
+                    <td>
+
+                        <div class="col-md-offset-2 col-md-10">
+                            <button onclick="location.href='@Url.Action("Download", "Richiesta", new { id = item.Id })';return false;">Download</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </fieldset>
+}
+
+
+<p>
+    <button onclick="Chiudi()">Chiudi</button>
+</p>

@@ -1,0 +1,30 @@
+﻿@{
+  ViewBag.Title = "LogOn di Test";
+  Layout = "~/Views/Shared/_Layout_NoMenu.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#UtenzaTest").focus();
+    });
+
+
+                
+            </script>
+ 
+@using (Html.BeginForm("setUtenzaTest", "Account", FormMethod.Post, new { id = "UtenzaTest_Form" }))
+{
+
+  <table style="width: 80%;">
+    <tbody>
+      <tr>
+        <td>
+          @Html.Label("Inserire utenza di test (es removedXXXX o KO0XXXX) oppure vuoto per usare la propria:")
+        </td>
+        <td>
+          @Html.TextBox("UtenzaTest")
+          <input type="submit" class="bottone_submit" value="Imposta"/>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+}

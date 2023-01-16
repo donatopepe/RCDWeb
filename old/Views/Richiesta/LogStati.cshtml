@@ -1,0 +1,48 @@
+﻿@model IEnumerable<RCDWeb.Areas.RCD.Models.LogStati>
+
+<table class="table" border="1">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Stato)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Motivazione)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Note)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UOCodeNext)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Matricola)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UltimaModifica)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Stato.Stato)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Motivazione)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Note)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.UOCodeNext.UOCODE)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Matricola)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.UltimaModifica)
+    </td>
+</tr>
+    }
+</table>

@@ -1,0 +1,294 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+<div id="result" class="text-danger"></div>
+
+
+<script type="text/javascript">
+
+        $(document).ready(function () {
+            var DocOrig = $("input#DocOrig");
+            DocOrig.unbind().click(function () {
+                /*DocOrig.prop('checked', true);*/
+                DocOrig.val($(this).is(':checked'));
+                console.log("DocOrig:"+$(this).is(':checked') + ":" + $(this).val());
+
+            });
+
+            
+
+            function Legittimato(value) {
+                var eleLegittimato = $("#Legittimato");
+                if (value.toLowerCase() == "true") {
+                    eleLegittimato.val("True");
+                } else {
+                    if (value.toLowerCase() == "false") {
+                        eleLegittimato.val("False");
+                    } else { eleLegittimato.val(""); }
+                }
+            };
+            Legittimato('@Model.Legittimato');
+
+                function Cessione(value) {
+                    var eleCessione = $("#Cessione");
+                    if (value.toLowerCase() == "true") {
+                        eleCessione.val("True");
+                    } else {
+                        if (value.toLowerCase() == "false") {
+                            eleCessione.val("False");
+                        } else { eleCessione.val(""); }
+                    }
+                };
+            Cessione('@Model.Cessione');
+
+            function GestionePost(elemento, submitName, submitValue, form, term) {
+
+                
+                
+
+                term.append(submitName, submitValue);
+                // Display the key/value pairs
+                //for (var pair of term.entries()) {
+                //    console.log(pair[0] + ', ' + pair[1]);
+                //}
+                url = form.attr('action');
+                //console.log("url:" + url);
+                console.log(term);
+                $.ajax({
+                    url: url,
+                    data: term,
+                    method: "POST",
+                    //       dataType: 'json',
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 800000,
+                    success:
+                        function (data)
+                        {
+                            console.log(submitName + ":" + submitValue);
+
+                            @*var url = '@Url.Action("Gestione", "Richiesta")';
+                            var url2 = '/' + data.data.Id;
+                            if (url.search(url2) < 0) {
+
+                                history.pushState({}, "", url+url2);
+                            }*@
+
+                            $('#result').html('Salvato con successo');
+                            /*console.log("DataIN:" + JSON.stringify(data));*/
+                            dataj = $.parseJSON(JSON.stringify(data));
+                            /*console.log("DatajIN:" + JSON.stringify(dataj));*/
+                            $.each(dataj.data, function (i, item) {
+                                if ((item != null) && (String(item).substring(0, 5) == "/Date")) {
+
+                                            @*$('#DataPagamento').val(new Date(Date.parse('@Model.DataPagamento')).format("yyyy-MM-dd"));
+                                            $('#DataSottoscrizione').val(new Date(Date.parse('@Model.DataSottoscrizione')).format("yyyy-MM-dd"));*@
+
+                                            item = String(item).replace("/Date(", "").replace(")/", "");
+                                            var dateObj = new Date(+item);
+                                            var month = dateObj.getMonth() + 1; //months from 1-12
+                                            var day = dateObj.getDate();
+                                            var year = dateObj.getFullYear();
+                                            item = ("000" + day).slice(-2) + "/" + ("000" + month).slice(-2) + "/" + year;
+                                            //console.log("data trovata:" + item);
+                                        }
+                                        $("#" + i).val(item);
+                                        console.log(i + ":" + item);
+                            });
+
+                            Legittimato(String(data.data.Legittimato));
+                            Cessione(String(data.data.Cessione));
+                            displayValidationErrors(data.errorList);
+
+                            if (data.errors) {
+
+                            } else {
+                                //$('#FileForm').val(null);
+                                //fixhttps://qastack.it/programming/20549241/how-to-reset-input-type-file
+                                $("#FileForm").replaceWith($("#FileForm").val('').clone(true));
+                                ////azzero selettore tipo allegato
+                                $('#tipoAllegato_Id').val(0).change();
+                            }
+
+                            console.log("operationType:" + dataj.operationType);
+                            var statosucc = String(dataj.data.StatoSuccessivo);
+                            console.log("StatoSuccessivo:" + statosucc);
+                            if ((dataj.operationType == "Conferma") || (dataj.operationType == "Annulla") || (dataj.operationType == "Respingixmod") || (dataj.operationType == "Archivia"))
+                            {
+                                if (!statosucc || statosucc.length === 0)
+                                {
+                                    alert("Non è possibile nessun cambio stato,\n effettuato solo salvataggio.                             ");
+                                }
+                                else
+                                {
+                                    var message = "Confermi passaggio a " + statosucc + "?                ";
+                                    console.log(message);
+                                    var conferma = confirm(message);
+                                    if (conferma)
+                                    {
+                                        var formdataxconferma = $("#RichiestaForm")[0];
+                                        var dataxconferma = new FormData(formdataxconferma);
+                                        GestionePost(elemento, "operationType", dataj.operationType+"Ok", form, dataxconferma);
+                                    }
+                                }
+                            }
+
+
+
+
+
+                            if ((submitValue == "AddFile") || (submitName == "DelAllegato"))
+                            {
+                                var url = '@Url.Action("TabellaAllegati", "Richiesta")';
+                                dato = {
+                                    id: data.data.Id
+                                };
+                                console.log(dato);
+                                $.ajax({
+                                    url: url,
+                                    data: dato,
+                                    type: "POST",
+                                    error: function (xhr) {
+                                        alert('Error: ' + xhr.statusText);
+                                    },
+                                    success: function (result) {
+                                        $('#AllegatiPartial').html(result);
+                                        console.log("Rigenero tabella AllegatiPartial");
+                                        init();
+                                    }
+                                });
+                            }
+                            else
+                            if ((submitValue == "AddDocumento") || (submitName == "DelDocumento"))
+                            {
+                                var url = '@Url.Action("TabellaDocumenti", "Richiesta")';
+                                dato = {
+                                    id: data.data.Id
+                                };
+                                console.log(dato);
+                                $.ajax({
+                                    url: url,
+                                    data: dato,
+                                    type: "POST",
+                                    error: function (xhr) {
+                                        alert('Error: ' + xhr.statusText);
+                                    },
+                                    success: function (result) {
+                                        $('#DocumentazionePartial').html(result);
+                                        console.log("Rigenero tabella DocumentazionePartial");
+                                        init();
+                                    }
+                                });
+
+                            }
+                            ///Sincronizzo checkbox
+                            if (DocOrig.val() == 'true') DocOrig.prop('checked', true);
+                            if (DocOrig.val() == 'false') DocOrig.prop('checked', false);
+                            console.log("DocOrig:" + DocOrig.is(':checked') + ":" + DocOrig.val());
+
+                            //if (SpesaAddebitabile.val() == 'true') SpesaAddebitabile.prop('checked', true);
+                            //if (SpesaAddebitabile.val() == 'false') SpesaAddebitabile.prop('checked', false);
+                            //SpesaAddebitabile.prop('checked', SpesaAddebitabile.val());
+                            //console.log("SpesaAddebitabile:" + SpesaAddebitabile.is(':checked') + ":" + SpesaAddebitabile.val());
+                            /////Sincronizzo checkbox
+
+                            ////sincronizzo selettore tipo documento
+                            if ((typeof (data.data) !== 'undefined')&& (data.data.Documento))
+                            {
+                                console.log("select documento:" + $('#Documento_Id').val());
+                                $('#Documento_Id').val(data.data.Documento.Id).change();
+                                console.log("Set select tipo documento:" + data.data.Documento.Id);
+                            } else $('#Documento_Id').val(0).change();
+
+
+
+
+                            if (dataj.operationType == "StatoCambiato")
+                            {
+                                @*window.location.href = "@Url.Action("Index", "Richiesta")";*@
+                                Chiudi();
+                            }
+                            if (dataj.operationType == "StatoNonCambiato")
+                            {
+                                alert("Non è possibile nessun cambio stato,\n effettuato solo salvataggio.                                      ");
+                            }
+
+
+
+
+                            $(elemento).removeAttr("disabled");
+
+                            init();
+                        },
+                    error: function () {
+                        $('#result').html('Impossibile inviare il modulo');
+                        $(elemento).removeAttr("disabled");
+                    }
+                });
+                
+                //console.log("Valore file " + $("#FileForm").val());
+                //document.getElementById('FileForm').value = "";
+                //var nome_file = document.getElementById('FileForm').value;
+                //nome_file = "";
+                //document.getElementById('FileForm').value = nome_file;
+                //console.log("Valore file dopo " + $("#FileForm").val());
+            }
+            function init() {
+                var regForm = $("#RichiestaForm");
+                regForm.find(':submit').each(function () {
+                    $(this).unbind().click(function () {
+                        var form = $(this).closest('form');
+                        var formdata = $("#RichiestaForm")[0];
+                        var data = new FormData(formdata);
+                        /*console.log("DataOUT:" + JSON.stringify(formdata));*/
+                        console.log("Submit form click");
+                        $(this).attr("disabled", "disabled");
+                        submitName = $(this).attr('name');
+                        submitValue = $(this).val();
+                        GestionePost(this, submitName, submitValue, form, data);
+
+                    });
+                });
+
+                regForm.submit(
+                    function (event) {
+                        console.log("Submit default prevenuto");
+                        event.preventDefault();
+
+                    }
+                );
+                var id = $("#Id");
+                console.log("ID: " + id.val());
+                if (id.val() =="@Guid.Empty") {
+                    $(".Id_Empty").hide();
+                    console.log("Id_Empty: hide");
+                } else {
+                    $(".Id_Empty").show();
+                    console.log("Id_Empty: show");
+                }
+            }
+            init();
+
+            function displayValidationErrors(errors) {
+                $("span[data-valmsg-for]").text("");
+                $.each(errors, function (idx, validationError) {
+                    //var message = ("Errore Validazione:" + validationError.PropertyName + " < " + validationError.ErrorList[0]);
+                    //$("span[data-valmsg-for='" + validationError.PropertyName + "']").text(validationError.ErrorList[0]);
+                    //$("<div>").text(message).prependTo("#result");
+                    //$("#result").scrollTop(0);
+                    validationError.ErrorList.forEach(function (element) {
+                        console.log(element)
+                        var message = ("Errore Validazione:" + validationError.PropertyName + " < " + element);
+                        //$("span[data-valmsg-for='" + validationError.PropertyName + "']").text(element);
+                        $("span[data-valmsg-for='" + validationError.PropertyName + "']").text("*");
+                        $("<div>").text(message).prependTo("#result");
+                        $("#result").scrollTop(0);
+                    })
+                }
+                );
+            }
+
+        });
+
+
+</script>

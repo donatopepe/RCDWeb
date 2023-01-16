@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "_FiltriRichiesta";
+    Layout = null;
+
+}
+
+<script>
+    $(document).ready(function () {
+
+        setTimeout(function () {
+
+            $("#btnSubmit").trigger("click");
+        }, 1000);
+
+
+    });
+
+    function inviaFiltri() {
+        if ($("#ndg").val() != "" && ($("#SelIstitutoR").val() == "" || $("#SelIstitutoR").val() == 0)) {
+            alertDialog("Selezionare istituto per ricerca per ndg.", 'confirmDialog', '');
+        } else {
+            $("#dettaglio").empty();
+            $("#btnSubmit").trigger("click");
+        }
+
+    }
+
+
+</script>
+
+<fieldset>
+    <legend>Filtri</legend>
+
+    <div id='filtriOrdini'>
+        @using (Ajax.BeginForm("_GridElencoRichieste", "Richiesta", null, new AjaxOptions { UpdateTargetId = "elencoRich", InsertionMode = InsertionMode.Replace, HttpMethod = "Post" }, new { id = "Filtri_form" }))
+        {
+            @Html.Partial("FiltriHomeCommon")
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        @Html.Label("Stato:", htmlAttributes: new { @class = "control-label col-md-2" })
+                    </td>
+                    <td>
+                        @*@Html.Hidden("StatoRichiestaF")*@
+
+                        @(Html.Kendo().DropDownList()
+                .Name("StatoRichiestaF")
+                .HtmlAttributes(new { @style = "width: 200px", @class = "DropDownList" })
+                .BindTo((IEnumerable<SelectListItem>)ViewData["StatoRichiestaF"])
+                .OptionLabel("Tutti"))
+                    </td>
+
+                    <td style="width: 15%;">
+                        @Html.Label("Ndg:")
+                    </td>
+                    <td style="width: 30%;">
+                        @Html.TextBox("ndg", "", new { @class = "testo", @style = "width: 200px;" })
+                    </td>
+                </tr>
+                <tr>
+                </tr>
+                <tr>
+
+                    <td colspan="4">
+
+                        <input id="btnSubmit" type="submit" class="bottone_submit" value="Cerca" style="display: none" />
+                        <input type="button" class="bottone_submit" value="Cerca" onclick="inviaFiltri();" />
+                    </td>
+                </tr>
+
+            </table>
+        }
+    </div>
+</fieldset>
+

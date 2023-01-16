@@ -1,0 +1,170 @@
+﻿@using AreaCommonWeb.Models
+
+@{
+  ViewBag.Title = "FiltriHomeCommon";
+  var sottoFunz = (List<AreaCommonWeb.DAL.SottoFunzioni>)ViewData["SottoFunzioni"];
+  var checkBox = (List<CheckMercatiModel>)ViewData["checkBoxMercati"];
+  bool haveS01 = ViewData["haveSottoFunzS01"]!=null ?(bool) ViewData["haveSottoFunzS01"]:false;
+  
+}
+<script src="@Url.Content("~/Scripts/rcdfiltrihome.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+  $(document).ready(function () {
+
+   // setTimeout(
+             @*function () {
+           $.ajax({
+             url: '@Url.Action("GetAjaxGestoriRichieste", "Richiesta")',
+              //cache: false,
+              type: 'POST',
+              success: function (data) {
+
+                var gestor = $("#ElencoGestoriAutoComplete").data("kendoDropDownList");
+                if (data != null && data.length != 0) {
+
+                  gestor.setDataSource(data);
+                }
+                if ('@ViewData["selectableGestore"]' != "") {
+            $('#gestore').val('@ViewData["selectableGestore"]');
+            enableGestori();
+          }
+        }
+            });*@
+
+        // }, 1500);
+    $('#firstBound').val("si");
+
+    $('#FlagUff').val('@ViewData["flagUff"]');
+      $('#uocode').val('@ViewData["uocode"]');
+      $('#SelFiltriHome').val('@ViewData["selFiltriHome"]');
+      $('#rebind').val('@ViewData["selFiltriHome"]');
+
+
+      if ($('input:checkbox[id^="mer_"]').length == 1) {
+        $('input:checkbox[id^="mer_"]').attr("disabled", true);
+      }
+      $("#filtriArea").val('@Session["area"]');
+
+
+  });
+
+  function onloadIstitutoN() {
+
+    var admin = $("#SelIstitutoR").val();
+    if (admin != "0" && '@haveS01' == 'False') {
+      $("#istitutoR").val($("#SelIstitutoR").val());
+      $("#SelIstitutoR").data('kendoComboBox').enable(false);
+    }else {
+      $("#istitutoR").val($("#SelIstitutoR").val());
+      $("#SelIstitutoR").data('kendoComboBox').enable(true);
+    }
+  }
+
+  
+</script>
+
+
+<table style="width: 100%">
+    @Html.Hidden("FlagUff")
+    @Html.Hidden("uocode")
+    @Html.Hidden("SelFiltriHome")
+    @Html.Hidden("rebind")
+    @Html.Hidden("filtriArea")
+    @Html.Hidden("gestore")
+    @Html.Hidden("mercato")
+    <tr>
+
+
+        <td style="width: 15%;">
+            @Html.Label("Data richiesta DA:")
+        </td>
+        <td style="width: 30%;">
+
+            @(Html.Kendo().DatePicker()
+                  .Name("DataRichiestaDA")
+                  .Value(new DateTime(DateTime.Today.Year-1, 1, 1))
+                  .Events(o => o.Change("controlloDate"))
+            )
+        </td>
+        <td style="width: 15%;">
+            @Html.Label(" A:")
+        </td>
+        <td>
+
+            @(Html.Kendo().DatePicker()
+                  .Name("DataRichiestaA")
+                  .Value(DateTime.Today)
+                  .Events(o => o.Change("controlloDate"))
+            )
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label("Istituto:")
+        </td>
+        <td>
+            @Html.Hidden("istitutoR")
+
+            @(Html.Kendo().ComboBox()
+                .Name("SelIstitutoR")
+                .HtmlAttributes(new { @style = "width: 50px", @class = "DropDownList" })
+                .BindTo((IEnumerable<SelectListItem>)ViewData["SelIstituti"])
+                .Events(events => events.Change("setIstitutoR").DataBound("onloadIstitutoN"))
+            )
+        </td>
+        @*<td>
+            @Html.Label("Area:")
+        </td>
+        <td>
+            @Html.Hidden("areaR")
+
+            @(Html.Kendo().DropDownList()
+                .Name("SelAreaR")
+                .HtmlAttributes(new { @style = "width: 120px", @class = "DropDownList" })
+                .BindTo((IEnumerable<SelectListItem>)ViewData["SelArea"])
+                .Events(events => events.Change("setAreaR").DataBound("onloadArea"))
+                //.Placeholder("--seleziona area--")
+                .OptionLabel("--seleziona area--")
+            )
+        </td>*@
+    </tr>
+    <tr>
+    @*<td>
+          <span id="nomeHub"> Distretto:</span>
+        </td>
+        <td>
+          @Html.Hidden("filialeHubR")
+          @(Html.Kendo().DropDownList()
+              .Name("FilialiHubAutoCompleteR")
+              //.Suggest(true)
+              .Template(" #= data.Text #")
+              //.Filter(FilterType.Contains)
+              .BindTo((IEnumerable<SelectListItem>)ViewData["SelFilialiHub"])
+              .HtmlAttributes(new { @style = "width: 250px", @class = "DropDownList" })
+              .Events(events => events.Change("setFilialeHubR").DataBound("onloadHub"))
+              //.Placeholder("--seleziona Microterritorio--")
+              .OptionLabel("--seleziona  Distretto--")
+              )
+        </td>*@
+    @*<td>
+        @Html.Label("Punto Operativo:")
+    </td>
+    <td>
+        @Html.Hidden("filialeSpokeR")
+        @(Html.Kendo().DropDownList()
+              .Name("FilialiSpokeAutoCompleteR")
+              //.Suggest(true)
+              .Template(" #= data.Text #")
+              //.Filter(FilterType.Contains)
+              .BindTo((IEnumerable<SelectListItem>)ViewData["SelFilialiSpoke"])
+              .HtmlAttributes(new { @style = "width: 250px", @class = "DropDownList" })
+              .Events(events => events.Change("setFilialeSpokeR").DataBound("onloadSpoke"))
+              //.Placeholder("--seleziona  punto operativo--")
+              .OptionLabel("--seleziona  punto operativo--")
+              )
+    </td>*@
+<tr>
+
+</table>
+

@@ -1,0 +1,161 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+
+<script>
+    presentecostonullo = false;
+</script>
+@if ((Model.DocumentiRichiesti != null) && (Model.DocumentiRichiesti.Count() > 0))
+{
+
+
+    <table class="Tabella_Documenti" style="width:100%; text-align:left">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Documento)
+            </th>
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().DescrizioneDocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Rapporto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Costo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().NumCopie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().DocOrig)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().NumCartone)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Matricola)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().UOCODE)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().UltimaModifica)
+                </th>*@
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.DocumentiRichiesti)
+        {
+            <tr>
+                <td>
+                    @if (item.Documento != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.Documento.Descrizione)
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DescrizioneDocumento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rapporto)
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Costo)
+                    <script>
+                            if (('@item.Costo' == "") || (parseFloat('@item.Costo')<=0))
+                            {
+                                presentecostonullo = true;
+                            };
+                    </script>
+                </td>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.NumCopie)
+                </td>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.DocOrig)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumCartone)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Matricola)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UOCODE)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UltimaModifica)
+                    </td>*@
+                <td style="width:100px">
+                    @* @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+                    <div class="col-md-offset-2 col-md-10">
+                        <button style="background: url(~/Content/img/edit_icon.png);cursor: pointer; border: none" name="ModDocumento" value="@item.Id" type="submit" id="btnModificaDoc">
+                            <img src="~/Content/img/edit_icon.png">
+                        </button>
+                        <button style="background: url(~/Content/img/delete_icon.png); cursor: pointer; border: none" name="DelDocumento" value="@item.Id" type="submit" id="btnCancellaDoc">
+                            <img src="~/Content/img/delete_icon.png">
+                        </button>
+
+                    </div>
+                </td>
+            </tr>
+        }
+        <tr class="spesa">
+            <td>@Html.LabelFor(model => model.TotaleCosto, htmlAttributes: new { @class = "control-label col-md-2" })</td>
+            <td></td>
+            <td></td>
+            <td class="col-md-10">
+                @Html.DisplayFor(model => model.TotaleCosto, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TotaleCosto, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+    </table>
+
+    <br />
+}
+@*else
+    {
+        <h2 class="text-danger">Attenzione non sono presenti documenti richiesti.</h2>
+    }*@
+
+
+@*<div id="resultDocumentazione" class="" style="display: none"></div>
+<script>
+                    function alertDocumentazione(message) {
+            if (message.length > 0) {
+                $("#resultDocumentazione").empty();
+                console.log("alert:" + message);
+                $("<div>").text(message).appendTo("#resultDocumentazione");
+                $("#resultDocumentazione").scrollTop(0);
+                var opt = {
+                    autoOpen: false,
+                    modal: true,
+                    width: "auto",
+                    height: "auto",
+                    title: 'Alert',
+                    buttons: {
+                        Chiudi: function () {
+                            $(this).dialog("close");
+                            $(this).dialog("destroy");
+                        }
+                    },
+                };
+                $('#resultDocumentazione').dialog(opt).dialog('open');
+            }
+            };
+            function ControlloCosti() {
+                var ValoreCanaleConsegna = $("select#CanaleConsegna_Id").val();
+                if ((presentecostonullo) && ((ValoreCanaleConsegna == "@ViewBag.CanaleFilialeID") || ($("input#SpesaAddebitabile").is(':checked'))))
+                {
+                  alertDocumentazione("Attenzione controllare costo documenti!");
+                }
+            };
+        ControlloCosti();
+</script>*@
+@*<script>
+    ControlloSpesa(SpesaAddebitabile.is(':checked'));
+</script>*@

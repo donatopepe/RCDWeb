@@ -1,0 +1,1194 @@
+﻿@charset "UTF-8";
+/* Imports 
+@import url("reset.css");
+@import url("menu.css");*/
+
+
+
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li
+ {
+
+	border: 0;
+	margin: 0;
+	padding: 0;
+	vertical-align: baseline;
+}
+
+
+html
+{
+
+}
+/***** Global *****/
+/* Body */
+body {
+	background: #4a4a4f url(img/body_bg.jpg) repeat-x left top;
+	color: #000;
+	font-size: 12px;
+	font-family: "Trebuchet MS",Verdana,Arial,Helvetica,sans-serif;
+	/*line-height: 12px;*/
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+
+.testo{
+	font-size: 12px;
+	font-family: "Trebuchet MS",Verdana,Arial,Helvetica,sans-serif;
+}
+
+.numero{
+	font-size: 12px;
+	font-family: "Trebuchet MS",Verdana,Arial,Helvetica,sans-serif;
+	text-align: right;
+}
+
+.DropDownList{
+	font-size: 12px;
+	font-family: "Trebuchet MS",Verdana,Arial,Helvetica,sans-serif;
+}
+
+/* BUTTON */
+.bottone_cerca {
+  /*
+      Strip down the button and link elements to a base we can work with.
+  */
+  border: none;
+  float: right;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  white-space: nowrap;
+  overflow: visible;
+  color: #666666;
+  margin-right: 25px;
+    /*
+        We define our background top left and use the 'Sliding Doors' Technique for some fast loading buttons.
+    */
+	padding: 0 15px 0 80px;
+	line-height: 24px;
+	
+    background: url(img/bg_button_cerca.gif) no-repeat;
+  }
+  
+  .bottone_submit {
+  /*
+      Strip down the button and link elements to a base we can work with.
+  */
+  border: none;
+  float: right;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  white-space: nowrap;
+  overflow: visible;
+  color: #666666;
+  margin-right: 25px;
+    /*
+        We define our background top left and use the 'Sliding Doors' Technique for some fast loading buttons.
+    */
+	
+	line-height: 24px;
+	
+    background: url(img/bg_button_submit.gif) no-repeat;
+      background-position: center;
+      width: 80px;
+      height: 24px;
+       font-size: 12px;
+      text-align: center;
+  }
+  
+  .bottone_submit_big {
+  /*
+      Strip down the button and link elements to a base we can work with.
+  */
+  border: none;
+  float: right;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  white-space: nowrap;
+  overflow: visible;
+  color: #666666;
+  margin-right: 25px;
+    /*
+        We define our background top left and use the 'Sliding Doors' Technique for some fast loading buttons.
+    */
+	
+	line-height: 24px;
+	
+    background: url(img/bg_button_submit_big.jpg) no-repeat;
+      background-position: center;
+      width: 160px;
+      height: 24px;
+       font-size: 12px;
+      text-align: center;
+  }
+
+/* Headings */
+h1 {
+    color: #D40606;
+    font-size: 18px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+h2 {
+	font-size: 16px;
+	font-weight: bold;
+	color: #000;
+	margin-bottom: 12px;
+}
+
+h3 {
+	font-size: 14px;
+	font-weight: bold;
+	color: #d40606;
+	margin-bottom: 5px;
+}
+
+h4 {
+	font-size: 12px;
+	font-weight: bold;
+	color: #000000;
+	
+}
+
+h5 {
+	font-size: 12px;
+	font-weight: bold;
+	color: #888888;
+	
+}
+
+h6 {
+	font-size: 11px;
+	color: #888888;
+	
+}
+/* Anchors */
+
+
+a,	
+a:link,
+a:visited {
+	color: #19456F;
+	text-decoration: none;
+	
+}	
+		
+a:hover,
+a:focus {
+	color: #191970;
+	text-decoration: none;
+}
+
+form { margin: 0; }
+
+/* Paragraphs */
+p {margin-bottom: 10px;}
+
+strong, b {font-weight: bold;}
+em, i {font-style: italic;}
+
+/* Lists */
+ul {
+	list-style: outside disc;
+	margin: 1em 0 1.5em 1.5em;
+}
+
+ol {
+	list-style: outside decimal;
+	margin: 1em 0 1.5em 1.5em;
+}
+
+dl {margin: 0 0 1.5em 0;}
+dt {font-weight: bold;}
+dd {margin-left: 1.5em;}
+
+/* Quotes */
+blockquote {
+	font-style: italic;
+	color: #5b5b5b;
+}
+cite {}
+
+q {}
+
+
+	
+.clear {
+	clear: both;
+	height: 1px;
+	overflow: hidden;
+}	
+
+#wrapper {
+	width: 970px;
+	margin: 0px auto;
+}
+
+#header {
+	background: url(img/header_bg.jpg) no-repeat left top;
+	height: 64px;
+	position: relative;
+}
+
+#header .logo {
+	position: absolute;
+	top: 11px;
+	left: 11px;
+}
+
+#header .moduletable-infolog {
+	
+	
+	position: absolute;
+	top: 45px;
+	right: 10px;
+	font-size: 11px;
+	font-weight: bold;
+	color: #F8F8FF;
+	
+}
+
+#header .moduletable-search .span {
+	background: none;
+	border: none;
+	float: left;
+	width: 130px;
+	color: #424242;
+	font-size: 11px;
+	padding: 5px 3px;
+}
+
+
+#menu {
+	background: url(img/menu_bg.jpg) repeat-x left top;
+	height: 30px;
+}
+
+
+
+#containerRepeat {
+	background: url(img/container_repeat.jpg) repeat-y left top;
+	width: 970px;
+
+}
+
+#containerTop {
+	background: url(img/container_top.jpg) no-repeat left top;
+	padding: 8px 5px 8px 5px;
+	/*height: auto !important;*/
+	
+}
+
+
+
+#bottom {
+	background: #eaeaea url(img/bottom_bg.jpg) repeat-x left top;
+	height: 30px;
+	padding: 22px 32px 13px 32px;
+	width: 906px; 
+}
+
+#bottom .moduletable-address {
+	background: url(img/bottom_border.jpg) no-repeat right center;
+	width: 300px;
+	padding-right: 22px;
+	float: left; 
+	font-size: 11px;
+	color: #555555;
+}
+
+#bottom .moduletable-address h3 {
+	font-size: 11px;
+	font-weight: bold;
+	color: #555555;
+	margin-bottom: 0px;	
+}
+
+#bottom .moduletable-contact {
+	background: url(img/bottom_border.jpg) no-repeat right center;
+	width: 250px;
+	padding: 0px 43px 0px 20px; 
+	float: left; 
+	font-size: 11px;
+	color: #555555;	
+}
+
+#bottom .moduletable-contact a:link,
+#bottom .moduletable-contact a:visited,
+#bottom .moduletable-contact a:active {
+	font-size: 11px;
+	color: #555555;	
+	text-decoration: none;	
+}
+
+#bottom .moduletable-contact a:hover {
+	text-decoration: underline;
+}
+
+#bottom .moduletable-connect {
+	width: 220px;
+	padding-left: 20px; 
+	float: right;
+	font-size: 11px;
+	color: #555555;
+}
+
+
+#bottom .moduletable-connect a:link,
+#bottom .moduletable-connect a:visited,
+#bottom .moduletable-connect a:active {
+	font-size: 11px;
+	color: #c22435;	
+	text-decoration: none;	
+}
+
+#bottom .moduletable-connect a:hover {
+	text-decoration: underline;
+}
+
+#bottom .moduletable-connect h3 {
+	font-size: 11px;
+	font-weight: bold;
+	color: #555555;
+	margin-bottom: 0px;	
+}
+
+#bottom .moduletable-connect .itemTop {
+	width: 220px;	
+	padding-bottom: 12px;
+}
+
+#bottom .moduletable-connect .itemTop h3 {
+	color: #555555;
+	font-size: 11px;
+	float: left;
+	padding-right: 10px;
+	font-weight: normal;
+}
+
+#bottom .moduletable-connect .itemTop ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+#bottom .moduletable-connect .itemTop ul li {
+	display: inline;
+}
+
+#bottom .moduletable-connect .itemBottom {
+	color: #8e8e8e;
+	font-size: 11px; 
+}
+
+#footer {
+	background: url(img/footer_bg.jpg) no-repeat left top;
+	height: 32px;
+	line-height: 32px;
+	color: #fff;
+	padding-left: 32px;
+	font-size: 11px;
+}
+
+
+
+.contentheading h1 {
+	color: #d40606;
+	font-size: 18px;
+	background: url(img/contentheading_bg.jpg) repeat-x left bottom;
+	padding-bottom: 12px;
+	font-weight: bold;
+	margin-bottom: 12px;
+}
+
+.pathway {
+	width: 660px;
+	border-bottom: 1px solid #e6e6e6;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+}
+
+.pathway.large {
+	width: 960px;
+	
+}
+
+.pathway ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+.pathway ul li {
+	float: left;
+	background: url(img/path_arrow_bg.jpg) no-repeat left center;
+	padding: 0px 7px 0px 11px;
+	color: #414141;
+	font-size: 11px;
+}
+
+.pathway ul li.item1 {
+	background: none;
+	padding-left: 0px;
+}
+
+.pathway ul li.item1 a:link,
+.pathway ul li.item1 a:visited,
+.pathway ul li.item1 a:active {
+	background: url(img/path_home_bg.jpg) no-repeat left center;
+	padding: 0px 7px 0px 19px;
+}
+
+.pathway ul li a:link,
+.pathway ul li a:visited,
+.pathway ul li a:active {
+	text-decoration: none;
+	color: #414141;
+	font-size: 11px;
+}
+
+.pathway ul li a:hover {
+	text-decoration: underline;
+}
+
+
+DIV#Col-left {
+	WIDTH: 150px; 
+	FLOAT: left
+}
+
+DIV#Col-right {
+	WIDTH: 795px; 
+	FLOAT: left; 
+	MARGIN-LEFT: 10px
+}
+
+
+
+.sid-box H5 {
+	LINE-HEIGHT: 20px; 
+	TEXT-INDENT: 12px; 
+	BACKGROUND: url(img/pro-sid-mnu-bg2.gif) repeat-x 50% top; 
+	HEIGHT: 23px; 
+	COLOR: #fff; 
+	FONT-SIZE: 10px
+}
+.sid-box SPAN.border {
+	BORDER-BOTTOM: #ccc 1px solid; 
+	BORDER-LEFT: #ccc 1px solid; 
+	/*BACKGROUND-COLOR: #f2f3f6; */
+	DISPLAY: block; 
+	MARGIN-BOTTOM: 8px; 
+	BORDER-TOP: #ccc 1px; 
+	BORDER-RIGHT: #ccc 1px solid
+}
+
+
+.ser-sid-box2 {
+	PADDING-BOTTOM: 6px; 
+	PADDING-LEFT: 10px; 
+	PADDING-RIGHT: 10px; 
+	BACKGROUND: url(img/ser-box2-cC.gif) repeat-y; 
+	FONT-SIZE: 12px; 
+	PADDING-TOP: 6px
+}
+.ser-sid-box2 H5 {
+	PADDING-BOTTOM: 3px; 
+	COLOR: #1787bb; 
+	FONT-SIZE: 13px; 
+	FONT-WEIGHT: bold
+}
+.ser-sid-box2 UL LI {
+	LINE-HEIGHT: 24px; 
+	PADDING-LEFT: 15px; 
+	BACKGROUND: url() no-repeat left 50%
+}
+.ser-sid-box2 UL LI A:link {
+	COLOR: #333; 
+	FONT-WEIGHT: bold; 
+	TEXT-DECORATION: none
+}
+.ser-sid-box2 UL LI A:visited {
+	COLOR: #333; 
+	FONT-WEIGHT: bold; 
+	TEXT-DECORATION: none
+}
+.ser-sid-box2 UL LI A:hover {
+	COLOR: #cc6600; 
+	TEXT-DECORATION: none
+}
+
+
+/*** MASTER FORM WIDTHS - CUSTOMIZE THIS TO CHANGE THE FORM LAYOUT ***/
+
+	/*
+	form width:		550px
+	left column:	190px / 180px + 10px padding
+	mid column:		200px
+	right column:	160px
+	*/
+
+
+
+#fform { margin:0; padding:0;}
+
+
+
+	#fform fieldset.submit
+		{
+		padding-left: 190px !important;
+		}
+
+	#fform label{
+		padding:0px 10px;
+		width: 160px;
+		}
+
+	#fform label.error,
+	#fform input.submit
+		{
+		margin-left:180px !important;
+		}		
+
+	#fform fieldset fieldset label.error
+		{
+		margin-left:0px !important;
+		width:200px !important;
+		}		
+
+
+	#fform .centered{
+		margin-left:180px !important;
+		width:200px !important;
+		}
+	
+	#fform .text, 
+	#fform .button,
+	#fform .group,
+	#fform .control,
+	#fform .submit,
+	#fform textarea,
+	#fform select
+		{
+		width: 150px !important;
+		}
+		
+
+	#fform .input 
+	{ 
+	background-color: #F5F5F5; 
+	font-size: 11pt; 
+	border-style: solid; 
+	border-width: 1;
+	}
+
+
+/*** FIELDSETS AND LEGENDS ***/
+
+
+	#fform fieldset
+		{
+		margin: 0 0 1.5em 0;
+		padding: 0 0 10px 0px;
+		float: left;
+		clear: both;
+
+		}
+	
+	#fform fieldset.submit
+		{
+		padding: 0px 10px 10px 190px;
+		border-style: none;
+		
+		background-color: transparent;
+		background-image: none;
+		
+		float: none;
+		width: auto;
+		
+		}
+	
+	#fform legend
+		{
+		color: #000000;
+		
+		font-size:1.0em;
+		font-variant:small-caps;
+		margin-left: 1em;
+		padding:0px 5px;
+		}
+		
+
+	
+/*** FORM BLOCKS ***/
+
+	#fform ul
+		{
+		padding:5px 10px;
+		list-style: none;
+		}
+	
+	#fform li
+		{
+		width: 100%;
+		
+		padding:5px 0px 10px 0;
+		border-top:1px dotted #ccc;
+		
+		display:block;
+		float: left;
+		clear: left;
+	}
+	
+	#fform li:first-child
+		{
+		border:none;
+		}
+
+	
+/*** FORM BLOCK ELEMENTS ***/
+
+	#fform label
+		{
+		padding:0px 10px;
+		width: 160px;
+		float: left;
+		}
+		
+	#fform .error{
+		color: #c00;
+		}
+		
+	#fform label.error
+		{
+		color: #c00;
+		
+		font-size: 100%;
+		font-weight: bold;
+		font-variant:small-caps;
+		
+		width:308px;
+		display: none;
+
+		margin:8px 0px 0px 180px;
+		padding:3px 0px 0px 5px;
+		border-top:1px dotted #ccc;
+		
+		clear:both;
+		}
+		
+	#fform label.info{
+		font-size: 100%;
+		font-weight: bold;
+		font-variant:small-caps;
+		
+		margin:8px 0px 0px 180px;
+		padding:3px 0px 0px 5px;
+		}
+
+	#fform fieldset fieldset,
+	#fform .group
+		{
+		width:200px;
+		
+		margin: 0;
+		border:none;
+		
+		background:none;
+		
+		float:left;
+		clear: none;
+		
+		}
+		
+	#fform fieldset fieldset label
+		{
+		width:auto !important;
+		white-space:nowrap;
+		padding:0px;
+		margin:0px;
+		display:block;
+		clear:both;
+		}
+		
+	#fform label label.error{
+		margin-left:0px;
+		}
+
+	#fform label.centered{
+		padding:0px 0px;
+		width:200px !important;
+		}
+		
+	/* see also the error class at the foot of the page */
+	
+	#fform fieldset fieldset label.spaced
+		{
+		margin-bottom:3px;
+		}
+
+
+
+
+/*** FORM ELEMENTS ***/
+
+	#fform input.submit{
+		margin:10px 0px 10px 180px;
+		padding:0px 2px;
+		}
+
+	#fform input, textarea, select, 
+	#fform label
+		{
+		font-size:1.2em;
+		
+		}
+
+	#fform input, textarea, select
+		{
+		font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+		}
+
+	#fform .input[type="text"],
+	#fform textarea
+		{
+		padding:1px;
+		}
+		
+	#fform .input[type="radio"],
+	#fform .input[type="checkbox"]
+		{
+		margin:0px;
+		padding:0px;
+		position:relative;
+		top:3px;
+		}
+		
+/*** SUPPORTING CLASSES ***/
+
+	#fform label.required{
+		background-image:url(images/required_star.gif);
+		background-position:right;
+		background-repeat:no-repeat;
+		}
+	
+	#fform span.required{
+		padding-right:15px;
+		}
+		
+	#fform .clean
+		{
+		border:none;
+		}
+		
+	#fform .info{
+		padding-top:0.5em;
+		font-size:80%;
+		line-height:100%;
+		color:#aaa;
+		}
+		
+	#fform .indent{
+ 		padding:2px 20px; 
+		width:auto !important;
+		white-space:nowrap;
+		padding-left: 25px !important;
+ 		}
+		
+	#fform label.disabled{
+		color:#aaa;
+		}
+	
+	#fform .highlight{
+		background-color:#e2e2e2;
+		}
+	
+	.off{
+		display:none !important;
+		}
+		
+	.clear{
+		clear:both;
+		}
+		
+/* -----------------------------------------------
+	www.swfupload.org
+	Description: Common Screen Stylesheet for SWFUpload Demos
+	Updated on:  May 1, 2008
+----------------------------------------------- */
+	
+div.fieldset {
+	border:  1px solid #afe14c;
+	margin: 10px 0;
+	padding: 20px 10px;
+}
+div.fieldset span.legend {
+	position: relative;
+	background-color: #FFF;
+	padding: 3px;
+	top: -30px;
+	font: 700 14px "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: #73b304;
+}
+
+div.flash {
+	width: 375px;
+	margin: 10px 5px;
+	border-color: #D9E4FF;
+
+	-moz-border-radius-topleft : 5px;
+	-webkit-border-top-left-radius : 5px;
+    -moz-border-radius-topright : 5px;
+    -webkit-border-top-right-radius : 5px;
+    -moz-border-radius-bottomleft : 5px;
+    -webkit-border-bottom-left-radius : 5px;
+    -moz-border-radius-bottomright : 5px;
+    -webkit-border-bottom-right-radius : 5px;
+
+}
+
+
+
+
+input[disabled]{ border: 1px solid #ccc } /* FF 2 Fix */
+
+
+label { 
+	width: 200px; 
+	text-align: left; 
+	margin-left: 5px;
+}
+
+#btnSubmit { margin: 0 0 0 155px ; }
+
+
+
+.progressWrapper {
+	width: 357px;
+	overflow: hidden;
+}
+
+.progressContainer {
+	margin: 5px;
+	padding: 4px;
+	border: solid 1px #E8E8E8;
+	background-color: #F7F7F7;
+	overflow: hidden;
+}
+/* Message */
+.message {
+	margin: 1em 0;
+	padding: 10px 20px;
+	border: solid 1px #FFDD99;
+	background-color: #FFFFCC;
+	overflow: hidden;
+}
+/* Error */
+.red {
+	border: solid 1px #B50000;
+	background-color: #FFEBEB;
+}
+
+/* Current */
+.green {
+	border: solid 1px #DDF0DD;
+	background-color: #EBFFEB;
+}
+
+/* Complete */
+.blue {
+	border: solid 1px #CEE2F2;
+	background-color: #F0F5FF;
+}
+
+.progressName {
+	font-size: 8pt;
+	font-weight: 700;
+	color: #555;
+	width: 323px;
+	height: 14px;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.progressBarInProgress,
+.progressBarComplete,
+.progressBarError {
+	font-size: 0;
+	width: 0%;
+	height: 2px;
+	background-color: blue;
+	margin-top: 2px;
+}
+
+.progressBarComplete {
+	width: 100%;
+	background-color: green;
+	visibility: hidden;
+}
+
+.progressBarError {
+	width: 100%;
+	background-color: red;
+	visibility: hidden;
+}
+
+.progressBarStatus {
+	margin-top: 2px;
+	width: 337px;
+	font-size: 7pt;
+	font-family: Trebuchet MS;
+	text-align: left;
+	white-space: nowrap;
+}
+
+a.progressCancel {
+	font-size: 0;
+	display: block;
+	height: 14px;
+	width: 14px;
+	background-image: url(../images/cancelbutton.gif);
+	background-repeat: no-repeat;
+	background-position: -14px 0px;
+	float: right;
+}
+
+a.progressCancel:hover {
+	background-position: 0px 0px;
+}
+
+/*
+     ICONA DEL PDF NELLA GRID RICHIESTE
+  */
+.gridPdfView {
+  /*
+      Strip down the button and link elements to a base we can work with.
+  */
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  white-space: nowrap;
+  overflow: visible;
+  color: #666666;
+  margin-right: 25px;
+	padding-left: 25px ;
+      padding-bottom: 6px;
+	
+	
+    background: url(img/icon_pdf.gif) no-repeat left top;
+    height: 24px;
+    width: 24px;
+	position: relative;
+  }
+
+.gridPdfPaddingView {
+    /*
+      Strip down the button and link elements to a base we can work with.
+  */
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    outline: none;
+    white-space: nowrap;
+    overflow: visible;
+    color: #666666;
+    padding-left: 15px;
+    padding-bottom: 20px;
+    background: url(img/icon_pdf.gif) no-repeat left top;
+    /*height: 24px;
+    width: 24px;*/
+    position: relative;
+}
+  
+  .gridPdfViewDisabled {
+  /*
+      Strip down the button and link elements to a base we can work with.
+  */
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  white-space: nowrap;
+  overflow: visible;
+  color: #666666;
+  margin-right: 25px;
+    z-index: 10000000;
+    /*
+        We define our background top left and use the 'Sliding Doors' Technique for some fast loading buttons.
+    */
+	padding-left: 25px ;
+      padding-bottom: 6px;
+      opacity: 0.5;
+	
+   /* background: url(img/icon_pdf.gif) no-repeat;*/
+  }
+  
+  .gridEdit {
+      
+  /*
+      Strip down the button and link elements to a base we can work with.
+  */
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  white-space: nowrap;
+  overflow: visible;
+  color: #666666;
+ 
+    z-index: 10000000;
+    /*
+        We define our background top left and use the 'Sliding Doors' Technique for some fast loading buttons.
+    */
+	padding-left: 10px ;
+      padding-right: 6px;
+	
+	
+    background: url(img/edit_icon.png)  no-repeat left top;
+    height: 16px;
+    width: 16px;
+	position: relative;
+  
+  }
+  
+  .gridDelete {
+      
+  /*
+      Strip down the button and link elements to a base we can work with.
+  */
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  white-space: nowrap;
+  overflow: visible;
+  color: #666666;
+ 
+    z-index: 10000000;
+    /*
+        We define our background top left and use the 'Sliding Doors' Technique for some fast loading buttons.
+    */
+	padding-left: 10px ;
+      padding-right: 6px;
+	
+    background: url(img/delete_icon.png)  no-repeat left top;
+    height: 16px;
+    width: 16px;
+	position: relative;
+  
+  }
+  
+  
+  /*
+     ICONA DEL Log NELLA GRID RICHIESTE
+  */
+.gridLogView {
+  /*
+      Strip down the button and link elements to a base we can work with.
+  */
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  white-space: nowrap;
+  overflow: visible;
+  color: #666666;
+  padding-bottom: 20px;
+  background: url(img/LogIcon.png) no-repeat left top;
+  position: relative;
+  }
+  
+    /*
+     ICONA DELLA MAIL INVIATA NELLA GRID RICHIESTE
+  */
+.gridSiMail {
+  /*
+      Strip down the button and link elements to a base we can work with.
+  */
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  white-space: nowrap;
+  overflow: visible;
+  color: #666666;
+  margin-right: 25px;
+	padding-left: 25px ;
+      padding-bottom: 6px;
+	
+	
+    background: url(img/si-mail.png)  no-repeat left top;
+    height: 18px;
+    width: 18px;
+	position: relative;
+  }
+  
+      /*
+     ICONA DELLA MAIL NON INVIATA NELLA GRID RICHIESTE
+  */
+.gridNoMail {
+  /*
+      Strip down the button and link elements to a base we can work with.
+  */
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  white-space: nowrap;
+  overflow: visible;
+  color: #666666;
+  margin-right: 25px;
+    z-index: 100;
+    /*
+        We define our background top left and use the 'Sliding Doors' Technique for some fast loading buttons.
+    */
+	padding-left: 25px ;
+      padding-bottom: 6px;
+	
+	
+    background: url(img/no-mail.png) no-repeat left top;
+    height: 18px;
+    width: 18px;
+	position: relative;
+  }
+  
+  	.desc_cell_c {
+		PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FONT-SIZE: 11px; BACKGROUND: #F4F4F4; PADDING-BOTTOM: 2px; COLOR: #002d45; PADDING-TOP: 2px; BORDER-BOTTOM: #ffffff 1px solid; FONT-FAMILY: verdana; VERTICAL-ALIGN: top;
+	}
+
+#loadImage_div {
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  position: fixed;
+  display: block;
+  opacity: 1.0;
+  background-color: #fff;
+  z-index: 99;
+  text-align: center;
+}
+
+#loadImage {
+   position: absolute;
+    top: 30%;
+    left: 30%;
+    margin-left: -50px;
+    margin-top: -50px;
+    text-align:center;
+    width:600px;
+    height:600px;
+}

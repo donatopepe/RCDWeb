@@ -1,0 +1,40 @@
+﻿@using System.Configuration
+@using AreaCommonWeb.Business
+@using AreaCommonWeb.Consts
+           
+@{
+    ViewBag.Title = "LogOn";
+    Layout = "~/Views/Shared/_Layout_NoMenu.cshtml";
+
+    string host = HttpContext.Current.Request.Url.Host;
+    string user = User.Identity.Name;
+    string redirect = "";
+    string ssoApplication_PRS = ConfigHelpers.GetConfigValue("ssoApplication_PRS", HttpContext.Current.Session[SessionKeys.CurrentCodApp] != null ? HttpContext.Current.Session[SessionKeys.CurrentCodApp].ToString() : "");
+    if (user.Contains("KO"))
+    {
+      redirect = ConfigHelpers.GetConfigValue("RedirectCRO", GenericKeys.CodAppWKS) + ssoApplication_PRS;
+    }
+    else
+    {
+      redirect = ConfigHelpers.GetConfigValue("RedirectIstituto", GenericKeys.CodAppWKS) + ssoApplication_PRS;
+    }
+    redirect = redirect + "http://" + host + "/RCD";
+}
+
+<div align="center">
+<table>
+    <tr>
+        <td>
+          
+            <a href="@redirect"> <img src="@Url.Content("~/Content/img/logon.jpg")"/> </a>
+        </td>
+     
+    </tr>
+    <tr>
+        <td>
+            <a href="@redirect"> <h2>Ricarica sessione</h2> </a>
+        </td>
+
+    </tr>
+</table>
+</div>

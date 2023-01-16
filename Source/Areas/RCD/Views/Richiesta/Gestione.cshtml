@@ -1,0 +1,447 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+<script>
+    var presentecostonullo = false;
+</script>
+<style type="text/css">
+    textarea, select {
+        font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+        font-size: 12px;
+    }
+    .bottone_documenti_rcd {
+        background: url('@Url.Content("~/Content/img/ico_word.png")') no-repeat;
+        border-radius: 10px;
+        color: gray;
+        border: 1px solid;
+        /*background-color: #e7e7e7;*/
+        /*padding: 15px 12px;*/
+        text-decoration: none;
+        font-size: 12px;
+        margin: 4px 2px;
+        cursor: pointer;
+        width: 200px;
+        height: 24px;
+        text-align: left;
+        padding-left: 25px;
+    }
+
+        .bottone_documenti_rcd span {
+            color: gray;
+            margin-left: 10px;
+            margin-top: 50px;
+        }
+
+    .altezza_row {
+        height: 40px;
+    }
+
+    table.detailsTable {
+        border: 2px solid #1C6EA4;
+        background-color: #EEEEEE;
+        width: 100%;
+        text-align: center;
+        border-collapse: collapse;
+    }
+
+        table.detailsTable td, table.detailsTable th {
+            border: 1px solid #AAAAAA;
+            padding: 3px 2px;
+        }
+
+        table.detailsTable tbody td {
+            font-size: 13px;
+        }
+
+        table.detailsTable tr:nth-child(even) {
+            background: #D0E4F5;
+        }
+
+        table.detailsTable thead {
+            background: #1C6EA4;
+            background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+            background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+            background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+            border-bottom: 2px solid #444444;
+        }
+
+            table.detailsTable thead th {
+                font-size: 15px;
+                font-weight: bold;
+                color: #FFFFFF;
+                text-align: center;
+                border-left: 2px solid #D0E4F5;
+            }
+
+                table.detailsTable thead th:first-child {
+                    border-left: none;
+                }
+
+        table.detailsTable tfoot {
+            font-size: 14px;
+            font-weight: bold;
+            color: #FFFFFF;
+            background: #D0E4F5;
+            background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+            background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+            background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+            border-top: 2px solid #444444;
+        }
+
+            table.detailsTable tfoot td {
+                font-size: 14px;
+            }
+
+            table.detailsTable tfoot .links {
+                text-align: right;
+            }
+
+                table.detailsTable tfoot .links a {
+                    display: inline-block;
+                    background: #1C6EA4;
+                    color: #FFFFFF;
+                    padding: 2px 8px;
+                    border-radius: 5px;
+                }
+
+    table.TabellaDati {
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
+    }
+
+        table.TabellaDati td, table.TabellaDati th {
+            border: 0px solid #AAAAAA;
+
+        }
+
+        table.TabellaDati thead {
+            background: #EEECEC;
+        }
+
+        table.TabellaDati th tr {
+            font-weight: normal;
+            text-align: left;
+        }
+
+        table.TabellaDati tfoot .links {
+            text-align: right;
+        }
+
+            table.TabellaDati tfoot .links a {
+                display: inline-block;
+                background: #FFFDFD;
+                color: #000000;
+                padding: 2px 8px;
+                border-radius: 5px;
+            }
+
+
+    table.Tabella_Documenti {
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
+    }
+
+        table.Tabella_Documenti td, table.Tabella_Documenti th {
+            border: 1px solid #000000;
+            padding: 0px 0px;
+            text-wrap: normal;
+            word-wrap: break-word;
+            max-width: 250px;
+        }
+
+        table.Tabella_Documenti tbody td {
+            font-size: 12px;
+        }
+
+        table.Tabella_Documenti tr:nth-child(even) {
+            background: #EEEEEE;
+        }
+
+        table.Tabella_Documenti thead {
+            background: #CFCFCF;
+        }
+
+            table.Tabella_Documenti thead th {
+                font-size: 13px;
+                font-weight: bold;
+                color: #000000;
+                text-align: left;
+            }
+
+        table.Tabella_Documenti tfoot td {
+            font-size: 14px;
+        }
+
+    #Note {
+        width: 100%;
+    }
+
+    #imputMotivazione {
+        width: 100%;
+    }
+
+    #Stato_Descrizione {
+        width: 300px;
+        text-align: center;
+    }
+
+    .text-danger {
+        color: red;
+    }
+
+    .txt_costo {
+        width: 50px;
+    }
+
+    table.gestioneTable {
+        border: 2px solid #AFB4B0;
+        background-color: #F6EFE2;
+        width: 100%;
+        text-align: center;
+        border-collapse: collapse;
+    }
+
+        table.gestioneTable td, table.gestioneTable th {
+            border: 1px solid #AAAAAA;
+            padding: 3px 2px;
+        }
+
+        table.gestioneTable tbody td {
+            font-size: 13px;
+        }
+
+        table.gestioneTable tr:nth-child(even) {
+            background: #EEE0DA;
+        }
+
+        table.gestioneTable thead {
+            background: #D0D6D1;
+            border-bottom: 1px solid #929292;
+        }
+
+            table.gestioneTable thead th {
+                font-size: 15px;
+                font-weight: bold;
+                color: #FFFFFF;
+                text-align: left;
+                border-left: 2px solid #AFB4B0;
+            }
+
+                table.gestioneTable thead th:first-child {
+                    border-left: none;
+                }
+
+        table.gestioneTable tfoot {
+            font-size: 13px;
+            font-weight: bold;
+            color: #FFFFFF;
+            background: #D0D6D1;
+            border-top: 1px solid #929292;
+        }
+
+            table.gestioneTable tfoot td {
+                font-size: 13px;
+            }
+
+            table.gestioneTable tfoot .links {
+                text-align: right;
+            }
+
+                table.gestioneTable tfoot .links a {
+                    display: inline-block;
+                    background: #FFFFFF;
+                    color: #929292;
+                    padding: 2px 8px;
+                    border-radius: 5px;
+                }
+</style>
+
+<a id="anchorScelta"></a>
+
+@using (Html.BeginForm("Gestione", "Richiesta", new { }, FormMethod.Post, new { enctype = "multipart/form-data", id = "RichiestaForm" }))
+{
+    //@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Stato.Id)
+    @Html.HiddenFor(model => model.UOCode)
+    @Html.HiddenFor(model => model.UOCodeNext)
+    @Html.HiddenFor(model => model.Matricola)
+    @Html.HiddenFor(model => model.Motivazione)
+    @Html.HiddenFor(model => model.UOCode_Inoltro)
+    @Html.HiddenFor(model => model.FilialeUOcode)
+
+    <div>
+
+        @Html.Partial("Anagrafica", Model)
+
+        <fieldset>
+            <legend class="testo_ordine_red">Dati</legend>
+
+            @Html.Partial("Canali", Model)
+
+            @Html.Partial("DatiRichiedente", Model)
+        </fieldset>
+
+        <br />
+        @Html.Partial("DocumentiStart", Model)
+
+        <br />
+        @Html.Partial("AllegatiStart", Model)
+        <br />
+
+        <div class="Id_Empty">
+            @if ((ViewData["Motivazione"] != null) && (!String.IsNullOrWhiteSpace(ViewData["Motivazione"].ToString())))
+            {
+                @Html.LabelFor(model => model.Motivazione, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.Label(@ViewData["Motivazione"] == null ? "" : (string)@ViewData["Motivazione"])
+            }
+        </div>
+
+        @Html.Partial("Date", Model)
+
+        @Html.Partial("Filiale", Model)
+
+        @Html.Partial("InfoFooter", Model)
+
+    </div>
+
+    <br />
+
+    <table>
+        <tr>
+            <td>
+                <div id="BottoniCambioStato" />
+            </td>
+        </tr>
+
+    </table>
+
+
+</div>
+}
+
+
+@using (Html.BeginForm("DownloadDoc", "Richiesta", new { }, FormMethod.Post, new { enctype = "multipart/form-data", id = "RichiestaForm" }))
+{
+    @Html.HiddenFor(model => model.Id)
+    <fieldset class="bottonidocumenti">
+        <legend class="testo_ordine_red">Generazione Modulistica</legend>
+        <table style="width:100%">
+            <tr>
+                <div>
+                    <small>Attenzione i sottostanti modelli saranno automaticamente compilati con i dati dell'ultimo salvataggio!</small>
+                </div>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button class="bottone_documenti_rcd" type="submit" name="operationType" value="StampaRichiesta" id="btnStampaRichiesta">Sottoscrizione Richiesta</button>
+                        </div>
+                    </div>
+                </td>
+
+                @*<td>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button class="bottone_documenti_rcd" type="submit" name="operationType" value="StampaAddspese" id="btnStampaAddspese">Disposizione Addebito Spese</button>
+                    </div>
+                </div>
+            </td>*@
+                <td>
+                    <div class="form-group" id="docGiacenza">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button class="bottone_documenti_rcd" type="submit" name="operationType" value="StampaModGiacenza" id="btnStampaModGiacenza">Avviso Doc. Giacenza</button>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="btnStampaConsegna">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button class="bottone_documenti_rcd" type="submit" name="operationType" value="StampaConsegna" id="btnStampaConsegna">Consegna Documentazione</button>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="btnModInvioDocumentazione">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button class="bottone_documenti_rcd" type="submit" name="operationType" value="ModInvioDocumentazione" id="btnModInvioDocumentazione">Invio Documentazione</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+    </fieldset>
+
+}
+
+
+@Html.Partial("PostAjaxForm", Model)
+
+<table>
+    <tr>
+
+
+        <td>
+
+            <div class="col-md-offset-2 col-md-10">
+                <button class="bottone_submit" onclick="Chiudi()">Chiudi</button>
+            </div>
+
+        </td>
+
+    </tr>
+</table>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#containerTop").css("height", "auto");
+
+
+    });
+</script>
+<script>
+    function Chiudi() {
+        $("#elencoRich").empty();
+        $("#dettaglio").empty();
+        $("#elencoNdg").empty();
+        $("#sceltaNdg").empty();
+        $('form[data-ajax-update="#elencoRich"] :submit').trigger("click");
+    }
+</script>
+
+<script type="text/javascript">
+
+    var CanaleConsegna = $("select#CanaleConsegna_Id");
+
+    function numeroconvirgola(value) {
+        value = value.replace('.', ',').replace(/[^0-9,]/g, '').replace(/(\..*)\./g, '$1');
+        return value;
+    }
+
+    function numerosenzavirgola(value) {
+        value = value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');
+        return value;
+    }
+
+
+    $(document).ready(function () {
+
+        $("#Costo").change(function (e) {
+            $(this).val(numeroconvirgola($(e.target).val()));
+        });
+        $("#Costo").on("input", function (e) {
+            $(this).val(numeroconvirgola($(e.target).val()));
+        });
+        $("#NumCopie").on("input", function (e) {
+            $(this).val(numerosenzavirgola($(e.target).val()));
+        });
+    });
+</script>

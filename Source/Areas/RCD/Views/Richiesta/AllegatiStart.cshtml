@@ -1,0 +1,108 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+<style>
+    #MotivazioneBypass, #DescrizioneFile {
+        width: 250px;
+    }
+</style>
+<fieldset>
+    <legend class="testo_ordine_red">Allegati</legend>
+    @Html.ValidationMessage("Allegato", "", new { @class = "text-danger" })
+    @*@Html.ValidationMessageFor(model => model.tipoAllegato.Id, "", new { @class = "text-danger" })*@
+    <div class="form-horizontal">
+        <table class="TabellaDati">
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.bypassallegati)
+
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.bypassallegati)
+                        @Html.ValidationMessageFor(model => model.bypassallegati, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+              
+                <td class="motbypass">
+                    <div class="form-group">
+                        @Html.DisplayNameFor(model => model.MotivazioneBypass)
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.MotivazioneBypass, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.MotivazioneBypass, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.DisplayNameFor(model => model.tipoAllegato)
+                        <div>
+                            @Html.DropDownListFor(model => model.tipoAllegato.Id, (IEnumerable<SelectListItem>)ViewBag.DropDownTipoAllegato, "-- Seleziona --", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.tipoAllegato, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.DisplayNameFor(model => model.DescrizioneFile)
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DescrizioneFile, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DescrizioneFile, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Allegati)
+                        <div>
+                            @*<input type="file" name="FileForm" id="FileForm" />*@
+                            @*@Html.Editor("FileForm", new { htmlAttributes = new { @type = "file", @class = "form-control" } })*@
+                            <input onchange="validateFile(this)" class="form-control text-box single-line" id="FileForm" name="FileForm" type="file" value="" />
+                            @Html.ValidationMessage("FileForm", "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button class="bottone_submit" name="operationType" value="AddFile" type="submit" id="btnAddAllegato">Salva File</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+
+
+
+        <div id="AllegatiPartial">@Html.Partial("Allegati", Model)</div>
+
+
+
+    </div>
+
+
+</fieldset>
+
+
+<script>
+
+    function validateFile(input) {
+
+        var fileSize = input.files[0].size / 1024 / 1024; // in MiB
+        if (fileSize > 5) {
+            alert('File size eccede 5 MiB');
+            $("#FileForm").replaceWith($("#FileForm").val('').clone(true));
+        } else {
+
+        }
+        console.log('Validate size:' + fileSize);
+        var fileName = input.files[0].name;
+        console.log('Validate filename:' + fileName);
+        regex = new RegExp("(.*?)\.(docx|doc|pdf|xml|bmp|ppt|xls|xlsx|jpg|jpeg|png|eml|zip|7z|rar|rtf|txt)$");
+
+        if (!(regex.test(fileName))) {
+            $("#FileForm").replaceWith($("#FileForm").val('').clone(true));
+            alert('Formato file non consentito');
+        }
+    }
+</script>

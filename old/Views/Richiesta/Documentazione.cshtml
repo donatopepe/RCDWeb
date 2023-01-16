@@ -1,0 +1,101 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+<fieldset>
+    @if ((Model.DocumentiRichiesti != null) && (Model.DocumentiRichiesti.Count() > 0))
+    {
+        <legend>Tabella documenti</legend>
+        <table class="table" style="width:100%; text-align:left">
+            <tr >
+                <th >
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Documento)
+                </th>
+
+
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().DescrizioneDocumento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Rapporto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Costo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().NumCopie)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().DocOrig)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().NumCartone)
+                </th>
+                @*<th>
+            @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().Matricola)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().UOCODE)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DocumentiRichiesti.FirstOrDefault().UltimaModifica)
+        </th>*@
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.DocumentiRichiesti)
+            {
+        <tr>
+            <td>
+                @if (item.Documento != null)
+                {
+                    @Html.DisplayFor(modelItem => item.Documento.Descrizione)
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescrizioneDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rapporto)
+            </td>
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Costo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumCopie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocOrig)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumCartone)
+            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.Matricola)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UOCODE)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UltimaModifica)
+        </td>*@
+            <td>
+                @* @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+                <div class="col-md-offset-2 col-md-10">
+                    <button name="ModDocumento" value="@item.Id" type="submit" id="btnModificaDoc">Modifica</button>
+                    <button name="DelDocumento" value="@item.Id" type="submit" id="btnCancellaDoc">Cancella</button>
+                </div>
+            </td>
+        </tr>
+            }
+
+        </table>
+
+    }
+    else
+    {
+        <h2>Attenzione non sono presenti documenti richiesti.</h2>
+    }
+</fieldset>
+    @Html.Partial("Spese", Model)

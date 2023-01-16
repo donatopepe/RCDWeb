@@ -1,0 +1,174 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+
+<style type="text/css">
+    .text-danger {
+        color: red;
+    }
+
+    .txt_costo {
+        width: 50px;
+    }
+
+    th {
+        text-align: left;
+    }
+
+    .table {
+        width: 100%;
+    }
+</style>
+<h2>Stato attuale: @Model.Stato.Descrizione</h2>
+@using (Html.BeginForm("Gestione", "Richiesta", new { }, FormMethod.Post, new { enctype = "multipart/form-data", id = "RichiestaForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.Stato.Id)
+        @Html.HiddenFor(model => model.UOCode)
+        @Html.HiddenFor(model => model.UOCodeNext)
+        @Html.HiddenFor(model => model.Matricola)
+
+        <div>
+
+            @Html.Partial("Anagrafica", Model)
+
+            @Html.Partial("Canali", Model)
+
+            @Html.Partial("DatiRichiedente", Model)
+
+
+            <br />
+            @Html.Partial("DocumentiStart", Model)
+
+            <br />
+            @Html.Partial("AllegatiStart", Model)
+            <br />
+
+            <div class="Id_Empty">
+                @Html.LabelFor(model => model.Motivazione, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Motivazione, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Motivazione, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Note, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @Html.Partial("Date", Model)
+
+            @Html.Partial("Filiale", Model)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Luogo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Luogo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Luogo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            @Html.Partial("InfoFooter", Model)
+
+        </div>
+
+        <br />
+
+        <table>
+            <tr>
+
+                <td class="Id_Empty">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button type="submit" name="operationType" value="Annulla" id="btnAnnulla">Annulla</button>
+                        </div>
+                    </div>
+                </td>
+
+
+                <td>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button type="submit" name="operationType" value="Archivia" id="btnArchivia">Archivia</button>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button type="submit" name="operationType" value="Respingixmod" id="btnRespingixmod">Respingi per modifica</button>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button type="submit" name="operationType" value="Salva">Salva</button>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button name="operationType" value="Conferma" type="submit" id="btnCambioStato">Conferma cambio Stato</button>
+                        </div>
+                    </div>
+                </td>
+                @*<td>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <button name="operationType" value="Evasa" type="submit" id="btnCambioStato">Evasa</button>
+                            </div>
+                        </div>
+                    </td>*@
+            </tr>
+        </table>
+
+
+    </div>
+}
+
+<table>
+    <tr>
+        <td>
+            <p>
+                <button onclick="Chiudi()">Chiudi</button>
+            </p>
+        </td>
+        <td>
+            @if ((@Model.Stato.Stato == "Inizio") && (@Model.Id != Guid.Empty))
+            {
+                using (Html.BeginForm("Delete", "Richiesta", new { }, FormMethod.Post, null))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        @Html.HiddenFor(model => model.Id)
+                        <input type="submit" value="Delete" class="btn btn-default" />
+                    </div>
+                }
+            }
+        </td>
+    </tr>
+</table>
+
+@Html.Partial("AbilitaElementiStato", Model)
+
+@Html.Partial("PostAjaxForm", Model)
+
+
+
+
+

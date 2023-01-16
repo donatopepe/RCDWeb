@@ -1,0 +1,189 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+    <table>
+        <tr>
+            <td>
+                <div class="TipoRichiedente form-group">
+                    @Html.LabelFor(model => model.TipoRichiedente, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.DropDownListFor(model => model.TipoRichiedente.Id, (IEnumerable<SelectListItem>)ViewBag.DropDownTipoRichiedente, "-- Seleziona --", new { @class = "form-control" })
+                            @*@Html.EditorFor(model => model.TipoRichiedente)*@
+                            @Html.ValidationMessageFor(model => model.TipoRichiedente, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Richiedente, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Richiedente, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Richiedente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+ 
+
+
+<div class="legittimato2 form-group">
+    @*@Html.LabelFor(model => model.Legittimato, htmlAttributes: new { @class = "control-label col-md-2" })*@
+    <div class="col-md-10">
+        <div class="checkbox">
+            @if (Model.Legittimato == null)
+            {
+                <p>Legittimato Non selezionato</p>
+            }
+            else
+            {
+                if ((bool)Model.Legittimato)
+                {
+                    
+                    <p>Legittimato</p>
+                }
+                else
+                {
+                    
+                    <p>Non Legittimato</p>
+                }
+            }
+            @Html.ValidationMessageFor(model => model.Legittimato, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+<div class="legittimato form-group">
+    @Html.LabelFor(model => model.Legittimato, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        <div class="checkbox">
+            @Html.DropDownListFor(model => model.Legittimato, (IEnumerable<SelectListItem>)ViewBag.DropDownLegit)
+            @*@Html.EditorFor(model => model.Legittimato)*@
+            @Html.ValidationMessageFor(model => model.Legittimato, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cessione2 form-group">
+    @*@Html.LabelFor(model => model.Cessione, htmlAttributes: new { @class = "control-label col-md-2" })*@
+    <div class="col-md-10">
+        <div class="checkbox">
+            @if (Model.Cessione == null)
+            {
+                <p>Cessione Non selezionata</p>
+            }
+            else
+            {
+                if ((bool)Model.Cessione)
+                {
+                    <p>Cessione Rilevata</p>
+                    @*<p>Cessione Rilevata</p>*@
+                }
+                else
+                {
+                    <p>Cessione Non Rilevata</p>
+                    @*<p>Cessione Non Rilevata</p>*@
+                }
+            }
+            @Html.ValidationMessageFor(model => model.Cessione, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+<div class="cessione form-group">
+    @Html.LabelFor(model => model.Cessione, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        <div class="checkbox">
+            @Html.DropDownListFor(model => model.Cessione, (IEnumerable<SelectListItem>)ViewBag.DropDownCess)
+            @*@Html.EditorFor(model => model.Cessione)*@
+            @Html.ValidationMessageFor(model => model.Cessione, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<fieldset class="inoltro">
+    <legend>Inoltro a UO Competente</legend>
+    <div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.UOCode_Inoltro, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div>
+                @Html.DropDownListFor(model => model.UOCode_Inoltro, (IEnumerable<SelectListItem>)ViewBag.DropDownUffici, "-- Seleziona --", new { @class = "form-control" })
+                @*@Html.EditorFor(model => model.UOCode_Inoltro, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.ValidationMessageFor(model => model.UOCode_Inoltro, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<script type="text/javascript">
+    $(function () {
+
+        var TipoRichiedente = $("select#TipoRichiedente_Id");
+        var Cessione = $("select#Cessione");
+        var Legittimato = $("select#Legittimato");
+
+        function ControlloTitolare(value) {
+            if (value) {
+                $('.legittimato').show(); //show
+
+            }
+            else {
+                $('.legittimato').hide();
+                $('.cessione').hide();
+                Cessione.val("");
+                Cessione.value = "";
+                Legittimato.val("");
+                Legittimato.value = "";
+            }
+        };
+        ControlloTitolare(TipoRichiedente.val() != "@ViewBag.CuratoreId");
+        TipoRichiedente.change(function () {
+            $('#UOCode_Inoltro').val("").change();
+            ControlloTitolare($(this).val() != "@ViewBag.CuratoreId");
+            ControlloUOCompetente(TipoRichiedente.val() == "@ViewBag.CuratoreId" || Cessione.val() == "True");
+        });
+
+
+        function ControlloLegittimato(value) {
+            //console.log(value);
+            if (value) {
+                $('.cessione').show(); //show
+            }
+            else {
+                $('.cessione').hide(); //show
+                Cessione.val("");
+                Cessione.value = "";
+            }
+        };
+        ControlloLegittimato(Legittimato.val() == "True");
+        Legittimato.change(function () {
+            ControlloLegittimato($(this).val() == "True");
+        });
+
+        function ControlloUOCompetente(value) {
+            //console.log(value);
+            if (value) {
+                $('.inoltro').show(); //show
+            }
+            else {
+                $('.inoltro').hide(); //show
+            }
+        };
+        ControlloUOCompetente(TipoRichiedente.val() == "@ViewBag.CuratoreId" || Cessione.val() == "True");
+        Cessione.change(function () {
+            $('#UOCode_Inoltro').val("").change();
+            ControlloUOCompetente(TipoRichiedente.val() == "@ViewBag.CuratoreId" || Cessione.val() == "True");
+        });
+    });
+
+</script>

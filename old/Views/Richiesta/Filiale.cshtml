@@ -1,0 +1,55 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Filiale, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.Filiale, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Filiale, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<script>
+  $(function() {
+      function log(message) {
+          $("<div>").text(message).prependTo("#log");
+          $("#log").scrollTop(0);
+      }
+
+      $("#Filiale").autocomplete({
+          source: function(request, response) {
+              var url = '@Url.Action("GetFiliali", "Richiesta")';
+              $.ajax({
+                  url: url,
+                  type: "POST",
+                  dataType: "json",
+                  data: {
+                      prefix: request.term
+                  },
+                  success: function(data) {
+                      response($.map(data,
+                          function(item) {
+                              //console.log("item di ritorno");
+                              //console.log(item);
+                              //return { label: item.DescrizioneUObyIstituto, value: item.UOCode };
+                              return { label: item.DescrizioneUObyIstituto, value: item.DescrizioneUObyIstituto };
+                          }))
+                  }
+              });
+          },
+          minLength: 3,
+          select: function(e, ui) {
+              console.log("ui.item", ui.item);
+              //console.log("value ", $(this).val());
+          },
+          change: function(e, ui) {
+              if (!(ui.item)) e.target.value = "";
+          },
+          open: function() {
+              $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+          },
+          close: function() {
+              $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+          }
+      }).val('@ViewData["FilialeDesc"]');
+  });
+</script>

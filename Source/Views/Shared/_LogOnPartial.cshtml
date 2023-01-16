@@ -1,0 +1,34 @@
+﻿@using AreaCommonWeb.ModelView.Security
+
+@{
+  UserProfile myProfile = new UserProfileManager().GetCurrent();
+  if (myProfile != null && myProfile.Utenza != null)
+  {    
+  <text>Salve <strong>@myProfile.UserInfo.Nome</strong>!
+        
+  @myProfile.Utenza.NomeRuolo
+  @if (myProfile.Utenza.CodRuolo != "SCS")
+  {
+    if (myProfile.FiltriSicurezza.ContainsKey("FIL") && myProfile.FiltriSicurezza["FIL"] != null)
+    {                                                              
+    @myProfile.FiltriSicurezza["FIL"]<span>-</span>
+    }
+
+    if (myProfile.FiltriSicurezza.ContainsKey("descUnitRuolo") && myProfile.FiltriSicurezza["descUnitRuolo"] != null)
+    {
+    @myProfile.FiltriSicurezza["descUnitRuolo"]      
+    }
+    else
+    {
+    @myProfile.UserInfo.DescUnit
+    }
+  }
+  </text>
+  <text><span style="padding-left: 40px;"> [ @Html.ActionLink("Log Off", "LogOff", "Account", new { area = "" }, null) ] </span></text>    
+  }
+  else
+  {
+    Response.Redirect("~/Account/LogOff");
+  }
+}
+

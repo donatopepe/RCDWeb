@@ -1,0 +1,284 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+
+<style>
+    #UOCode_InoltroDesc {
+        width: 250px;
+    }
+    #Richiedente, #IndirizzoRichiedente, #LuogoNascitaRichiedente, #CodiceFiscaleRichiedente {
+        width: 400px;
+    }
+</style>
+
+
+<table class="TabellaDati">
+    <tr>
+        <td style="width:250px">
+            <div class="TipoRichiedente form-group">
+                @Html.DisplayNameFor(model => model.TipoRichiedente)
+                <br />
+
+                <div class="checkbox">
+                    @Html.DropDownListFor(model => model.TipoRichiedente.Id, (IEnumerable<SelectListItem>)ViewBag.DropDownTipoRichiedente, "-- Seleziona --", new { @class = "form-control" })
+                    @*@Html.EditorFor(model => model.TipoRichiedente)*@
+                    @Html.ValidationMessageFor(model => model.TipoRichiedente, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+            @if (@Model.TipoRichiedente != null)
+            {
+                <div class="TipoRichiedente2 form-group">
+                    @Html.DisplayNameFor(model => model.TipoRichiedente)
+                    <br />
+                    <b>@Model.TipoRichiedente.Descrizione</b>
+                </div>
+            }
+        </td>
+        <td style="width:50px"></td>
+        <td>
+            @*@Html.LabelFor(model => model.Legittimato, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <div class="legittimato2">
+                <div class="checkbox">
+                    @if (Model.Legittimato == null)
+                    {
+                        <p>Legittimato Non selezionato</p>
+                    }
+                    else
+                    {
+                        if ((bool)Model.Legittimato)
+                        {
+
+                            <p>Legittimato: SI</p>
+                        }
+                        else
+                        {
+
+                            <p>Legittimato: NO</p>
+                        }
+                    }
+                    @Html.ValidationMessageFor(model => model.Legittimato, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+            <div class="legittimato">
+                @Html.DisplayNameFor(model => model.Legittimato)
+                <div class="col-md-10">
+                    <div class="">
+                        @*@Html.RadioButtonFor(m => m.Legittimato, "", Model.Legittimato == null ? new { Checked = "checked" } : null)
+                            Non Selezionato*@
+                        @*@Html.RadioButtonFor(m => m.Legittimato, true, Model.Legittimato == true ? new { Checked = "checked" } : null)*@
+
+                        <input name="Legittimato" id="Legittimato-True" type="radio" value="True"> Si
+
+                        @*@Html.RadioButtonFor(m => m.Legittimato, false, Model.Legittimato == false ? new { Checked = "checked" } : null)*@
+
+                        <input name="Legittimato" id="Legittimato-False" type="radio" value="False">  No
+
+                        @*@Html.DropDownListFor(model => model.Legittimato, (IEnumerable<SelectListItem>)ViewBag.DropDownLegit)*@
+                        @*@Html.EditorFor(model => model.Legittimato)*@
+
+                        @Html.ValidationMessageFor(model => model.Legittimato, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            @*@Html.LabelFor(model => model.Cessione, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <div class="cessione2">
+                <div class="checkbox">
+                    @if (Model.Cessione == null)
+                    {
+                        <p>Cessione Non selezionata</p>
+                    }
+                    else
+                    {
+                        if ((bool)Model.Cessione)
+                        {
+                            <p>Cessione Rilevata</p>
+                            @*<p>Cessione Rilevata</p>*@
+                        }
+                        else
+                        {
+                            <p>Cessione Non Rilevata</p>
+                            @*<p>Cessione Non Rilevata</p>*@
+                        }
+                    }
+                    @Html.ValidationMessageFor(model => model.Cessione, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="cessione">
+                @Html.DisplayNameFor(model => model.Cessione)
+                <br />
+                <div class="">
+                    <input name="Cessione" id="Cessione-True" type="radio" value="True"> Si
+                    <input name="Cessione" id="Cessione-False" type="radio" value="False">  No
+                    @*@Html.DropDownListFor(model => model.Cessione, (IEnumerable<SelectListItem>)ViewBag.DropDownCess)*@
+                    @*@Html.EditorFor(model => model.Cessione)*@
+                    @Html.ValidationMessageFor(model => model.Cessione, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+        </td>
+
+    </tr>
+</table>
+<br />
+<fieldset>
+    <legend>Dati Richiedente se diverso da Cliente</legend>
+    <table>
+        <tr>
+            <td style="width:500px">
+                @Html.DisplayNameFor(model => model.Richiedente)
+                <br />
+                <b>
+                    @Html.EditorFor(model => model.Richiedente, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Richiedente, "", new { @class = "text-danger" })
+                </b>
+            </td>
+            <td style="width:500px">
+                @Html.DisplayNameFor(model => model.IndirizzoRichiedente)
+                <br />
+                <b>
+                    @Html.EditorFor(model => model.IndirizzoRichiedente, new { htmlAttributes = new { @class = "col-md-10" } })
+                    @Html.ValidationMessageFor(model => model.IndirizzoRichiedente, "", new { @class = "text-danger" })
+                </b>
+            </td>
+        </tr>
+        @*<tr>
+            <td style="width:500px">
+                @Html.DisplayNameFor(model => model.LuogoNascitaRichiedente)
+                <br />
+                <b>
+                    @Html.EditorFor(model => model.LuogoNascitaRichiedente, new { htmlAttributes = new { @class = "col-md-10" } })
+                    @Html.ValidationMessageFor(model => model.LuogoNascitaRichiedente, "", new { @class = "text-danger" })
+                </b>
+            </td>
+            <td style="width:500px">
+                @Html.DisplayNameFor(model => model.CodiceFiscaleRichiedente)
+                <br />
+                <b>
+                    @Html.EditorFor(model => model.CodiceFiscaleRichiedente, new { htmlAttributes = new { @class = "col-md-10" } })
+                    @Html.ValidationMessageFor(model => model.CodiceFiscaleRichiedente, "", new { @class = "text-danger" })
+                </b>
+            </td>
+        </tr>*@
+
+    </table>
+</fieldset>
+
+<br />
+
+@Html.Partial("Spese", Model)
+
+@*<fieldset class="inoltro">
+        <legend>Inoltro a UO Competente</legend>
+        <div>
+
+        </div>
+    </fieldset>*@
+@*<table class="gestioneTable">
+        <tr>
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UOCode_Inoltro, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div>
+                        @Html.DropDownListFor(model => model.UOCode_Inoltro, (IEnumerable<SelectListItem>)ViewBag.DropDownUffici, "-- Seleziona --", new { @class = "form-control" })
+                        @Html.HiddenFor(model => model.UOCode_Inoltro, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UOCode_Inoltro, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>*@
+
+<table class="TabellaDati">
+    <tr>
+        <td style="width:500px">
+
+            <div class="inoltronew form-group">
+                @*@Html.LabelFor(model => model.UOCode_Inoltro, htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+                @Html.Label("Struttura Centrale di Inoltro")
+                <div class="col-md-10">
+                    @Html.DropDownList("SelezioneUffici", (IEnumerable<SelectListItem>)ViewBag.DropDownUffici, "-- Seleziona --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.UOCode_Inoltro, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="inoltronew form-group inoltrofiliale">
+                @*@Html.LabelFor(model => model.UOCode_Inoltro, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                @Html.Label("Filiale di Inoltro")
+                <div class="col-md-10">
+                    @Html.Editor("UOCode_InoltroDesc", new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.UOCode_Inoltro, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+
+
+
+@*<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+        Result:
+        <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+    </div>*@
+
+<script>
+    $(function() {
+        //function log( message ) {
+        //  $( "<div>" ).text( message ).prependTo( "#log" );
+        //  $( "#log" ).scrollTop( 0 );
+        //}
+
+        $("#UOCode_InoltroDesc").autocomplete({
+            source: function(request, response) {
+                var url = '@Url.Action("GetPossibiliInoltri", "Richiesta")';
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        prefix: request.term
+                    },
+                    success: function(data) {
+                        response($.map(data,
+                            function(item) {
+                                //console.log("item di ritorno");
+                                //console.log(item);
+                                return { label: item.DescrizioneUObyIstituto, value: item.UOCode +' - '+ item.DescrizioneUObyIstituto, id: item.UOCode };
+                            }))
+                    }
+                });
+            },
+            minLength: 3,
+            select: function(e, ui) {
+
+                if ((ui.item)) {
+                    console.log("ui.item", ui.item);
+                    $('#SelezioneUffici').val("");
+                    $("#UOCode_Inoltro").val(ui.item.id);
+                }
+
+                //console.log("value ", $(this).val());
+            },
+            change: function(e, ui) {
+                if (!(ui.item)) {
+                    e.target.value = "";
+                    $('#SelezioneUffici').val("");
+                    $("#UOCode_Inoltro").val("");
+                }
+            },
+            open: function() {
+                $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+            },
+            close: function() {
+                $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+            }
+        }).val('@ViewData["UOCode_InoltroC"]');
+    });
+</script>
+

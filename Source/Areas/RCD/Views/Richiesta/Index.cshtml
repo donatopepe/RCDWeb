@@ -1,0 +1,107 @@
+﻿@using AreaCommonWeb.Consts
+@model AreaCommonWeb.Models.CampiRicerca
+
+@{
+    ViewBag.Title = "Indice Richieste";
+    //Layout = "~/Views/Shared/_Layout_NoMenu.cshtml";
+    //Layout = "~/Views/Shared/_Layout_10n.cshtml";
+    Layout = "~/Views/Shared/_Layout_10.cshtml";
+    //Layout = "~/Areas/RCD/Views/Richieste/_Layout.cshtml";
+    
+}
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="-1">
+</head>
+
+
+    <!---------------------------------- DataTable Jquery ------------------------------->
+    <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.js"></script>-->
+    <!---------------------------------- DataTable Jquery ------------------------------->
+    <h2>@ViewBag.Title</h2>
+
+
+    @*<script>
+            function GestioneNuova() {
+                var url = '@Url.Action("Gestione", "Richiesta")';
+                dato = {};
+                console.log(dato);
+                $("#loading").css("display", "block");
+                $.ajax({
+                url: url,
+                data: { istituto: 47, ndg: 12345, codfiscale: "0000000000000" },
+                type: "GET",
+                    error: function (xhr) {
+                        $("#loading").css("display", "none");
+                alert('Error: ' + xhr.statusText);
+                },
+                    success: function (result) {
+                        $("#loading").css("display", "none");
+                console.log("Popolo div dettaglio");
+
+                $('#dettaglio').html(result);
+
+                }
+                });
+                }
+        </script>
+
+
+    <p>
+    Solo fase di test:  
+    <button value="" onclick="GestioneNuova()">
+            Solo fase di test
+        </button>
+    </p>*@
+
+    @*@Html.Partial("IndexJqueryTable", Model)*@
+
+    <div id='GestioneRichieste' style="max-width: 950px; display: block; overflow: hidden;">
+        <h2>Ricerca </h2>
+        <div id='filtriR'>
+            @Html.Partial("_FiltriRichieste")
+        </div>
+        <div id='elencoRich'>
+
+        </div>
+        <div id="dettaglio">
+
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#containerTop").css("height", "auto");
+
+
+        });
+    </script>
+
+
+
+    <!-- begin DIV di Lading al caricamento pagina -->
+
+
+    <script type="text/javascript">
+        var ApriRichiestaId = '@ViewData["ApriRichiestaId"]';
+
+        $(document).ready(function () {
+            // handler for .ready() called.
+            $("#loading").css("display", "block");
+            //alert('document ready');
+
+
+        });
+        $(window).load(function () {
+            // run code
+            $("#loading").css("display", "none");
+            //alert('window load');
+        });
+
+
+    </script>

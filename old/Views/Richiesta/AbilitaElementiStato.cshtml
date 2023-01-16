@@ -1,0 +1,29 @@
+﻿@model RCDWeb.Areas.RCD.Models.GestioneViewModel
+<script type="text/javascript">
+
+    $("document").ready(function () {
+        function ModificaElemento(Attributo, NomeElemento, NomeProprieta, ValoreProprieta) {
+            var ele = "[" + Attributo + "='" + NomeElemento + "']";
+            console.log("Elemento:"+ele + " " + NomeProprieta + " " + ValoreProprieta);
+            var elemento = $(ele);
+            if (NomeProprieta == "hidden") {
+                if (ValoreProprieta == "false") { elemento.show(); } else
+                    if (ValoreProprieta == "true") { elemento.hide(); }
+            }
+            if (ValoreProprieta == "false") { elemento.prop(NomeProprieta, false); } else
+                if (ValoreProprieta == "true") { elemento.prop(NomeProprieta, true); } else
+            elemento.prop(NomeProprieta, ValoreProprieta);
+        };
+
+        var myArrayIdElemento = [];
+    @foreach(var item in ViewBag.ElementiStato)
+    {
+        @:myArrayIdElemento.push({ Attributo: "@Html.Raw(item.Attributo)", NomeElemento: "@Html.Raw(item.NomeElemento)", NomeProprieta: "@Html.Raw(item.NomeProprieta)", ValoreProprieta: "@Html.Raw(item.ValoreProprieta)" });
+    }
+        //myArrayIdElemento.forEach(element => ModificaElemento(element.Attributo, element.NomeElemento, element.NomeProprieta, element.ValoreProprieta));
+        for (var i in myArrayIdElemento) {
+            ModificaElemento(myArrayIdElemento[i].Attributo, myArrayIdElemento[i].NomeElemento, myArrayIdElemento[i].NomeProprieta, myArrayIdElemento[i].ValoreProprieta);
+        };
+
+    });
+</script>

@@ -1,0 +1,35 @@
+﻿@using AreaCommonWeb.Consts
+@model AreaCommonWeb.Models.CampiRicerca
+@{
+    ViewBag.Title = "Ricerca RCD";
+    Layout = "~/Views/Shared/_Layout_10.cshtml";
+    string ndg = Session[SessionKeys.CurrentNDG] != null ? Session[SessionKeys.CurrentNDG].ToString() : "";
+
+}
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="-1">
+</head>
+<script type="text/javascript">
+
+
+</script>
+
+
+
+<div id='GestioneRichieste'  style="max-width: 950px; display: block; overflow: hidden;">
+    <h2>Ricerca Cliente</h2>
+    <div id='filtriOrdini'>
+        @Html.Partial("_FiltriNdg")
+    </div>
+
+    <div id='elencoNdg'>
+
+    </div>
+
+    <div id="sceltaNdg">
+
+    </div>
+</div>
