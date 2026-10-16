@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -52,6 +53,15 @@ namespace RCDWeb.Domain.Tests
             ".github/workflows/ci.yml",
         };
 
+        /// <summary>Estensioni dei documenti Office Open XML analizzati dalla guardia C1c.</summary>
+        private static readonly string[] OfficeExtensions = { ".docx", ".xlsx", ".pptx" };
+
+        /// <summary>Estensioni immagine analizzate dalla guardia C1c.</summary>
+        private static readonly string[] ImageExtensions =
+        {
+            ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".tif", ".tiff", ".ico", ".svg",
+        };
+
         /// <summary>Estensioni binarie saltate dalla scansione completa dei token.</summary>
         private static readonly string[] BinaryExtensions =
         {
@@ -89,7 +99,8 @@ namespace RCDWeb.Domain.Tests
         private static readonly (string Name, string Pattern)[] InfrastructurePatterns =
         {
             ("host interno", @"\bsrv[a-z]{3,}[0-9]{1,}\b"),
-            ("dominio aziendale", @"example\.it|example\.it"),
+            // Il dominio aziendale e la ragione sociale NON sono qui in chiaro:
+            // sono verificati per hash in C1b (token) e C1c (marchi e documenti).
             ("IP privato", @"\b(10\.\d{1,3}|172\.(1[6-9]|2[0-9]|3[01])|192\.168)\.\d{1,3}\.\d{1,3}\b"),
             ("share UNC interna", @"\\\\[A-Za-z0-9._-]{3,}\\[A-Za-z0-9._$-]{2,}"),
             ("endpoint TFS", @"tfs/|SccAuxPath|SccProjectName"),
@@ -231,6 +242,21 @@ namespace RCDWeb.Domain.Tests
             "33e865d58ffa673525a743a0e8ad53dc26896aa7cc658f12967837123fa317fa",
             "eaf67e6f1689c64e268549a6eed37b977db742a811f6b3677d85391841973d17",
             "8cf90f26e9f69b80838ce5744f36c5e60440b2f1442a1c60d326f1f8b63a6fa9",
+            "df6ffa97d13bad4ba5aee9f5e4c926cb7308eb481fbaa98aaa868cb9a1f6218b",
+            "adf948d7b23a486c0b9f1b4508e5c2cf2e301239aaf2d10a350c1c1f0d78999d",
+            "774c072f2521238f1f4521b797b5b1e7f77c336b1b0d62637fefec2510dfa448",
+            "a20b90a7a410a00d8ab3118ac65ef21b65843c45d6cf5ff581abf83a2b9a36a3",
+            "85eb24dec3b7e40c8bc87d06ca6756f243c95a63ab262efb45f5cc8df46a33ef",
+            "2a467889a001a0c2dfa035f1422909461a971fc04b375adc1aa96c2bf460c056",
+            "2251e53079977f09d7d6a1c9291ed440c3c911de6973ff02184f3d34afb7b585",
+            "6a4515610158bf27b317d02c1ad978bf6f9d22cf6fb296bd643833bf78678a71",
+            "d43f3a21caad6d9a30ac79bf82d0a9249eba8ff6cad343ab1a0f3f982bd3b7de",
+            "43586832660f11b4846de4062f4e48b6c5dbaa7341c01008598f75ffbf953c1b",
+            "560fafc318c05134e034a07da59312b47cfe6b49873a5dc1e09eb9dcf264f0a8",
+            "ff6e77b5072ff4ffc71f66fabf3156d669fe520ffc6a97e15297b6ce692b3c27",
+            "93ff7dc87635e6973a1db397a549bb9c336baf05b94c683dfbf135f2ffd7daec",
+            "cf7e32b5f107d172e43b13e878e86e29a9e96ff3d3da533e5746c5d0f9db890c",
+            "e8e0459a7ca1a851c1555d9d627561814aa908b38a8999c2fd40dcf0b1cff8f3",
             };
 
             var root = RepositoryRoot();
@@ -256,9 +282,18 @@ namespace RCDWeb.Domain.Tests
                     continue;
                 }
 
-                foreach (Match match in Regex.Matches(content, @"[A-Za-z0-9_@.$%+-]{6,}"))
+                foreach (Match match in Regex.Matches(content, @"[A-Za-z0-9_@.$%+-]{3,}"))
                 {
-                    if (digests.Contains(Sha256(match.Value)))
+                    var hit = false;
+
+                    foreach (var candidate in Candidates(match.Value))
+                    {
+                        if (!digests.Contains(Sha256(candidate))) continue;
+                        hit = true;
+                        break;
+                    }
+
+                    if (hit)
                     {
                         var relative = path.Substring(root.Length + 1).Replace('\\', '/');
                         violations.Add(relative + " -> token compromesso rilevato (valore non stampato)");
@@ -268,6 +303,224 @@ namespace RCDWeb.Domain.Tests
 
             Assert.True(violations.Count == 0,
                 "C1b fallito - token compromessi reintrodotti:\n" + String.Join("\n", violations.Distinct()));
+        }
+
+        /// <summary>
+        /// Guardia contro marchi, ragioni sociali, indirizzi, dati personali e loghi
+        /// dell'istituto di credito di origine, dentro documenti Office e immagini.
+        ///
+        /// I valori vietati NON sono scritti nel repository: il test usa un insieme di
+        /// SHA-256 e, per i documenti, un hash a finestra scorrevole che rileva il marcatore
+        /// anche quando è immerso in una frase più lunga. Vedi docs/evidence/10-branding.md.
+        /// </summary>
+        [Fact]
+        public void C1c_NoBankIdentityInOfficeDocumentsOrImages()
+        {
+            // Marcatore normalizzato (spazi rimossi, minuscolo) -> SHA-256
+            var textDigests = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "2a467889a001a0c2dfa035f1422909461a971fc04b375adc1aa96c2bf460c056",
+                "8921d2c8491b6220827774cddc28ca86dc4cd878b2810b68db6d3818e8116989",
+                "c3ed0c3691e45d1d6cabdc06f7a66aed564688c53455ee59412cb9e0c5250ac1",
+                "85015e85011111c26a98669f27bfcf20b424c29d4b28e7f0f07c06793899d79d",
+                "aa7e6f1eb8c2913d70b4412c32b98adf2974d82b1476a90919a17f8228b81118",
+                "85eb24dec3b7e40c8bc87d06ca6756f243c95a63ab262efb45f5cc8df46a33ef",
+                "774c072f2521238f1f4521b797b5b1e7f77c336b1b0d62637fefec2510dfa448",
+                "7537c66a553b79392f8f290b8899d9c5970395985480089cc7e04832e03c2c6b",
+                "56c5996f6c014ee4ea460e101931a41e6e5dced8a164dd034f41802f16260f4d",
+                "2251e53079977f09d7d6a1c9291ed440c3c911de6973ff02184f3d34afb7b585",
+                "6a4515610158bf27b317d02c1ad978bf6f9d22cf6fb296bd643833bf78678a71",
+                "49a31a06a61aaf2884b9d4d25face590721d9225849723821d865f8f0f7699a0",
+                "af0b9a5ba01bc5b23dd7b66d56cf72f8dfa87bdbc1bb4ca260f0979b87908c34",
+                "f00a71a128600d843acebee09d38d0059ab0efe6415caac082e395b8d5a45294",
+                "774c072f2521238f1f4521b797b5b1e7f77c336b1b0d62637fefec2510dfa448",
+                "85eb24dec3b7e40c8bc87d06ca6756f243c95a63ab262efb45f5cc8df46a33ef",
+                "ea070f89bf270cce825de1fa975d4e61f4bb1ca02231cd274820396ebd762fc3",
+                "d3d0cbe5041198c0695e133e82ca766928b76ede89a43cc0e0c8f106b5efa898",
+                "4dcf07fc1ad313cf7b0df6bebc270538d66310d49a03460423fd2d42514a69fc",
+                "badd9e5aa6112d2148be033b783a91eac5c93177fabd52e4c4b7a1ab98866a84",
+                "e8e0459a7ca1a851c1555d9d627561814aa908b38a8999c2fd40dcf0b1cff8f3",
+            };
+
+            // SHA-256 dei file immagine di marchio rimossi
+            var imageDigests = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "58d26a03aae7e3048187972317670cdf701f7b2ebfcf82bf539aa93adf65171d",
+                "0f74a10322051e5cd2c5dd078d358f8e6a035ae566f45270d3845d46cefb3a64",
+                "069aac16ad8df01e58cea70eda12bf1f8c3ede2b7c232cdd99cecdef69d4ef2d",
+            };
+
+            // Lunghezze dei marcatori, per l'hash a finestra scorrevole
+            var windowLengths = new HashSet<int> { 3, 7, 9, 10, 11, 12, 15, 17, 19, 20, 21, 22, 24 };
+
+            var root = RepositoryRoot();
+            var violations = new List<string>();
+
+            foreach (var path in AllScanFiles(root))
+            {
+                var extension = Path.GetExtension(path).ToLowerInvariant();
+                var relative = path.Substring(root.Length + 1).Replace('\\', '/');
+
+                if (OfficeExtensions.Contains(extension))
+                {
+                    foreach (var run in OfficeTextRuns(path))
+                    {
+                        var normalized = Normalize(run);
+                        if (normalized.Length < 7) continue;
+
+                        var limit = Math.Min(normalized.Length, 2000);
+
+                        foreach (var length in windowLengths)
+                        {
+                            if (length > limit) continue;
+
+                            var found = false;
+                            for (var start = 0; start + length <= limit && !found; start++)
+                            {
+                                if (textDigests.Contains(Sha256(normalized.Substring(start, length))))
+                                {
+                                    found = true;
+                                }
+                            }
+
+                            if (found)
+                            {
+                                violations.Add(relative + " -> marchio o dato identificativo rilevato (valore non stampato)");
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if (ImageExtensions.Contains(extension))
+                {
+                    if (imageDigests.Contains(ShaFile(path)))
+                    {
+                        violations.Add(relative + " -> logo dell'istituto di origine (valore non stampato)");
+                    }
+                }
+            }
+
+            Assert.True(violations.Count == 0,
+                "C1c fallito - marchio o loghi presenti:\n" + String.Join("\n", violations.Distinct()));
+        }
+
+        /// <summary>Normalizza il testo per il confronto: rimuove ogni spazio e minuscolizza.</summary>
+        private static string Normalize(string value)
+        {
+            var sb = new StringBuilder(value.Length);
+            foreach (var c in value)
+            {
+                if (char.IsWhiteSpace(c)) continue;
+                sb.Append(char.ToLowerInvariant(c));
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Testo dei run di un documento Office Open XML: restituisce il contenuto testuale
+        /// di ogni elemento XML (fra <c>&gt;</c> e <c>&lt;</c>) delle parti word/, xl/, ppt/
+        /// e docProps/.
+        /// </summary>
+        private static List<string> OfficeTextRuns(string path)
+        {
+            var result = new List<string>();
+
+            try
+            {
+                using (var archive = ZipFile.OpenRead(path))
+                {
+                    foreach (var entry in archive.Entries)
+                    {
+                        var name = entry.FullName;
+                        var isTextPart =
+                            (name.StartsWith("word/", StringComparison.OrdinalIgnoreCase) ||
+                             name.StartsWith("xl/", StringComparison.OrdinalIgnoreCase) ||
+                             name.StartsWith("ppt/", StringComparison.OrdinalIgnoreCase) ||
+                             name.StartsWith("docProps/", StringComparison.OrdinalIgnoreCase)) &&
+                            name.EndsWith(".xml", StringComparison.OrdinalIgnoreCase);
+
+                        if (!isTextPart) continue;
+
+                        string content;
+                        try
+                        {
+                            using (var reader = new StreamReader(entry.Open(), Encoding.UTF8))
+                            {
+                                content = reader.ReadToEnd();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            continue;
+                        }
+
+                        foreach (Match match in Regex.Matches(content, @">([^<>]{3,400})<"))
+                        {
+                            result.Add(match.Groups[1].Value);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Documento non leggibile: la guardia non deve fallire per questo.
+            }
+
+            return result;
+        }
+
+        /// <summary>SHA-256 esadecimale del contenuto di un file.</summary>
+        private static string ShaFile(string path)
+        {
+            using (var sha = SHA256.Create())
+            using (var stream = File.OpenRead(path))
+            {
+                var bytes = sha.ComputeHash(stream);
+                var sb = new StringBuilder(bytes.Length * 2);
+                foreach (var b in bytes) sb.Append(b.ToString("x2"));
+                return sb.ToString();
+            }
+        }
+
+        /// <summary>Tutti i file del repository, esclusi solo gli artefatti di build e i metadati git.</summary>
+        private static IEnumerable<string> AllScanFiles(string root)
+        {
+            var skip = new[] { ".git", "bin", "obj", "packages", "node_modules", ".vs", "TestResults" };
+
+            foreach (var path in Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories))
+            {
+                var relative = path.Substring(root.Length + 1).Replace('\\', '/');
+
+                if (skip.Any(d =>
+                        relative.Equals(d, StringComparison.OrdinalIgnoreCase) ||
+                        relative.StartsWith(d + "/", StringComparison.OrdinalIgnoreCase) ||
+                        relative.Contains("/" + d + "/")))
+                {
+                    continue;
+                }
+
+                yield return path;
+            }
+        }
+
+        /// <summary>
+        /// Forme confrontabili di un token: il token stesso, la sua versione minuscola e i
+        /// componenti ottenuti separando su punteggiatura e separatori. Serve a rilevare i
+        /// marcatori anche quando sono immersi in un token piu' lungo (percorsi, URL, email).
+        /// </summary>
+        private static IEnumerable<string> Candidates(string token)
+        {
+            yield return token;
+
+            var lower = token.ToLowerInvariant();
+            yield return lower;
+
+            foreach (var part in lower.Split(
+                new[] { '.', ':', '@', '/', '\\', '_', '-', '+', '%' },
+                StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (part.Length >= 3) yield return part;
+            }
         }
 
         /// <summary>SHA-256 esadecimale (minuscolo) di una stringa UTF-8.</summary>

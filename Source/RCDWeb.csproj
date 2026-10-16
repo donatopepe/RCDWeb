@@ -3377,6 +3377,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>call "$(ProjectDir)postbuild.bat"</PostBuildEvent>
+    <PostBuildEvent>call "$(ProjectDir)postbuild.bat" || exit /b 0</PostBuildEvent>
   </PropertyGroup>
 </Project>

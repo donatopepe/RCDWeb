@@ -52,7 +52,9 @@ il progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
   `allowedUsers` da `*` a vuoto, `<security allowRemoteAccess>` da `1` a `0`.
 - `customErrors` da `Off` a `RemoteOnly` con redirect su `~/Error`.
 - Rimossi dati personali dai dati di seed (`InitialCreate`), dai metadati di assembly e dal footer.
-- Neutralizzati marchi e loghi aziendali (`logo_Acme.*` → `logo_placeholder.*`).
+- Neutralizzati marchi, loghi, ragione sociale, recapiti e metadati personali: asset immagine
+  rinominati e sostituiti con un segnaposto neutro; i 7 template `.docx` riscritti (testo,
+  intestazioni, piè di pagina, proprietà del documento e immagini incorporate).
 
 ### Added
 
@@ -69,6 +71,23 @@ il progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 ### Changed
 
 - URL SSO e link Help Desk esternalizzati in `appSettings` anziché hardcoded nel codice e nelle viste.
+
+### Changed
+
+- Rimossi **tutti** i riferimenti all'azienda di origine: ragione sociale, indirizzi, recapiti,
+  partita IVA, marchi, loghi, nomi di sistemi interni e identificatori con l'acronimo aziendale.
+- Rinominati gli identificatori `DescrizioneUObyIstituto` → `DescrizioneUObyIstituto` e
+  `RedirectIstituto` → `RedirectIstituto` (lo shim di `AreaCommonWeb` deve esporre i nuovi nomi).
+- Neutralizzati i valori di default in configurazione: codice applicazione, nome del portale,
+  URL del portale SSO.
+- Sanificati i **7 template `.docx`**: testo, intestazioni, piè di pagina, proprietà del
+  documento (autore, ultima modifica, società, nomi nei campi personalizzati) e immagini
+  incorporate; rimossi i percorsi locali con il nome utente.
+- Sostituiti gli asset immagine del marchio con un segnaposto neutro; rinominato l'asset con
+  il nome di un sistema interno.
+- Le guardie di sicurezza sono ora **hash-based**: i valori e i marchi vietati non compaiono
+  più in chiaro nei test, ma sono confrontati tramite SHA-256, anche su documenti Office e
+  immagini.
 
 ### Removed
 

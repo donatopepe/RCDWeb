@@ -62,12 +62,12 @@ namespace RCDWeb.Areas.RCD.Controllers
         {
             //IQueryable<DimUO> filiali = commonBusiness.getUoByText(prefix).Where(a => a.FlagUfficioFiliale == "F" || a.FlagUfficioFiliale == "O");
             var filiali = new List<DimUO> {
-                new DimUO { DescrizioneUObyIstituto="Bari", UOCode="435678"},
-                new DimUO { DescrizioneUObyIstituto="Taranto", UOCode="55533"},
-                new DimUO { DescrizioneUObyIstituto="Foggia", UOCode="3534553"},
-                new DimUO { DescrizioneUObyIstituto="Brindisi", UOCode="54333"},
-                new DimUO { DescrizioneUObyIstituto="Roma", UOCode="6666666"},
-                new DimUO { DescrizioneUObyIstituto="Milano", UOCode="4444444"},
+                new DimUO { DescrizioneUObyIstituto="Citta A", UOCode="435678"},
+                new DimUO { DescrizioneUObyIstituto="Citta B", UOCode="55533"},
+                new DimUO { DescrizioneUObyIstituto="Citta C", UOCode="3534553"},
+                new DimUO { DescrizioneUObyIstituto="Citta D", UOCode="54333"},
+                new DimUO { DescrizioneUObyIstituto="Citta E", UOCode="6666666"},
+                new DimUO { DescrizioneUObyIstituto="Citta F", UOCode="4444444"},
             };
             return Json(filiali, JsonRequestBehavior.AllowGet);
         }
@@ -81,12 +81,12 @@ namespace RCDWeb.Areas.RCD.Controllers
             {
                 //IQueryable<DimUO> filiali = commonBusiness.getUoByText(prefix).Where(a => a.FlagUfficioFiliale == "F" || a.FlagUfficioFiliale == "O");
                 filiali = new List<DimUO> {
-                    new DimUO { DescrizioneUObyIstituto="Bari", UOCode="435678"},
-                    new DimUO { DescrizioneUObyIstituto="Taranto", UOCode="55533"},
-                    new DimUO { DescrizioneUObyIstituto="Foggia", UOCode="3534553"},
-                    new DimUO { DescrizioneUObyIstituto="Brindisi", UOCode="54333"},
-                    new DimUO { DescrizioneUObyIstituto="Roma", UOCode="6666666"},
-                    new DimUO { DescrizioneUObyIstituto="Milano", UOCode="4444444"},
+                    new DimUO { DescrizioneUObyIstituto="Citta A", UOCode="435678"},
+                    new DimUO { DescrizioneUObyIstituto="Citta B", UOCode="55533"},
+                    new DimUO { DescrizioneUObyIstituto="Citta C", UOCode="3534553"},
+                    new DimUO { DescrizioneUObyIstituto="Citta D", UOCode="54333"},
+                    new DimUO { DescrizioneUObyIstituto="Citta E", UOCode="6666666"},
+                    new DimUO { DescrizioneUObyIstituto="Citta F", UOCode="4444444"},
                 };
             }
 
@@ -211,9 +211,9 @@ namespace RCDWeb.Areas.RCD.Controllers
         {
             richieste.isPerson = false;
             richieste.Istituto = MioIstituto;
-            richieste.Filiale = "Bari";
+            richieste.Filiale = "Citta A";
             richieste.FilialeUOcode = "12345";
-            richieste.Luogo = "Bari";
+            richieste.Luogo = "Citta A";
             richieste.NDG = 3456789;
             richieste.DataNascita = DateTime.Now;
             richieste.LuogoNascita = "Taranto";
@@ -238,7 +238,7 @@ namespace RCDWeb.Areas.RCD.Controllers
                 cointestatario.NDG = 568924;
                 cointestatario.IntestazioneNDG = "pluto "+i;
                 cointestatario.DataNascita = DateTime.Now;
-                cointestatario.LuogoNascita = "bari " + i;
+                cointestatario.LuogoNascita = "citta " + i;
                 cointestatario.NaturaGiuridica = "F";
 
                 cointestatario.isPerson = true;   ////persona fisica

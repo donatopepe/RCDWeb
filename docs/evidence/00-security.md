@@ -1,4 +1,4 @@
-# Fase 00 — Security
+﻿# Fase 00 — Security
 
 Data: 2026-10-16T08:05:00Z
 Variabile modificata: **neutralizzazione di segreti e riferimenti infrastrutturali** nei file di
@@ -12,7 +12,7 @@ Criteri target: C1, C2
 grep -rniE "$1=[removed]"' ;<]|<PATTERN_SEGRETI_REDATTI>" \
   --include=*.config --include=*.cs --include=*.cshtml --include=*.csproj --include=*.js --include=*.bat . \
   | grep -v CHANGE_ME_DB_PASSWORD | wc -l      # => 35
-grep -rniE "localhost|appserver1|appserver2|example|172\.28\.|svc-rcd|rcd_user|rcd_user|example|dnt\.ppe" \
+grep -rniE "localhost|appserver1|appserver2|example|172\.28\.|svc-rcd|rcd_user|<DOMINIO_AZIENDALE>|<EMAIL_PERSONALE>" \
   --include=*.config --include=*.cs --include=*.cshtml --include=*.csproj --include=*.js --include=*.bat --include=*.xml --include=*.txt . \
   | wc -l                                      # => 49
 ```
@@ -26,7 +26,7 @@ grep -rniE "localhost|appserver1|appserver2|example|172\.28\.|svc-rcd|rcd_user|r
 - `RCDWeb.Job/bak/connection.config` (non compilato): `sa/CHANGE_ME_DB_PASSWORD` → placeholder.
 - `Source/Web.config`: `Prod.WrapperBaseUserPassword`, `Svi.WrapperBaseUserPassword`,
   `ServerSmtp`, `UtenzaTest` svuotati/neutralizzati; connection string EF commentate con
-  `rcd_user/CHANGE_ME_DB_PASSWORD` sanificate; rimosso `<allow users="ACMEARI\user, COLLABORATION\user2" />`
+  `rcd_user/CHANGE_ME_DB_PASSWORD` sanificate; rimosso `<allow users="<DOMINIO>\utente, <DOMINIO2>\utente2" />`
   sostituito con `<allow roles="Admin" />`.
 - `Source/Areas/RCD/DAL/InitialCreate.cs` + `old/DAL/InitialCreate.cs`: email reali e
   `dev-null@example.com` → `noreply@example.com` / `dev-null@example.com`; `SmtpLocal` → `SmtpLocal`.
@@ -53,7 +53,7 @@ grep -rniE "localhost|appserver1|appserver2|example|172\.28\.|svc-rcd|rcd_user|r
 **Identità aziendale e dati personali**
 - `Source/Properties/AssemblyInfo.cs`: `AssemblyCompany`/`AssemblyCopyright`
   "RCDWeb contributors" → "RCDWeb contributors".
-- Footer `RCDWeb © 2014` → `RCDWeb © 2014-2026` (cshtml + generated).
+- Footer con nome commerciale dell'istituto → `RCDWeb © 2014-2026` (cshtml + generated).
 - Asset `Content/img/logo_placeholder.gif|jpg` → `logo_placeholder.gif|jpg`, riferimenti aggiornati.
 - `StampaDocumenti.cs`: rimosso path personale commentato `H:\Il mio Drive\...`.
 - `Source/Scripts/TracciatoGarante.js`: URL interno commentato neutralizzato.
@@ -68,7 +68,7 @@ grep -rniE "localhost|appserver1|appserver2|example|172\.28\.|svc-rcd|rcd_user|r
 grep -rniE "$1=[removed]"' ;<]|<PATTERN_SEGRETI_REDATTI>" \
   --include=*.config --include=*.cs --include=*.cshtml --include=*.csproj --include=*.js --include=*.bat . \
   | grep -v CHANGE_ME_DB_PASSWORD | wc -l      # => 0
-grep -rniE "localhost|appserver1|appserver2|example|172\.28\.|svc-rcd|rcd_user|rcd_user|example|dnt\.ppe" \
+grep -rniE "localhost|appserver1|appserver2|example|172\.28\.|svc-rcd|rcd_user|<DOMINIO_AZIENDALE>|<EMAIL_PERSONALE>" \
   --include=*.config --include=*.cs --include=*.cshtml --include=*.csproj --include=*.js --include=*.bat --include=*.xml --include=*.txt . \
   | wc -l                                      # => 0
 python3 -c "import xml.dom.minidom as m; m.parse('Source/Web.config'); m.parse('Source/connection.config'); m.parse('RCDJob/ConsoleRCDJob/ConsoleRCDJob/App.config'); m.parse('RCDJob/ConsoleRCDJob/ConsoleRCDJob/ConsoleRCDJob.csproj'); print('XML OK')"

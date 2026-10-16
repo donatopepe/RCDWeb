@@ -154,7 +154,7 @@ RCDWeb/
 | Stampa modulistica DOCX | Microsoft Word installato sul server (Office Interop) **oppure** il percorso OpenXML | La generazione DOCX/PDF non è disponibile; il resto dell'applicazione funziona |
 | Servizi anagrafici (`WSAnagrafe`) | Endpoint SOAP raggiungibile | Ricerca NDG non disponibile; si usa il controller simulato |
 | Notifiche email | Server SMTP raggiungibile | Invio email disabilitato (log attivo) |
-| Directory utenti (`AreaCommonWeb`) | Fornita dall'organizzazione (binario non incluso) | Vedi §9.3 — l'autenticazione reale non è disponibile, usare la modalità demo |
+| Directory utenti (`AreaCommonWeb`) | Fornita dall'organizzazione (binario non incluso) | Vedi §9.4 — l'autenticazione reale non è disponibile, usare la modalità demo |
 
 ### 3.3 Build cross-platform
 
@@ -342,8 +342,8 @@ nessuna password compare su disco.
 | `ClientValidationEnabled` | `true` | no | Validazione client MVC |
 | `UnobtrusiveJavaScriptEnabled` | `true` | no | JavaScript non invasivo |
 | `ServerSmtp` | `smtp.example.com` | sì per email | Host del server SMTP |
-| `CodApp` | `PTT` | sì | Codice applicazione usato dal layer utenti |
-| `SsoPortalUrl` | `https://sso.example.com/...` | sì | Base URL SSO usata per costruire i link nelle email |
+| `CodApp` | `APP` | sì | Codice applicazione usato dal layer utenti |
+| `SsoPortalUrl` | `https://sso.example.com/sso/login.aspx` | sì | URL del portale SSO usato per costruire i link nelle email |
 | `HelpDeskUrl` | `https://helpdesk.example.com/` | no | Link Help Desk nel footer |
 | `DocFilesPath` | `~/Areas/RCD/Doc_Files/` | sì | Percorso dei template di modulistica |
 | `UtenzaTest` | *(vuoto)* | no | Matricola per la modalità di profilazione di test (vuoto = disabilitata) |
@@ -529,7 +529,7 @@ build `Release` e `41/41` test verdi su checkout pulito, in container Linux.
 
 | Sintomo | Causa probabile | Soluzione |
 |---|---|---|
-| `Could not load file or assembly 'AreaCommonWeb'` | Dipendenza aziendale non inclusa | Vedi `lib/README.md` e §9.3 |
+| `Could not load file or assembly 'AreaCommonWeb'` | Dipendenza aziendale non inclusa | Vedi `lib/README.md` e §9.4 |
 | `Could not load file or assembly 'Kendo.Mvc'` | Pacchetto Kendo UI non installato | Installare Kendo UI for MVC 2015.2.902 (licenza richiesta) |
 | `The type initializer for 'System.Data.Entity...' threw an exception` | EntityFramework non ripristinato | Eseguire `nuget restore` e verificare la versione 5.0 |
 | `CREATE DATABASE permission denied` | Utente DB senza permessi | Concedere `db_owner` o creare lo schema in anticipo |
@@ -559,7 +559,22 @@ riferimenti infrastrutturali e dipendenze non ridistribuibili per poter essere p
 progetto open source. Il piano di recupero, la rubrica di valutazione e le evidenze sono in
 [`PLAN.md`](./PLAN.md) e [`docs/`](./docs/).
 
-### 9.3 Dipendenze non incluse
+### 9.3 Identificatori ereditati dalla dipendenza proprietaria
+
+Alcuni identificatori nel codice derivano dalla libreria chiusa `AreaCommonWeb` e **non sono
+stati rinominati** per non rompere la compilazione contro il binario originale:
+
+| Identificatore rinominato | Motivo |
+|---|---|
+| `DimUO.DescrizioneUObyIstituto` | Era `DescrizioneUOby<acronimo aziendale>`; la proprietà appartiene alla libreria esterna: lo shim di `stubs/AreaCommonWeb` **deve** esporre il nuovo nome |
+| `ConfigHelpers.GetConfigValue("RedirectIstituto", …)` | Chiave di configurazione della libreria esterna; richiede la voce corrispondente nella configurazione dell'ambiente |
+
+Nessun riferimento all'azienda di origine resta nel repository: ragione sociale, indirizzi,
+recapiti, marchi, loghi e nomi di sistemi interni sono stati rimossi dal codice, dalla
+configurazione, dai documenti Office e da tutta la storia Git.
+Vedi [`docs/evidence/10-branding.md`](./docs/evidence/10-branding.md).
+
+### 9.4 Dipendenze non incluse
 
 Alcuni componenti **non sono distribuiti** con questo repository perché proprietari, commerciali
 o soggetti a licenze incompatibili con la MIT. Vedi [`THIRD-PARTY.md`](./THIRD-PARTY.md) e
@@ -568,14 +583,14 @@ o soggetti a licenze incompatibili con la MIT. Vedi [`THIRD-PARTY.md`](./THIRD-P
 Senza questi componenti l'applicazione **non è compilabile integralmente** e le funzionalità
 dipendenti restano indisponibili.
 
-### 9.4 Sicurezza
+### 9.5 Sicurezza
 
 - Il repository **non contiene** credenziali, host interni o dati personali.
 - Prima di distribuire una propria istanza, consultare [`SECURITY.md`](./SECURITY.md).
 - Segnalazioni di vulnerabilità: non aprire issue pubbliche (vedi `SECURITY.md`).
 - Le stringhe di connessione vanno fornite a runtime; preferire `Integrated Security`.
 
-### 9.5 Stato del progetto
+### 9.6 Stato del progetto
 
 Il recupero è in corso ed è tracciato in `docs/WORKSTATE.json` con una rubrica fissa di
 10 criteri. Avanzamento al 2026-10-16: **9/10**.
@@ -604,7 +619,7 @@ Il recupero è in corso ed è tracciato in `docs/WORKSTATE.json` con una rubrica
 | CP5 | Configurazione per variabili d'ambiente/segnaposto | 🟢 |
 | CP6 | Il tier web gira su Linux | 🔴 richiede porting ad ASP.NET Core (Track B, PLAN.md) |
 
-### 9.6 Contribuire
+### 9.7 Contribuire
 
 Vedi [`CONTRIBUTING.md`](./CONTRIBUTING.md). Modifiche e cronologia in [`CHANGELOG.md`](./CHANGELOG.md).
 

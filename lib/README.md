@@ -22,6 +22,17 @@ Questa cartella contiene solo la documentazione necessaria a ripristinarli local
 | `Microsoft.Web.Services3.dll` (3.0.0.0) | ❌ non incluso | WSE 3.0 (Microsoft, 2006, deprecato) | Microsoft |
 | `lib.zip` (`System.Web.WebPages.dll`, `WebActivatorEx.dll`) | ❌ non incluso | NuGet: `Microsoft.AspNet.WebPages`, `WebActivatorEx` | Apache-2.0 |
 
+## Identificatori richiesti
+
+Lo shim `stubs/AreaCommonWeb` deve esporre:
+
+- la proprietà `DimUO.DescrizioneUObyIstituto` (nel binario originale aveva l'acronimo
+  aziendale nel nome);
+- la chiave di configurazione `RedirectIstituto` letta da `ConfigHelpers.GetConfigValue`.
+
+Sono i nomi usati dal codice di RCDWeb dopo la rimozione dei riferimenti all'azienda di origine
+(vedi `docs/evidence/10-branding.md`).
+
 ## Ripristino locale
 
 1. Ottenere ciascun binario secondo la licenza applicabile.

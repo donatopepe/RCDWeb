@@ -12,7 +12,7 @@
 |---|---|
 | Nome | RCDWeb (area `RCD` — gestione **Richieste di Documentazione**) |
 | Tipo | Applicazione web intranet ASP.NET MVC 4 (Razor), .NET Framework **v4.5** |
-| Origine | Aziendale (RCDWeb contributors / "ACME"), dominio intranet |
+| Origine | Applicazione intranet aziendale di un istituto di credito (nome rimosso) |
 | Repo pubblico | `https://github.com/donatopepe/RCDWeb.git` (branch `master`) |
 | Ultimo commit | `f02045f` "Aggiungere i file di progetto." |
 | Commit totali | 2 |
@@ -141,7 +141,7 @@ Stessa cosa per i file `_Prefisso.cs` in `Source/Areas/RCD/Uility/`
 | L1 | **MIT + Telerik Kendo UI commerciale = violazione licenza.** Kendo UI richiede licenza commerciale; non può essere ridistribuito con licenza MIT. |
 | L2 | **MIT + iTextSharp 5.4.2 = violazione AGPL** (o licenza commerciale). |
 | L3 | `AreaCommonWeb.dll` e `WebServiceModel.dll`: proprietà intellettuale aziendale, non ridistribuibili. |
-| L4 | Marchi/loghi aziendali (ACME) in immagini e documenti `.docx`. |
+| L4 | Marchi, loghi, ragione sociale, indirizzi e dati di persone fisiche in immagini e documenti `.docx`. |
 | L5 | Dati personali (email, matricole) nei sorgenti e nel DB di seed. |
 
 ### 2.4 Debito tecnico e qualità

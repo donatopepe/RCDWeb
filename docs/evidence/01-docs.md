@@ -62,7 +62,7 @@ wc -l README.md                                        # => 545
 grep -rniE "$1=[removed]"' ;<]|<PATTERN_SEGRETI_REDATTI>" \
   --include=*.config --include=*.cs --include=*.cshtml --include=*.csproj --include=*.js --include=*.bat . \
   | grep -v CHANGE_ME_DB_PASSWORD | wc -l              # => 0
-grep -rniE "localhost|appserver1|appserver2|example|172\.28\.|svc-rcd|rcd_user|rcd_user|example|dnt\.ppe" \
+grep -rniE "localhost|appserver1|appserver2|example|172\.28\.|svc-rcd|rcd_user|rcd_user|<DOMINIO_AZIENDALE>|<EMAIL_PERSONALE>" \
   --include=*.config --include=*.cs --include=*.cshtml --include=*.csproj --include=*.js --include=*.bat --include=*.xml --include=*.txt . \
   | wc -l                                              # => 0
 ```

@@ -79,8 +79,12 @@ Eseguito **3 volte consecutive** sullo stesso checkout pulito: 41/41 ogni volta
 ### Test negativo (validazione delle guardie)
 
 Introdotto `Source/Areas/RCD/Uility/__negtest.config` con:
-`Data Source=db.example.com;Initial Catalog=RCD;User ID=db_user;$1=[removed] fallito — credenziali rilevate:
-password assegnata: __negtest.config -> $1=[removed] string con utente: __negtest.config -> ;User ID=db_user
+una connection string con host, utente e password **fittizi** (`removed`, `removed`, `<DB_PASSWORD>`)
+
+```
+C1 fallito — credenziali rilevate:
+password assegnata: __negtest.config -> (valore fittizio rilevato, non stampato)
+connection string con utente: __negtest.config -> (utente fittizio rilevato, non stampato)
 ```
 
 Le guardie rilevano effettivamente le violazioni (non sono test vacui). File rimosso dopo la prova.

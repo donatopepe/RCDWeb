@@ -632,8 +632,8 @@ WriteLiteral("\';\r\n                $.ajax({\r\n                    url: url,\r
 "             success: function(data) {\r\n                        response($.map(d" +
 "ata,\r\n                            function(item) {\r\n                            " +
 "    //console.log(\"item di ritorno\");\r\n                                //console" +
-".log(item);\r\n                                return { label: item.DescrizioneUOb" +
-"yACME, value: item.UOCode +\' - \'+ item.DescrizioneUObyIstituto, id: item.UOCode };\r\n  " +
+".log(item);\r\n                                return { label: item.DescrizioneUObyIstituto" +
+", value: item.UOCode +\' - \'+ item.DescrizioneUObyIstituto, id: item.UOCode };\r\n  " +
 "                          }))\r\n                    }\r\n                });\r\n     " +
 "       },\r\n            minLength: 3,\r\n            select: function(e, ui) {\r\n\r\n " +
 "               if ((ui.item)) {\r\n                    console.log(\"ui.item\", ui.i" +
