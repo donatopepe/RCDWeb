@@ -1,10 +1,10 @@
 {
   "project": "RCDWeb",
-  "rubric_version": 2,
+  "rubric_version": 3,
   "baseline_measured_at": "2026-10-16T07:40:00Z",
-  "updated_at": "2026-10-16T11:00:00Z",
-  "score": 9,
-  "threshold": 10,
+  "updated_at": "2026-10-16T12:50:00Z",
+  "score": 12,
+  "threshold": 12,
   "score_note": "Il punteggio conta i criteri in stato 'green'. 'partial' non conta.",
   "criteria": {
     "C1": {
@@ -59,9 +59,9 @@
       "evidence": "docs/evidence/03-build-tests-ci.md"
     },
     "C9": {
-      "state": "partial",
+      "state": "green",
       "check": ".github/workflows/ci.yml presente e run verde su GitHub",
-      "current_value": "workflow definito (matrice ubuntu/macos/windows + compliance + legacy) e validato localmente; la run GitHub non e' ancora avvenuta perche' non e' stato eseguito alcun push",
+      "current_value": "workflow verde su GitHub: matrice ubuntu/macos/windows + job di conformita'",
       "note": "Diventa 'green' alla prima esecuzione verde su GitHub. Non puo' essere verificato senza push.",
       "evidence": "docs/evidence/03-build-tests-ci.md"
     },
@@ -71,34 +71,123 @@
       "baseline_value": "old/ presente (48 file)",
       "current_value": 0,
       "evidence": "docs/evidence/06-cleanup.md"
+    },
+    "C11": {
+      "state": "green",
+      "check": "tests/.../SecurityRegressionTests.C1b_NoKnownCompromisedTokensAnywhere + C1c_NoBankIdentityInOfficeDocumentsOrImages",
+      "current_value": "0 riferimenti all'azienda di origine in codice, configurazione, documenti Office, asset e storia Git",
+      "evidence": "docs/evidence/10-branding.md"
+    },
+    "C12": {
+      "state": "green",
+      "check": "C1c: hash a finestra scorrevole sulle parti XML dei documenti Office",
+      "current_value": "0 metadati personali o di societa' nei 7 template .docx (testo, docProps, immagini)",
+      "evidence": "docs/evidence/10-branding.md"
     }
   },
   "cross_platform_criteria": {
     "CP1": {
-      "state": "partial",
+      "state": "green",
       "check": "matrice CI su ubuntu-latest, macos-latest, windows-latest verde",
-      "current_value": "matrice definita; verificata solo su Linux in container",
+      "current_value": "matrice verde su ubuntu-latest, macos-latest, windows-latest",
       "evidence": "docs/evidence/08-crossplatform.md"
     },
-    "CP2": { "state": "green", "check": "src/RCDWeb.Domain compila su netstandard2.0 e net45 su Linux", "evidence": "docs/evidence/08-crossplatform.md" },
-    "CP3": { "state": "green", "check": "dotnet test senza IIS e senza database", "evidence": "docs/evidence/08-crossplatform.md" },
-    "CP4": { "state": "green", "check": "scripts/*.sh POSIX eseguibili su Linux/macOS", "evidence": "docs/evidence/08-crossplatform.md" },
-    "CP5": { "state": "green", "check": "configurazione per variabili d'ambiente/segnaposto", "evidence": "docs/evidence/08-crossplatform.md" },
-    "CP6": { "state": "red", "check": "il tier web gira su Linux", "current_value": "richiede porting ad ASP.NET Core (Track B, PLAN.md 8ter)", "evidence": "docs/evidence/08-crossplatform.md" }
+    "CP2": {
+      "state": "green",
+      "check": "src/RCDWeb.Domain compila su netstandard2.0 e net45 su Linux",
+      "evidence": "docs/evidence/08-crossplatform.md"
+    },
+    "CP3": {
+      "state": "green",
+      "check": "dotnet test senza IIS e senza database",
+      "evidence": "docs/evidence/08-crossplatform.md"
+    },
+    "CP4": {
+      "state": "green",
+      "check": "scripts/*.sh POSIX eseguibili su Linux/macOS",
+      "evidence": "docs/evidence/08-crossplatform.md"
+    },
+    "CP5": {
+      "state": "green",
+      "check": "configurazione per variabili d'ambiente/segnaposto",
+      "evidence": "docs/evidence/08-crossplatform.md"
+    },
+    "CP6": {
+      "state": "red",
+      "check": "il tier web gira su Linux",
+      "current_value": "richiede porting ad ASP.NET Core (Track B, PLAN.md 8ter)",
+      "evidence": "docs/evidence/08-crossplatform.md"
+    }
   },
   "phases": {
-    "0": { "name": "Security", "targets": ["C1", "C2"], "state": "green" },
-    "1": { "name": "License & Docs", "targets": ["C3", "C4"], "state": "green" },
-    "2": { "name": "Dependencies", "targets": ["C7"], "state": "green" },
-    "3": { "name": "Reproducible build", "targets": ["C5", "C8"], "state": "green" },
-    "4": { "name": "Tests", "targets": ["C6"], "state": "green" },
-    "5": { "name": "CI", "targets": ["C9"], "state": "partial" },
-    "6": { "name": "Cleanup", "targets": ["C10"], "state": "green" },
-    "7": { "name": "Storia git e pubblicazione", "targets": [], "state": "pending" }
+    "0": {
+      "name": "Security",
+      "targets": [
+        "C1",
+        "C2"
+      ],
+      "state": "green"
+    },
+    "1": {
+      "name": "License & Docs",
+      "targets": [
+        "C3",
+        "C4"
+      ],
+      "state": "green"
+    },
+    "2": {
+      "name": "Dependencies",
+      "targets": [
+        "C7"
+      ],
+      "state": "green"
+    },
+    "3": {
+      "name": "Reproducible build",
+      "targets": [
+        "C5",
+        "C8"
+      ],
+      "state": "green"
+    },
+    "4": {
+      "name": "Tests",
+      "targets": [
+        "C6"
+      ],
+      "state": "green"
+    },
+    "5": {
+      "name": "CI",
+      "targets": [
+        "C9"
+      ],
+      "state": "green"
+    },
+    "6": {
+      "name": "Cleanup",
+      "targets": [
+        "C10"
+      ],
+      "state": "green"
+    },
+    "7": {
+      "name": "Storia git e pubblicazione",
+      "targets": [],
+      "state": "green"
+    }
   },
   "cross_platform_track": {
     "name": "Track B — Cross-platform",
-    "targets": ["CP1", "CP2", "CP3", "CP4", "CP5", "CP6"],
+    "targets": [
+      "CP1",
+      "CP2",
+      "CP3",
+      "CP4",
+      "CP5",
+      "CP6"
+    ],
     "state": "in_progress",
     "note": "CP1-CP5 soddisfatti o in verifica; CP6 (tier web su Linux) richiede il porting ad ASP.NET Core."
   },
@@ -109,16 +198,15 @@
     "git_history_rewrite": "AUTORIZZATA dall'utente il 2026-10-16. Da eseguire in FASE 7 con backup del repository e force-push.",
     "subagent": "non necessario: nessun divario misurato residuo che richieda delega",
     "cross_platform": "richiesto dall'utente il 2026-10-16; realizzato per dominio, build, test e CI; il tier web resta Windows-only finche' non viene portato ad ASP.NET Core",
-    "milestone": "tutto approvato dall'utente il 2026-10-16"
+    "milestone": "tutto approvato dall'utente il 2026-10-16",
+    "branding": "Rimossi tutti i riferimenti all'azienda di origine (richiesta utente 2026-10-16): identificatori, configurazione, asset, 7 documenti Office, metadati e storia Git."
   },
   "open_questions": [
     "CP6 richiede il porting ad ASP.NET Core: e' autorizzato il porting completo del tier web (viste Razor, EF Core, rimozione Telerik/Kendo, autenticazione) oppure ci si ferma al cross-platform di build/test/dominio?"
   ],
   "user_actions_required": [
-    "RUOTARE/REVOCARE le credenziali SQL esposte (utente DB applicativo e sa) in Source/connection.config e RCDJob/ConsoleRCDJob/ConsoleRCDJob/App.config",
-    "RUOTARE/REVOCARE le password wrapper web service: Prod.WrapperBaseUserPassword e Svi.WrapperBaseUserPassword in Source/Web.config",
-    "Verificare e ruotare l'account SMTP usato dal seed EmailSettings",
-    "Considerare compromessa l'infrastruttura esposta in passato (host DB, host SMTP, share di rete) e verificare gli accessi",
-    "Fornire le credenziali di push GitHub per eseguire FASE 7 (riscrittura storia + force-push) e per ottenere la prima run verde di C9/CP1"
+    "RUOTARE/REVOCARE le credenziali esposte storicamente (utente DB, sa, wrapper WS, SMTP): la riscrittura non raggiunge cloni e fork, e GitHub puo' conservare per un periodo gli oggetti non raggiungibili",
+    "Cancellare i backup in /home/public/HermesVault/Backups/rcdweb/ dopo la rotazione: contengono la storia con i segreti",
+    "Decisione su CP6: autorizzare o meno il porting del tier web ad ASP.NET Core (unico modo per eseguire il sito su Linux/macOS)"
   ]
 }

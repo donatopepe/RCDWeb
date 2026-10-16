@@ -187,6 +187,40 @@ git push --force-with-lease origin master
 `--force-with-lease` (non `--force`) impedisce di sovrascrivere il remoto se qualcun altro
 vi ha pushato nel frattempo. Esito in `docs/evidence/07-push.txt`.
 
+## Secondo e terzo passaggio — riscrittura dei contenuti binari
+
+La prima riscrittura (`--replace-text`) agisce solo sui blob testuali: ragione sociale,
+loghi e metadati contenuti nei **documenti Office** e nelle **immagini** restavano nella storia.
+
+È stato quindi aggiunto `git filter-repo --blob-callback <file>` con un callback che:
+
+1. riconosce i blob ZIP contenenti `word/document.xml` e riscrive le parti XML
+   (testo, intestazioni, piè di pagina, `docProps`) e le immagini incorporate;
+2. riconosce per SHA-256 le immagini di marchio e le sostituisce con il segnaposto neutro;
+3. applica le stesse sostituzioni testuali a tutti i blob testuali.
+
+Errore commesso e corretto: il primo tentativo passava al callback un **file di script
+completo**; `git filter-repo` si aspetta invece il **corpo** della funzione
+`callback(blob, _do_not_use_this_var=None)`. Il callback veniva quindi eseguito senza
+effetto e la verifica iniziale (che leggeva gli archivi da uno stream) non lo rilevava.
+Rilevato rieseguendo il controllo scrivendo i blob su file temporanei.
+
+Verifica finale su clone pulito del repository remoto:
+
+```bash
+git clone https://github.com/donatopepe/RCDWeb.git /tmp/rcdweb-final
+cd /tmp/rcdweb-final
+git grep -I -F <pattern> $(git rev-list --all) --     # => 0 per tutti i pattern
+```
+
+| Categoria | Prima | Dopo |
+|---|---|---|
+| Segreti (password, host, account, dati personali) | 52 | **0** |
+| Riferimenti all'azienda (ragione sociale, marchi, loghi, sistemi interni, acronimi) | 60+ | **0** |
+| Riferimenti nei documenti Office della storia | 7 file × 3 commit | **0** |
+| Immagini di marchio nella storia | 3 blob | **0** |
+| Oggetti non raggiungibili | — | **0** |
+
 ## Limiti — da leggere
 
 1. **La riscrittura non richiama i cloni e i fork esistenti.** Chi ha clonato il repository
