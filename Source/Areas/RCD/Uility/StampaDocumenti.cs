@@ -35,7 +35,6 @@ namespace RCDWeb.Areas.RCD.Uility
         private MemoryStream file_memoria;
         private Richieste richesta;
 
-        //private static string fullpath = @"H:\Il mio Drive\Lavoro\Example\repos\RCDWeb_Locale\Source\Areas\RCD\Doc_Files\";
         //private static string fullpath = @"Doc_Files/RCD/";
         private string fullpath;
         private string filetemp;

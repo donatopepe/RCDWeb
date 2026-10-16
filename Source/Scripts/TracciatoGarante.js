@@ -18,7 +18,7 @@ function CallTracciatoGarante(loginName, funzioneInterna, filialeRapporto, numer
     },
     jsonp: 'jsonp_callback',
     url: 'http://localhost:12698/TracciatoGarante.ashx',
-    //url: 'https://api.example.com/TracciatoGarante/TracciatoGarante.ashx',
+    //url: 'http://sso.example.com/TracciatoGarante/TracciatoGarante.ashx',
     success: function (j) {
       if (j.response != "ok") {
         alert(j.response);

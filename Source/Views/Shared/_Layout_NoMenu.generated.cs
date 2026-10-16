@@ -365,15 +365,13 @@ WriteLiteral(">\r\n        <h3>Informazioni di supporto </h3>\r\n\r\n        <a"
 
 WriteLiteral(" target=\"_blank\"");
 
-WriteLiteral(" href=\"http://sso.example.com/webapps/redirect.aspx?url=http://portal.example.com/get" +
-"userinfo/GetUserInfo.asp?UrlRedirect=http://portal.example.com/Portal/portale/port" +
-"ale.asp\"");
+WriteLiteral(" href=\"https://helpdesk.example.com/\"");
 
 WriteLiteral(">Help Desk</a>\r\n\r\n      </div>\r\n    </div>\r\n    <div");
 
 WriteLiteral(" id=\"footer\"");
 
-WriteLiteral(">RCDWeb &copy; 2014. All rights reserved.</div>\r\n  </div>\r\n\r\n</body>\r\n\r\n</html>\r\n" +
+WriteLiteral(">RCDWeb &copy; 2014-2026. All rights reserved.</div>\r\n  </div>\r\n\r\n</body>\r\n\r\n</html>\r\n" +
 "\r\n");
 
         }

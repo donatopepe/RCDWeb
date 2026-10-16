@@ -1,0 +1,33 @@
+<Project>
+
+  <!--
+    Impostazioni comuni ai progetti cross-platform (src/ e tests/).
+    I progetti legacy in Source/ e RCDWeb.Job/ non sono interessati da questo file
+    e mantengono la propria configurazione storica.
+  -->
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Authors>RCDWeb contributors</Authors>
+    <Product>RCDWeb</Product>
+    <Copyright>Copyright (c) 2014-2026 RCDWeb contributors</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!--
+    Consente di compilare i target .NET Framework anche su Linux/macOS,
+    fornendo gli assembly di riferimento ufficiali.
+  -->
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework' OR $(TargetFrameworks.Contains('net4'))">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

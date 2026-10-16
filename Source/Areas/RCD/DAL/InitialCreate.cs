@@ -21,7 +21,7 @@ namespace RCDWeb.Areas.RCD.DAL
             ParametriApp.ForEach(s => context.ParametriApp.Add(s));
             context.SaveChanges();
 
-            context.EmailSettings.Add(new Uility.EmailSettings { Name = "SmtpLocal", isActive = true, SenderName = "uff.sviluppoitsistemidirezionali@example.com", SmtpServer = "smtp.example.com", SmtpUsername = "uff.sviluppoitsistemidirezionali@example.com", isSimulated = true, SimulatedEmail = "dev-null@example.com" });
+            context.EmailSettings.Add(new Uility.EmailSettings { Name = "SmtpLocal", isActive = true, SenderName = "noreply@example.com", SmtpServer = "smtpin.example.com", SmtpUsername = "noreply@example.com", isSimulated = true, SimulatedEmail = "dev-null@example.com" });
             context.SaveChanges();
 
 

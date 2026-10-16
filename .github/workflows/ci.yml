@@ -1,0 +1,126 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, main, 'feature/**', 'fix/**' ]
+  pull_request:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+env:
+  DOTNET_NOLOGO: 'true'
+  DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Build + test cross-platform: copre C5, C6, C8, C9 della rubrica in PLAN.md.
+  # Il job gira su Linux, macOS e Windows: è la prova che il repository è
+  # effettivamente cross-platform.
+  # ---------------------------------------------------------------------------
+  cross-platform:
+    name: Build e test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Mostra le versioni degli strumenti
+        run: |
+          dotnet --version
+          git --version
+
+      - name: Restore
+        run: dotnet restore RCDWeb.CrossPlatform.sln --nologo
+
+      - name: Build
+        run: dotnet build RCDWeb.CrossPlatform.sln --configuration Release --no-restore --nologo
+
+      - name: Test
+        run: dotnet test RCDWeb.CrossPlatform.sln --configuration Release --no-build --nologo --verbosity normal
+
+  # ---------------------------------------------------------------------------
+  # Guardie di conformità: verifica i criteri di sicurezza e documentazione
+  # direttamente sull'albero dei sorgenti, indipendentemente dal build.
+  # ---------------------------------------------------------------------------
+  compliance:
+    name: Guardie di conformità
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: C7 — nessun binario non ridistribuibile versionato
+        run: |
+          if git ls-files lib/ | grep -E 'Kendo|Telerik|AreaCommonWeb|WebServiceModel|itextsharp|Interop\.Word|Services3|lib\.zip'; then
+            echo "::error::C7 fallito — binari non ridistribuibili versionati in lib/"
+            exit 1
+          fi
+          echo "C7 OK"
+
+      - name: C3/C4 — file di progetto richiesti
+        run: |
+          for f in LICENSE README.md SECURITY.md CONTRIBUTING.md CHANGELOG.md THIRD-PARTY.md PLAN.md; do
+            test -f "$f" || { echo "::error::File mancante: $f"; exit 1; }
+          done
+          echo "C3/C4 OK"
+
+      - name: C1 — nessuna credenziale nei file di configurazione e nel codice
+        run: |
+          set +e
+          MATCHES=$(grep -rniE 'password[[:space:]]*=[[:space:]]*[^"'"'"'[:space:];<]{3,}' \
+            --include='*.config' --include='*.cs' --include='*.cshtml' --include='*.csproj' \
+            --include='*.js' --include='*.bat' --include='*.sh' --include='*.yml' . \
+            | grep -v 'CHANGE_ME_DB_PASSWORD' \
+            | grep -v 'SecurityRegressionTests.cs' \
+            | grep -v '^\./PLAN.md' \
+            | grep -v '^\./PROMPT.md' \
+            | grep -v '^\./docs/')
+          set -e
+          if [ -n "$MATCHES" ]; then
+            echo "$MATCHES"
+            echo "::error::C1 fallito — credenziali rilevate"
+            exit 1
+          fi
+          echo "C1 OK"
+
+  # ---------------------------------------------------------------------------
+  # Build del progetto web legacy (.NET Framework 4.5) su Windows.
+  # Non bloccante: dipende da binari non ridistribuibili assenti nel repository.
+  # ---------------------------------------------------------------------------
+  legacy-windows:
+    name: Build legacy .NET Framework 4.5 (best effort)
+    runs-on: windows-latest
+    continue-on-error: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Restore pacchetti legacy
+        run: nuget restore RCDWeb.sln
+
+      - name: Build soluzione legacy
+        run: msbuild RCDWeb.sln /p:Configuration=Release /p:Platform="Any CPU" /v:minimal /nologo

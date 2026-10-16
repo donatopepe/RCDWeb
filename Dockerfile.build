@@ -1,0 +1,50 @@
+# Immagine di build cross-platform per RCDWeb
+#
+# Fornisce:
+#   - .NET SDK 8        -> compila src/RCDWeb.Domain e tests/RCDWeb.Domain.Tests
+#   - Mono + msbuild    -> compila i progetti legacy .NET Framework 4.5
+#   - git               -> richiesto dal test di regressione C7
+#
+# Uso:
+#   docker build -f Dockerfile.build -t rcdweb-build .
+#   docker run --rm -v "$PWD:/src" rcdweb-build ./scripts/build.sh
+#   docker run --rm -v "$PWD:/src" rcdweb-build ./scripts/test.sh
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# --- Mono e strumenti di build .NET Framework ---
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      mono-complete \
+      msbuild \
+      nuget \
+      git \
+      unzip \
+      ca-certificates \
+      locales \
+ && rm -rf /var/lib/apt/lists/*
+
+# Locale UTF-8: necessaria per compilare sorgenti con caratteri accentati
+RUN sed -i -e 's/# it_IT.UTF-8 UTF-8/it_IT.UTF-8 UTF-8/' /etc/locale.gen \
+ && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
+ && locale-gen
+ENV LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
+# Directory di lavoro: il repository viene montato qui
+WORKDIR /src
+
+# Le immagini non devono girare come root quando possibile
+RUN useradd --create-home --shell /bin/bash builder \
+ && mkdir -p /nuget \
+ && chown -R builder:builder /nuget
+ENV NUGET_PACKAGES=/nuget
+
+USER builder
+
+# Smoke test degli strumenti
+RUN dotnet --version && msbuild -version && git --version
+
+CMD ["bash"]

@@ -361,3 +361,20 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+###############################################################################
+# RCDWeb — dipendenze binarie non ridistribuibili (vedi lib/README.md e
+# THIRD-PARTY.md). Restano utilizzabili in locale ma non devono mai essere
+# versionate: il test C7 in tests/RCDWeb.Domain.Tests le rifiuta.
+###############################################################################
+lib/*
+!lib/README.md
+
+# File di configurazione con credenziali reali (mai versionati)
+Source/connection.local.config
+**/Web.*.secret.config
+**/*.local.config
+.env
+
+# Artefatti della sessione di lavoro automatica
+.pi-loop.json
+.pi-loop.json.lock

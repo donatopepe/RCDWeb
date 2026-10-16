@@ -52,7 +52,7 @@ namespace ConsoleRCDJob
             //LogFatalErrorMessage();
             string host = ConfigurationManager.AppSettings["Host"];
             string nomePortale = ConfigurationManager.AppSettings["NomePortale"];
-            string hostName = @"http://sso.example.com/Webapps/Portal/login.aspx?url=http://" + host + nomePortale;
+            string hostName = (ConfigurationManager.AppSettings["SsoPortalUrl"] ?? string.Empty) + "?url=http://" + host + nomePortale;
             string fullUrl = hostName + @"/RCD/Richiesta/GestioneRichieste/";
             Log.Info(fullUrl);
             new CheckRichiesteJob().Check();

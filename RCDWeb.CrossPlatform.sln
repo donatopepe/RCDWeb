@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{23519185-8556-43FB-B9F2-9580C3E4084C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RCDWeb.Domain", "src\RCDWeb.Domain\RCDWeb.Domain.csproj", "{7D6F16DF-D3C9-4437-A1BB-3227DEE36609}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{40F1CE56-0242-4429-BA1C-1B4D156803A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RCDWeb.Domain.Tests", "tests\RCDWeb.Domain.Tests\RCDWeb.Domain.Tests.csproj", "{5DE92E20-ADFA-4816-BD09-E6CB915C2004}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D6F16DF-D3C9-4437-A1BB-3227DEE36609}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D6F16DF-D3C9-4437-A1BB-3227DEE36609}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D6F16DF-D3C9-4437-A1BB-3227DEE36609}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D6F16DF-D3C9-4437-A1BB-3227DEE36609}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DE92E20-ADFA-4816-BD09-E6CB915C2004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DE92E20-ADFA-4816-BD09-E6CB915C2004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DE92E20-ADFA-4816-BD09-E6CB915C2004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DE92E20-ADFA-4816-BD09-E6CB915C2004}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7D6F16DF-D3C9-4437-A1BB-3227DEE36609} = {23519185-8556-43FB-B9F2-9580C3E4084C}
+		{5DE92E20-ADFA-4816-BD09-E6CB915C2004} = {40F1CE56-0242-4429-BA1C-1B4D156803A1}
+	EndGlobalSection
+EndGlobal

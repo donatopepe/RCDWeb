@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+      Multi-target:
+        netstandard2.0 -> consumabile da .NET Core / .NET 5+ / .NET Framework 4.6.1+
+        net45          -> consumabile dal progetto web legacy (Source/RCDWeb.csproj)
+      Entrambi i target sono compilabili su Linux, macOS e Windows grazie a
+      Microsoft.NETFramework.ReferenceAssemblies (vedi Directory.Build.props).
+    -->
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <RootNamespace>RCDWeb.Domain</RootNamespace>
+    <AssemblyName>RCDWeb.Domain</AssemblyName>
+    <Description>Logica di dominio di RCDWeb, indipendente dalla piattaforma e senza dipendenze da System.Web.</Description>
+  </PropertyGroup>
+
+</Project>

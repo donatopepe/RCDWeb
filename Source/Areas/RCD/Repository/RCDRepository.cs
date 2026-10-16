@@ -614,7 +614,7 @@ namespace RCDWeb.Areas.RCD.Repository
                 //string fullUrl = "";
                 string host = HttpContext.Current.Request.Url.Host;
                 string nomePortale = ConfigurationManager.AppSettings["NomePortale"];
-                string hostName = @"http://sso.example.com/Webapps/Portal/login.aspx?url=http://" + host + nomePortale;
+                string hostName = (ConfigurationManager.AppSettings["SsoPortalUrl"] ?? string.Empty) + "?url=http://" + host + nomePortale;
                 string fullUrl = hostName + @"/RCD/Richiesta/GestioneRichieste/" + richiestedb.Id;
                 //fullUrl = this.Url.Action("GestioneRichieste", "Richiesta", new { }, this.Request.Url.Scheme);
                 var oggetto = emailtesto.Oggetto;
