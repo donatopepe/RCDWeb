@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Xunit;
@@ -49,6 +50,14 @@ namespace RCDWeb.Domain.Tests
         {
             "tests/RCDWeb.Domain.Tests/SecurityRegressionTests.cs",
             ".github/workflows/ci.yml",
+        };
+
+        /// <summary>Estensioni binarie saltate dalla scansione completa dei token.</summary>
+        private static readonly string[] BinaryExtensions =
+        {
+            ".dll", ".exe", ".pdb", ".zip", ".gz", ".tar", ".7z", ".rar",
+            ".png", ".jpg", ".jpeg", ".gif", ".ico", ".bmp", ".webp", ".svg",
+            ".docx", ".xlsx", ".xls", ".pdf", ".eot", ".ttf", ".woff", ".woff2", ".swf", ".map",
         };
 
         /// <summary>Directory escluse dalla scansione.</summary>
@@ -187,6 +196,119 @@ namespace RCDWeb.Domain.Tests
 
             Assert.True(violations.Count == 0,
                 "C1 fallito — credenziali rilevate:\n" + String.Join("\n", violations));
+        }
+
+        /// <summary>
+        /// Guardia hash-based contro la reintroduzione dei valori compromessi storici.
+        ///
+        /// I valori originali NON sono scritti nel repository: qui compaiono solo i loro
+        /// SHA-256. Il test tokenizza ogni file di testo e confronta l'hash di ciascun token
+        /// con l'insieme degli hash noti. Vedi docs/evidence/07-git-history.md.
+        /// </summary>
+        [Fact]
+        public void C1b_NoKnownCompromisedTokensAnywhere()
+        {
+            var digests = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+            "fb267217d5acc8cd33ea20712712ceec24ce8cd70e2949fcad1d60e31ed02c24",
+            "62fcbcfa3468e4b095e9bc4736898573ecd41e4d5a993adc1df57bad33163b77",
+            "a6ecdabbf4029d22045764c0aa7a251f17dcfeb799f3aa4117b201ba69110614",
+            "0e3e815ab5f1b3bece555b81dde7c3f93b212a1feea22121fcc408cd37558dae",
+            "999ce726e6a134ca5f411a59ab274a3c82ef3e304517771f6b2b2c461bb9c37e",
+            "241dfeb846821b6ed7737bcdec09109d7e841e6bfe138e7bfd8ad4807f7b38db",
+            "5d731049a4ace10cb8571974f68247d4bada89052c744fa788281ae9de546599",
+            "f76cfb95a28e204ada0b53e1151d5c4fb055f062be60453b9cdce5774943fb65",
+            "057e53e04b201d3f6b0734e9f663889a5c181000acf01d145e3f8ee9fd1d479d",
+            "9f2bce9b49fb94eeeee50318e259ffa595337a1a925d6c9d865ed4538b10f434",
+            "63622189e387b511142c4b580267471e098d9a0a9b6257ebda7b2ed29b68951a",
+            "cf323cabc7c3c309b53b359301bb0d4d97108e4cdd91059fc948354a7dd40214",
+            "41eecb6961d2667cf7f35e98f435389595dbe756fa86db504c41d39e5acf8ddc",
+            "1bc3a46aaaccc511ea67724d764706fc20ea7a4d42df47339544c2b64cfcb54c",
+            "0b7834549e32828ae585431a4adcd92fcec910cc75b8583b0cc9e620338ef685",
+            "27e30ea28b5f1332def1e0ff6adc180e8522cbf4c0dfe08c64d5d2f7fdc3e045",
+            "13c940ff05a028e56ed0fc39f443529275c64e231fa6814532a53316d2c9681d",
+            "6e13135eb601bef08da14394d0b1baa4303cf784b94e4665810ef0623c3d1a98",
+            "33e865d58ffa673525a743a0e8ad53dc26896aa7cc658f12967837123fa317fa",
+            "eaf67e6f1689c64e268549a6eed37b977db742a811f6b3677d85391841973d17",
+            "8cf90f26e9f69b80838ce5744f36c5e60440b2f1442a1c60d326f1f8b63a6fa9",
+            };
+
+            var root = RepositoryRoot();
+            var violations = new List<string>();
+
+            foreach (var path in AllTextFiles(root))
+            {
+                if (Path.GetFileName(path).Equals("SecurityRegressionTests.cs", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Contiene solo gli hash, mai i valori.
+                    continue;
+                }
+
+                string content;
+                try
+                {
+                    var info = new FileInfo(path);
+                    if (info.Length > 2 * 1024 * 1024) continue;
+                    content = File.ReadAllText(path);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+
+                foreach (Match match in Regex.Matches(content, @"[A-Za-z0-9_@.$%+-]{6,}"))
+                {
+                    if (digests.Contains(Sha256(match.Value)))
+                    {
+                        var relative = path.Substring(root.Length + 1).Replace('\\', '/');
+                        violations.Add(relative + " -> token compromesso rilevato (valore non stampato)");
+                    }
+                }
+            }
+
+            Assert.True(violations.Count == 0,
+                "C1b fallito - token compromessi reintrodotti:\n" + String.Join("\n", violations.Distinct()));
+        }
+
+        /// <summary>SHA-256 esadecimale (minuscolo) di una stringa UTF-8.</summary>
+        private static string Sha256(string value)
+        {
+            using (var sha = SHA256.Create())
+            {
+                var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(value));
+                var sb = new StringBuilder(bytes.Length * 2);
+                foreach (var b in bytes) sb.Append(b.ToString("x2"));
+                return sb.ToString();
+            }
+        }
+
+        /// <summary>Tutti i file di testo del repository, esclusi binari e asset di terze parti.</summary>
+        private static IEnumerable<string> AllTextFiles(string root)
+        {
+            foreach (var path in Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories))
+            {
+                var relative = path.Substring(root.Length + 1).Replace('\\', '/');
+
+                if (ExcludedDirectories.Any(d =>
+                        relative.Equals(d, StringComparison.OrdinalIgnoreCase) ||
+                        relative.StartsWith(d + "/", StringComparison.OrdinalIgnoreCase) ||
+                        relative.Contains("/" + d + "/")))
+                {
+                    continue;
+                }
+
+                if (ForbiddenBinaryNames.Contains(Path.GetFileName(path), StringComparer.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (BinaryExtensions.Contains(Path.GetExtension(path), StringComparer.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                yield return path;
+            }
         }
 
         [Fact]
