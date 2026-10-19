@@ -174,7 +174,7 @@ Soglia di accettazione finale: **10/10**. Soglia di avanzamento minimo per fase:
 | # | Criterio (0/1) | Verifica oggettiva |
 |---|---|---|
 | C1 | Nessun segreto in file tracciati | `grep` su pattern password/key/host interni = 0 match |
-| C2 | Nessun riferimento a infrastruttura aziendale | 0 occorrenze di `removed`, `example.com`, `172.28.`, `removed`, `<SVC_USER>` |
+| C2 | Nessun riferimento a infrastruttura aziendale | nessuna occorrenza di hostname, IP, credenziali o identificatori aziendali nei sorgenti |
 | C3 | `LICENSE` MIT presente alla root | file esiste, header SPDX valido |
 | C4 | README completo | tutte le 9 sezioni richieste presenti (vedi §5) |
 | C5 | Build riproducibile eseguita | log di build con exit code 0 archiviato in `docs/evidence/` |
